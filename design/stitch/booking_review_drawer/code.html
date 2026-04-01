@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Booking Review | Estate Metric</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed-variant": "#2e6b57",
+                        "on-primary-fixed": "#354053",
+                        "tertiary": "#2c6a55",
+                        "on-secondary": "#f7f9ff",
+                        "secondary-container": "#d3e4fe",
+                        "tertiary-fixed-dim": "#aaead0",
+                        "on-tertiary-fixed": "#074e3b",
+                        "surface-container-highest": "#d9e4ea",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-container": "#475266",
+                        "primary-dim": "#485367",
+                        "on-secondary-fixed-variant": "#4d5d73",
+                        "inverse-on-surface": "#9a9d9f",
+                        "outline": "#717c82",
+                        "primary-fixed": "#d8e3fb",
+                        "on-surface": "#2a3439",
+                        "error-container": "#fe8983",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed-variant": "#515c70",
+                        "on-error-container": "#752121",
+                        "error-dim": "#4e0309",
+                        "surface-dim": "#cfdce3",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#a9b4b9",
+                        "secondary-fixed-dim": "#c5d6f0",
+                        "on-secondary-fixed": "#314055",
+                        "surface-container": "#e8eff3",
+                        "on-surface-variant": "#566166",
+                        "secondary-dim": "#44546a",
+                        "on-secondary-container": "#435368",
+                        "primary": "#545f73",
+                        "on-tertiary": "#e5fff2",
+                        "on-error": "#fff7f6",
+                        "on-background": "#2a3439",
+                        "secondary": "#506076",
+                        "inverse-surface": "#0b0f10",
+                        "inverse-primary": "#dae6fe",
+                        "tertiary-container": "#b8f9de",
+                        "tertiary-dim": "#1d5d49",
+                        "primary-container": "#d8e3fb",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-primary": "#f6f7ff",
+                        "tertiary-fixed": "#b8f9de",
+                        "primary-fixed-dim": "#cad5ed",
+                        "background": "#f7f9fb",
+                        "surface-container-low": "#f0f4f7",
+                        "surface-variant": "#d9e4ea",
+                        "on-tertiary-container": "#22614d",
+                        "error": "#9f403d",
+                        "surface-tint": "#545f73",
+                        "surface-container-high": "#e1e9ee"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- Global Layout Shell -->
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar (Landlord Portal Context) -->
+<aside class="h-screen w-64 bg-slate-50 dark:bg-slate-950 flex flex-col p-4 gap-2 border-r-0 shrink-0">
+<div class="mb-8 px-2">
+<div class="text-lg font-black text-slate-900 dark:text-white">Landlord Portal</div>
+<div class="text-xs font-medium text-slate-500 uppercase tracking-widest">Portfolio Manager</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg shadow-sm font-bold transition-all duration-200" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-medium">Portfolio</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-medium">Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-medium">Finance</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-slate-200/50 pt-4 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-700 hover:bg-slate-200/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+<div class="mt-4 flex items-center gap-3 px-3">
+<img alt="Landlord Avatar" class="w-8 h-8 rounded-full" data-alt="professional male landlord avatar in a business casual attire with soft studio lighting and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvTeL3LCblbqh1_PBel4hmJrBIbDOYJJtSm8igu3YkUXnv8ul22qOYOJ9bgAH6zSYoJr3RXLHFXFSjG5Q7iu9vriI8KtiJrQdVzEFMYBJaI7DFt83h8lP4EjLAoT9FivmHZVQ4YrzzjVtjXCTGU3hHqdLVRT0bgtdIK97yzkff43U8QCNtfZh9eqCfvTCNPO1k7zcWDB02QLUAYARhBD-z-qybD2ecaWXUDiajVFiP1XJ18CwnyOnhlO9d_x0Jlc8J1S5-z1hm3FXR"/>
+<div class="overflow-hidden">
+<p class="text-sm font-bold text-slate-900 truncate">Julian Sterling</p>
+<p class="text-[10px] text-slate-500">Premium Owner</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area (Background list) -->
+<main class="flex-1 overflow-y-auto bg-surface p-8 relative">
+<header class="mb-12">
+<h1 class="text-4xl font-extrabold tracking-tight text-on-surface mb-2">Booking Requests</h1>
+<p class="text-on-surface-variant max-w-2xl">Review and manage pending rental applications for your global portfolio.</p>
+</header>
+<!-- Background List (Visual Context Only) -->
+<div class="space-y-4 opacity-40 select-none">
+<div class="bg-surface-container-lowest p-6 rounded-xl flex items-center justify-between">
+<div class="flex gap-4 items-center">
+<div class="w-12 h-12 rounded-lg bg-surface-container"></div>
+<div>
+<div class="h-4 w-48 bg-surface-container mb-2 rounded"></div>
+<div class="h-3 w-32 bg-surface-container-low rounded"></div>
+</div>
+</div>
+<div class="h-8 w-24 bg-surface-container rounded-full"></div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl flex items-center justify-between">
+<div class="flex gap-4 items-center">
+<div class="w-12 h-12 rounded-lg bg-surface-container"></div>
+<div>
+<div class="h-4 w-48 bg-surface-container mb-2 rounded"></div>
+<div class="h-3 w-32 bg-surface-container-low rounded"></div>
+</div>
+</div>
+<div class="h-8 w-24 bg-surface-container rounded-full"></div>
+</div>
+</div>
+<!-- MODAL OVERLAY -->
+<div class="fixed inset-0 bg-on-surface/20 backdrop-blur-sm z-[60] flex justify-end">
+<!-- DRAWER -->
+<div class="w-full max-w-2xl bg-surface h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
+<!-- Header -->
+<div class="px-8 py-6 flex items-center justify-between border-b-0 bg-surface-container-low">
+<div>
+<h2 class="text-2xl font-bold tracking-tight">Review Request</h2>
+<p class="text-sm text-on-surface-variant">Request ID: #BK-8829</p>
+</div>
+<button class="w-10 h-10 rounded-full hover:bg-surface-container-highest transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Content -->
+<div class="flex-1 overflow-y-auto p-8 space-y-10">
+<!-- Tenant Profile Bento Section -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-bold uppercase tracking-widest text-primary">Tenant Profile</h3>
+<span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold">Verified Identity</span>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<div class="col-span-3 lg:col-span-1 bg-surface-container-low rounded-xl p-4 flex flex-col items-center text-center">
+<img alt="Tenant Avatar" class="w-20 h-20 rounded-full mb-3 object-cover shadow-sm" data-alt="close-up portrait of a young professional woman with a friendly expression, natural lighting, high-end corporate photography style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxGXXAhEsydu0qAVB0pycSEuvqjYGDln19SyM9Km7RNjPU1Yp-0x5wXgVISYESCLyDZ4EMKXOQ9tJaoFzSwWGefC87yIEMvAkn3LR1OtHepEFmhxCYm3mdNTyT1mRkyz0_Lb5eWrttKgZI89llu-jVXvRat-KXnBYzf8bTUnmiD9Kvx9K4fRjY_6q7QrGcWZGyusIze6O1AiK6QS0iSbQRVw8JwfLjPfgLbx2UEYHIxalPlhS_LM6JgUZ-E8DeG2qFT727MGywdLeV"/>
+<p class="font-bold text-on-surface">Elena Rodriguez</p>
+<p class="text-xs text-on-surface-variant">Architectural Lead</p>
+</div>
+<div class="col-span-3 lg:col-span-2 grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low rounded-xl p-4">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase mb-1">Previous Stays</p>
+<p class="text-lg font-bold">14 Properties</p>
+<p class="text-xs text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+                                            4.9 Tenant Rating
+                                        </p>
+</div>
+<div class="bg-surface-container-low rounded-xl p-4">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase mb-1">Stay Duration</p>
+<p class="text-lg font-bold">Long-term Pref</p>
+<p class="text-xs text-on-surface-variant">Avg. 8.5 months</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Booking Details Section -->
+<section>
+<h3 class="text-sm font-bold uppercase tracking-widest text-primary mb-4">Booking Terms</h3>
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-outline-variant/10">
+<div class="p-6 grid grid-cols-2 gap-8">
+<div class="space-y-4">
+<div>
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Check-in</label>
+<p class="text-lg font-semibold">Oct 12, 2023</p>
+</div>
+<div>
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Total Duration</label>
+<p class="text-lg font-semibold">6 Months</p>
+</div>
+</div>
+<div class="space-y-4">
+<div>
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Monthly Rent</label>
+<p class="text-lg font-semibold text-primary">$3,450.00</p>
+</div>
+<div>
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Security Deposit</label>
+<p class="text-lg font-semibold">$5,000.00</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container px-6 py-4 flex justify-between items-center">
+<p class="text-sm font-medium">Requested Property</p>
+<p class="text-sm font-bold">The Obsidian Suites - Unit 402</p>
+</div>
+</div>
+</section>
+<!-- Conflict Check Alert -->
+<section>
+<div class="bg-secondary-container/30 rounded-xl p-4 flex gap-4 items-start border border-secondary-container">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">event_available</span>
+<div>
+<p class="text-sm font-bold text-on-secondary-container">Availability Confirmed</p>
+<p class="text-xs text-on-secondary-container/80 leading-relaxed">Unit 402 is currently vacant and has no overlapping requests for the specified window (Oct 2023 - Mar 2024).</p>
+</div>
+</div>
+</section>
+<!-- Notes & Internal -->
+<section>
+<h3 class="text-sm font-bold uppercase tracking-widest text-primary mb-4">Add Private Note</h3>
+<textarea class="w-full bg-surface-container-highest border-0 rounded-xl p-4 text-sm focus:ring-2 focus:ring-primary placeholder:text-on-surface-variant/50" placeholder="E.g. Verified income via LinkedIn, looks solid..." rows="3"></textarea>
+</section>
+</div>
+<!-- Footer Actions -->
+<div class="p-8 bg-surface-container-lowest border-t-0 shadow-[0_-10px_20px_rgba(0,0,0,0.02)] grid grid-cols-2 gap-4">
+<button class="col-span-2 py-3 text-sm font-bold text-primary flex items-center justify-center gap-2 hover:bg-primary-container/30 transition-colors rounded-lg mb-2">
+<span class="material-symbols-outlined text-sm">chat_bubble</span>
+                            Request more info
+                        </button>
+<button class="py-4 px-6 rounded-lg bg-surface-container-high text-on-surface font-bold text-sm hover:bg-surface-container-highest transition-all">
+                            Reject Request
+                        </button>
+<button class="py-4 px-6 rounded-lg bg-primary text-on-primary font-bold text-sm hover:opacity-90 shadow-lg shadow-primary/20 transition-all">
+                            Approve Booking
+                        </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

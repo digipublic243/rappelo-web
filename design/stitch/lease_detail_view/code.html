@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-fixed-variant": "#2e6b57",
+              "on-primary-fixed": "#354053",
+              "tertiary": "#2c6a55",
+              "on-secondary": "#f7f9ff",
+              "secondary-container": "#d3e4fe",
+              "tertiary-fixed-dim": "#aaead0",
+              "on-tertiary-fixed": "#074e3b",
+              "surface-container-highest": "#d9e4ea",
+              "surface-bright": "#f7f9fb",
+              "on-primary-container": "#475266",
+              "primary-dim": "#485367",
+              "on-secondary-fixed-variant": "#4d5d73",
+              "inverse-on-surface": "#9a9d9f",
+              "outline": "#717c82",
+              "primary-fixed": "#d8e3fb",
+              "on-surface": "#2a3439",
+              "error-container": "#fe8983",
+              "surface": "#f7f9fb",
+              "on-primary-fixed-variant": "#515c70",
+              "on-error-container": "#752121",
+              "error-dim": "#4e0309",
+              "surface-dim": "#cfdce3",
+              "surface-container-lowest": "#ffffff",
+              "outline-variant": "#a9b4b9",
+              "secondary-fixed-dim": "#c5d6f0",
+              "on-secondary-fixed": "#314055",
+              "surface-container": "#e8eff3",
+              "on-surface-variant": "#566166",
+              "secondary-dim": "#44546a",
+              "on-secondary-container": "#435368",
+              "primary": "#545f73",
+              "on-tertiary": "#e5fff2",
+              "on-error": "#fff7f6",
+              "on-background": "#2a3439",
+              "secondary": "#506076",
+              "inverse-surface": "#0b0f10",
+              "inverse-primary": "#dae6fe",
+              "tertiary-container": "#b8f9de",
+              "tertiary-dim": "#1d5d49",
+              "primary-container": "#d8e3fb",
+              "secondary-fixed": "#d3e4fe",
+              "on-primary": "#f6f7ff",
+              "tertiary-fixed": "#b8f9de",
+              "primary-fixed-dim": "#cad5ed",
+              "background": "#f7f9fb",
+              "surface-container-low": "#f0f4f7",
+              "surface-variant": "#d9e4ea",
+              "on-tertiary-container": "#22614d",
+              "error": "#9f403d",
+              "surface-tint": "#545f73",
+              "surface-container-high": "#e1e9ee"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md fixed top-0 w-full z-50 shadow-sm dark:shadow-none flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Estate Metric</span>
+<div class="hidden md:flex items-center ml-8 gap-6">
+<a class="text-slate-900 dark:text-white font-semibold" href="#">Dashboard</a>
+<a class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors px-3 py-1 rounded" href="#">Portfolio</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative bg-slate-100 dark:bg-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-500 text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-48" placeholder="Search lease..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-full transition-colors">notifications</button>
+<img class="w-8 h-8 rounded-full object-cover border-2 border-primary-container" data-alt="professional male property manager portrait soft natural lighting corporate style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDy93HZxF1DgpsFTPhrs9Ko7txad4LqOKJIP5NLJGQO3Gp94kMBPvatYd6f0Z9ndZwPRwKWUPOf5Gfz2s0q3BRG-2r7H96SKrLD9nMGAEB8z9TMy9CV4MmI-2DstStS6DtjWbiba5uQSVqn6yq6RSwhi8RkSX0iIACFxeXpnZR3YYo85CF3zb9EZsAMu5LYTx0sua1NesPyfg559hHQFLq3On4RxoLUvnd0ZC57hmOUmX8j1-Gb0Z9DemcDH2ga0FI73Am28KA74Uc_"/>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-16 bg-slate-50 dark:bg-slate-950 flex flex-col p-4 gap-2 border-r-0 z-40">
+<div class="mb-6 px-2">
+<h3 class="Manrope title-md text-lg font-black text-slate-900 dark:text-white">Landlord Portal</h3>
+<p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Portfolio Manager</p>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg shadow-sm font-bold transition-all duration-200" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-medium">Portfolio</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-medium">Management</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-medium">Finance</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-medium">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 pt-24 pb-12 px-8 min-h-screen">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-10">
+<div>
+<div class="flex items-center gap-2 text-primary font-semibold mb-2">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+<span class="text-xs uppercase tracking-widest">Back to Portfolio</span>
+</div>
+<h1 class="text-4xl font-extrabold text-on-surface tracking-tight">Skyline Heights #402</h1>
+<p class="text-on-surface-variant flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-base">person</span> 
+                    Tenant: Alexander Thorne • Active Lease L-8842
+                </p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-2.5 rounded-lg border border-primary text-primary font-semibold hover:bg-primary-container transition-all">Modify Terms</button>
+<button class="px-6 py-2.5 rounded-lg bg-error text-white font-semibold shadow-sm hover:opacity-90 transition-all">Terminate Early</button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Terms Summary Card -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-lowest p-8 rounded-xl flex flex-col gap-8 shadow-[0_12px_32px_-4px_rgba(42,52,57,0.06)]">
+<h3 class="text-xl font-bold border-b border-surface-container pb-4">Terms Summary</h3>
+<div class="grid grid-cols-2 gap-y-8">
+<div>
+<p class="text-xs text-on-surface-variant font-bold uppercase tracking-wider mb-1">Monthly Rent</p>
+<p class="text-2xl font-extrabold text-on-surface">$3,450.00</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-bold uppercase tracking-wider mb-1">Security Deposit</p>
+<p class="text-2xl font-extrabold text-on-surface">$6,900.00</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-bold uppercase tracking-wider mb-1">Billing Cadence</p>
+<div class="inline-flex px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold mt-1">Monthly</div>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-bold uppercase tracking-wider mb-1">Late Fee</p>
+<p class="text-lg font-semibold text-error">$150.00</p>
+</div>
+</div>
+<div class="mt-4 p-4 bg-surface-container rounded-lg">
+<p class="text-xs text-on-surface-variant font-bold uppercase mb-2">Lease Period</p>
+<div class="flex justify-between items-center text-sm font-semibold">
+<span>Jun 01, 2023</span>
+<span class="material-symbols-outlined text-outline">trending_flat</span>
+<span>May 31, 2024</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full mt-3 overflow-hidden">
+<div class="bg-tertiary h-full w-[75%] rounded-full"></div>
+</div>
+<p class="text-[10px] text-on-surface-variant mt-2 text-right">244 days elapsed (75%)</p>
+</div>
+</div>
+<!-- Payment Schedule -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_12px_32px_-4px_rgba(42,52,57,0.06)]">
+<div class="p-8 border-b border-surface-container flex justify-between items-center">
+<h3 class="text-xl font-bold">Payment Schedule</h3>
+<button class="text-primary text-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">download</span> Export Ledger
+                    </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-xs font-bold uppercase tracking-wider text-on-surface-variant">
+<tr>
+<th class="px-8 py-4">Billing Date</th>
+<th class="px-8 py-4">Description</th>
+<th class="px-8 py-4">Amount</th>
+<th class="px-8 py-4 text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low">
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="px-8 py-5 font-semibold">Feb 01, 2024</td>
+<td class="px-8 py-5 text-on-surface-variant">February Rent Payment</td>
+<td class="px-8 py-5 font-bold">$3,450.00</td>
+<td class="px-8 py-5 text-right">
+<span class="px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container text-xs font-bold uppercase">Paid</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="px-8 py-5 font-semibold">Mar 01, 2024</td>
+<td class="px-8 py-5 text-on-surface-variant">March Rent Payment</td>
+<td class="px-8 py-5 font-bold">$3,450.00</td>
+<td class="px-8 py-5 text-right">
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold uppercase">Upcoming</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors opacity-60">
+<td class="px-8 py-5 font-semibold">Apr 01, 2024</td>
+<td class="px-8 py-5 text-on-surface-variant">April Rent Payment</td>
+<td class="px-8 py-5 font-bold">$3,450.00</td>
+<td class="px-8 py-5 text-right">
+<span class="px-3 py-1 rounded-full bg-surface-container-highest text-outline text-xs font-bold uppercase">Pending</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Document Section (PDF Preview) -->
+<div class="col-span-12 lg:col-span-7 bg-surface-container-lowest p-8 rounded-xl shadow-[0_12px_32px_-4px_rgba(42,52,57,0.06)]">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-bold">Lease Documents</h3>
+<div class="flex gap-2">
+<button class="p-2 rounded hover:bg-surface-container"><span class="material-symbols-outlined">zoom_in</span></button>
+<button class="p-2 rounded hover:bg-surface-container"><span class="material-symbols-outlined">print</span></button>
+</div>
+</div>
+<div class="relative bg-surface-container-low rounded-lg h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/30 group">
+<div class="absolute inset-0 bg-white/50 backdrop-blur-[2px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<button class="bg-primary text-white px-6 py-2 rounded-full font-bold shadow-lg flex items-center gap-2">
+<span class="material-symbols-outlined">visibility</span> Open Full Document
+                        </button>
+</div>
+<span class="material-symbols-outlined text-6xl text-outline-variant mb-4">picture_as_pdf</span>
+<p class="text-on-surface-variant font-medium">Standard_Lease_Agreement_NY_v4.pdf</p>
+<p class="text-xs text-outline mt-1">Last signed May 28, 2023 • 2.4 MB</p>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-6">
+<div class="flex items-center gap-3 p-4 bg-surface-container-low rounded-lg">
+<span class="material-symbols-outlined text-tertiary">task_alt</span>
+<div class="text-xs">
+<p class="font-bold text-on-surface">Digital Signature</p>
+<p class="text-on-surface-variant">Verified by DocuSign</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-4 bg-surface-container-low rounded-lg">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+<div class="text-xs">
+<p class="font-bold text-on-surface">Legal Compliance</p>
+<p class="text-on-surface-variant">NY State HUD Approved</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Audit Trail / Activity -->
+<div class="col-span-12 lg:col-span-5 bg-surface-container-lowest p-8 rounded-xl shadow-[0_12px_32px_-4px_rgba(42,52,57,0.06)]">
+<h3 class="text-xl font-bold mb-8">Audit Trail</h3>
+<div class="relative">
+<!-- Timeline Line -->
+<div class="absolute left-4 top-0 bottom-0 w-0.5 bg-surface-container"></div>
+<div class="space-y-8 relative">
+<!-- Entry 1 -->
+<div class="flex gap-6 items-start">
+<div class="z-10 w-8 h-8 rounded-full bg-tertiary flex items-center justify-center text-white ring-4 ring-white shadow-sm">
+<span class="material-symbols-outlined text-sm">payments</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Rent Payment Received</p>
+<p class="text-xs text-on-surface-variant mt-0.5">Automated clearing house (ACH) transaction completed successfully for February.</p>
+<p class="text-[10px] text-outline mt-2 font-semibold">FEB 01, 2024 • 09:12 AM</p>
+</div>
+</div>
+<!-- Entry 2 -->
+<div class="flex gap-6 items-start">
+<div class="z-10 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white ring-4 ring-white shadow-sm">
+<span class="material-symbols-outlined text-sm">edit</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Maintenance Clause Updated</p>
+<p class="text-xs text-on-surface-variant mt-0.5">Section 4.2 modified by Property Manager (Michael Chen) to include snow removal terms.</p>
+<p class="text-[10px] text-outline mt-2 font-semibold">JAN 15, 2024 • 02:45 PM</p>
+</div>
+</div>
+<!-- Entry 3 -->
+<div class="flex gap-6 items-start">
+<div class="z-10 w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-white ring-4 ring-white shadow-sm">
+<span class="material-symbols-outlined text-sm">history</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Annual Inspection Completed</p>
+<p class="text-xs text-on-surface-variant mt-0.5">No violations found. Property condition noted as "Excellent". Attached 12 photos to lease record.</p>
+<p class="text-[10px] text-outline mt-2 font-semibold">DEC 12, 2023 • 11:00 AM</p>
+</div>
+</div>
+<!-- Entry 4 -->
+<div class="flex gap-6 items-start">
+<div class="z-10 w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-outline ring-4 ring-white shadow-sm">
+<span class="material-symbols-outlined text-sm">description</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Lease Origination</p>
+<p class="text-xs text-on-surface-variant mt-0.5">Initial contract signed by Alexander Thorne and Landlord Portal Entity.</p>
+<p class="text-[10px] text-outline mt-2 font-semibold">MAY 28, 2023 • 04:30 PM</p>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full mt-10 py-3 rounded-lg bg-surface-container text-on-surface font-bold text-sm hover:bg-surface-container-high transition-colors">
+                    View Complete History
+                </button>
+</div>
+</div>
+</main>
+</body></html>

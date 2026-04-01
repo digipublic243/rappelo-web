@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tenant Dashboard | Estate Metric</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed-variant": "#2e6b57",
+                        "on-primary-fixed": "#354053",
+                        "tertiary": "#2c6a55",
+                        "on-secondary": "#f7f9ff",
+                        "secondary-container": "#d3e4fe",
+                        "tertiary-fixed-dim": "#aaead0",
+                        "on-tertiary-fixed": "#074e3b",
+                        "surface-container-highest": "#d9e4ea",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-container": "#475266",
+                        "primary-dim": "#485367",
+                        "on-secondary-fixed-variant": "#4d5d73",
+                        "inverse-on-surface": "#9a9d9f",
+                        "outline": "#717c82",
+                        "primary-fixed": "#d8e3fb",
+                        "on-surface": "#2a3439",
+                        "error-container": "#fe8983",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed-variant": "#515c70",
+                        "on-error-container": "#752121",
+                        "error-dim": "#4e0309",
+                        "surface-dim": "#cfdce3",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#a9b4b9",
+                        "secondary-fixed-dim": "#c5d6f0",
+                        "on-secondary-fixed": "#314055",
+                        "surface-container": "#e8eff3",
+                        "on-surface-variant": "#566166",
+                        "secondary-dim": "#44546a",
+                        "on-secondary-container": "#435368",
+                        "primary": "#545f73",
+                        "on-tertiary": "#e5fff2",
+                        "on-error": "#fff7f6",
+                        "on-background": "#2a3439",
+                        "secondary": "#506076",
+                        "inverse-surface": "#0b0f10",
+                        "inverse-primary": "#dae6fe",
+                        "tertiary-container": "#b8f9de",
+                        "tertiary-dim": "#1d5d49",
+                        "primary-container": "#d8e3fb",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-primary": "#f6f7ff",
+                        "tertiary-fixed": "#b8f9de",
+                        "primary-fixed-dim": "#cad5ed",
+                        "background": "#f7f9fb",
+                        "surface-container-low": "#f0f4f7",
+                        "surface-variant": "#d9e4ea",
+                        "on-tertiary-container": "#22614d",
+                        "error": "#9f403d",
+                        "surface-tint": "#545f73",
+                        "surface-container-high": "#e1e9ee"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+            color: #2a3439;
+        }
+        h1, h2, h3, .brand-font {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm dark:shadow-none flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100 brand-font">Estate Metric</span>
+<div class="hidden md:flex items-center gap-6 text-slate-500 dark:text-slate-400 font-medium">
+<a class="text-slate-900 dark:text-white font-semibold" href="#">Dashboard</a>
+<a class="hover:text-slate-700 transition-colors" href="#">My Stays</a>
+<a class="hover:text-slate-700 transition-colors" href="#">Payments</a>
+<a class="hover:text-slate-700 transition-colors" href="#">Browse Properties</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors rounded-full">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="User profile" data-alt="User profile portrait of a smiling young professional man in a clean studio setting with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfsJzW5i0bFmsDgV7wn6OMYDRmkODeRtF9hQDe5DGaI8eWOR8tsovPKPouXriSUi7yDyS_cJQGHPTn-5roOoR9CVVMDQFhKIciH70VoDfa1sp6RttvQmL-meR84xBjcEUHr8PheHGSQHjUg65CTNNzQ2LtZeWbVY9_l5VgMZd1DaplCu2U5Y44E60__7MLvgOlTTLmafyBHsCR-t8QlER4s9N6lrWibDDKRDGKd1p3luySpn7q8f-PZxR6znBn5riz-x1DOS9-prsl"/>
+</div>
+</div>
+</nav>
+<!-- Sidebar (Shared Component) -->
+<aside class="hidden lg:flex flex-col h-screen w-64 fixed left-0 top-16 bg-slate-50 dark:bg-slate-950 p-4 gap-2 z-40">
+<div class="mb-6 px-2">
+<h2 class="text-lg font-black text-slate-900 dark:text-white brand-font">Tenant Portal</h2>
+<p class="text-xs text-slate-500 uppercase tracking-widest font-bold">Resident Services</p>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg shadow-sm font-bold transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="book_online">book_online</span>
+<span class="text-sm">My Stays</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="credit_card">credit_card</span>
+<span class="text-sm">Payments</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="text-sm">Browse Properties</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-1 pt-4 border-t border-slate-200/0">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="text-sm">Account</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-12 px-6 lg:pl-72 lg:pr-12 max-w-[1600px] mx-auto min-h-screen">
+<!-- Header Section -->
+<header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-1">
+<span class="text-primary font-semibold tracking-wide uppercase text-xs">Overview</span>
+<h1 class="text-4xl font-extrabold text-on-surface tracking-tight leading-none">Welcome back, Julian</h1>
+<p class="text-on-surface-variant body-md max-w-md pt-2">Here is what is happening with your residency at <span class="font-bold text-on-surface">The Meridian Residences</span>.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-primary text-on-primary px-6 py-3 rounded-lg font-semibold flex items-center gap-2 shadow-sm hover:brightness-110 transition-all">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+                    Book another stay
+                </button>
+</div>
+</header>
+<!-- Bento Grid Dashboard Area -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+<!-- Current Stay Card (Large/Bleed) -->
+<section class="md:col-span-8 bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-col group">
+<div class="relative h-64 w-full">
+<img alt="Current Stay Interior" class="w-full h-full object-cover" data-alt="luxury penthouse apartment interior with large windows overlooking a city skyline at sunset with warm ambient light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-VwzS_O6ZKjcJKGjJwXZlVmK2gc42VSgF7MJWj-5TaLC98rgm3KeApKSuSTPx4lUcn_Rc8G1vHNxSdxi0PyWgua4NVssg-QjqB-zRaCgWEjdGAzlu93G9xtQd8C4FW_Ukmltq2pU5ItEDfH0dkrLVoFVO0pnvy5pp56DnEheKxdyZLS62Tqd1UyMfoxuovrXzhTfE-gd8JQMqdFwwMaCeCHw7Ia0QkO_kZDK2zlNweOmbLO8g3hYJ7WSg8eNhcTRx1VCpZUskNPg6"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-6 left-8 text-white">
+<span class="bg-tertiary text-on-tertiary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3 inline-block">Current stay</span>
+<h2 class="text-2xl font-bold headline-md">Unit 402, The Meridian</h2>
+<p class="text-sm opacity-90">1228 Oakwood Blvd, San Francisco, CA</p>
+</div>
+</div>
+<div class="p-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+<div>
+<p class="text-[10px] text-outline-variant font-bold uppercase tracking-wider mb-1">Lease Term</p>
+<p class="text-sm font-semibold text-on-surface">12 Months</p>
+</div>
+<div>
+<p class="text-[10px] text-outline-variant font-bold uppercase tracking-wider mb-1">Expiry Date</p>
+<p class="text-sm font-semibold text-on-surface">Oct 24, 2024</p>
+</div>
+<div>
+<p class="text-[10px] text-outline-variant font-bold uppercase tracking-wider mb-1">Security Deposit</p>
+<p class="text-sm font-semibold text-on-surface">$3,200.00</p>
+</div>
+<div class="flex items-center justify-end">
+<button class="text-primary font-bold text-sm flex items-center gap-1 hover:underline">
+                            Details
+                            <span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Upcoming Payment Widget -->
+<section class="md:col-span-4 bg-primary-container text-on-primary-container rounded-xl p-8 shadow-sm flex flex-col justify-between h-full min-h-[350px]">
+<div>
+<div class="flex justify-between items-start mb-10">
+<div class="bg-white/20 p-3 rounded-xl backdrop-blur-md">
+<span class="material-symbols-outlined text-primary" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<span class="text-[10px] font-black uppercase tracking-widest bg-primary/10 text-primary-dim px-3 py-1 rounded-full">Next Cycle</span>
+</div>
+<h3 class="text-lg font-bold brand-font mb-1">Rent Payment</h3>
+<p class="text-3xl font-extrabold tracking-tight">$2,850.00</p>
+<div class="mt-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span>
+<p class="text-sm font-medium">Due by June 1st, 2024</p>
+</div>
+</div>
+<div class="mt-8">
+<button class="w-full bg-primary text-on-primary py-4 rounded-lg font-bold text-sm shadow-md hover:scale-[1.02] transition-transform active:scale-95 duration-150">
+                        Pay Now
+                    </button>
+<p class="text-center mt-3 text-[11px] opacity-70">Automatic payments are enabled for this unit.</p>
+</div>
+</section>
+<!-- Notifications Area -->
+<section class="md:col-span-6 bg-surface-container-low rounded-xl p-8 flex flex-col h-full">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-lg font-bold brand-font">Notifications</h3>
+<span class="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-on-surface-variant">4 New</span>
+</div>
+<div class="space-y-4">
+<!-- Notification Item -->
+<div class="bg-white/60 p-4 rounded-lg flex gap-4 items-start hover:bg-white transition-colors cursor-pointer">
+<div class="h-10 w-10 shrink-0 bg-secondary-container rounded-full flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="construction">construction</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Scheduled Maintenance</p>
+<p class="text-xs text-on-surface-variant mt-0.5">Fire alarm testing tomorrow between 10:00 AM and 2:00 PM.</p>
+<p class="text-[10px] text-outline mt-2 font-medium">2 hours ago</p>
+</div>
+</div>
+<div class="bg-white/60 p-4 rounded-lg flex gap-4 items-start hover:bg-white transition-colors cursor-pointer">
+<div class="h-10 w-10 shrink-0 bg-tertiary-container rounded-full flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Package Delivered</p>
+<p class="text-xs text-on-surface-variant mt-0.5">A package for Unit 402 is waiting in the smart locker system.</p>
+<p class="text-[10px] text-outline mt-2 font-medium">5 hours ago</p>
+</div>
+</div>
+<div class="bg-white/60 p-4 rounded-lg flex gap-4 items-start hover:bg-white transition-colors cursor-pointer opacity-70">
+<div class="h-10 w-10 shrink-0 bg-surface-container-highest rounded-full flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Utility Statement</p>
+<p class="text-xs text-on-surface-variant mt-0.5">Your monthly water and electricity usage report is ready.</p>
+<p class="text-[10px] text-outline mt-2 font-medium">Yesterday</p>
+</div>
+</div>
+</div>
+<button class="mt-6 text-primary text-sm font-bold w-full text-center hover:underline">View all history</button>
+</section>
+<!-- Quick Links / Utility Section -->
+<section class="md:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow group cursor-pointer">
+<span class="material-symbols-outlined text-primary-dim mb-4" data-icon="handyman">handyman</span>
+<h4 class="font-bold text-on-surface mb-1">Maintenance</h4>
+<p class="text-xs text-on-surface-variant mb-4">Report an issue or track repair status for your unit.</p>
+<div class="flex items-center text-primary text-xs font-bold gap-1">
+                        Request Service <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow group cursor-pointer">
+<span class="material-symbols-outlined text-primary-dim mb-4" data-icon="key">key</span>
+<h4 class="font-bold text-on-surface mb-1">Guest Access</h4>
+<p class="text-xs text-on-surface-variant mb-4">Generate temporary digital keys for your visitors.</p>
+<div class="flex items-center text-primary text-xs font-bold gap-1">
+                        Manage Keys <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow group cursor-pointer col-span-1 sm:col-span-2 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="h-12 w-12 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Renters Insurance</h4>
+<p class="text-xs text-on-surface-variant">Policy #RE-9902-X • Active</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="bg-surface-container text-on-secondary-container p-6 rounded-xl shadow-sm group cursor-pointer col-span-1 sm:col-span-2 border-dashed border-2 border-primary/20 flex flex-col items-center justify-center text-center py-8">
+<span class="material-symbols-outlined text-primary-dim mb-2 text-3xl" data-icon="explore">explore</span>
+<h4 class="font-bold text-on-surface mb-1">Planning a trip?</h4>
+<p class="text-xs text-on-surface-variant mb-4">Book another stay in any of our 40+ global locations with your resident discount.</p>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest">Browse Properties</button>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t-0 flex justify-around items-center h-16 px-4 z-50">
+<button class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</button>
+<button class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined" data-icon="book_online">book_online</span>
+<span class="text-[10px] font-medium">Stays</span>
+</button>
+<button class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined" data-icon="credit_card">credit_card</span>
+<span class="text-[10px] font-medium">Pay</span>
+</button>
+<button class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</nav>
+</body></html>

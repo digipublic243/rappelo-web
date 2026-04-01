@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Estate Metric | Landlord Access</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-fixed-variant": "#2e6b57",
+              "on-primary-fixed": "#354053",
+              "tertiary": "#2c6a55",
+              "on-secondary": "#f7f9ff",
+              "secondary-container": "#d3e4fe",
+              "tertiary-fixed-dim": "#aaead0",
+              "on-tertiary-fixed": "#074e3b",
+              "surface-container-highest": "#d9e4ea",
+              "surface-bright": "#f7f9fb",
+              "on-primary-container": "#475266",
+              "primary-dim": "#485367",
+              "on-secondary-fixed-variant": "#4d5d73",
+              "inverse-on-surface": "#9a9d9f",
+              "outline": "#717c82",
+              "primary-fixed": "#d8e3fb",
+              "on-surface": "#2a3439",
+              "error-container": "#fe8983",
+              "surface": "#f7f9fb",
+              "on-primary-fixed-variant": "#515c70",
+              "on-error-container": "#752121",
+              "error-dim": "#4e0309",
+              "surface-dim": "#cfdce3",
+              "surface-container-lowest": "#ffffff",
+              "outline-variant": "#a9b4b9",
+              "secondary-fixed-dim": "#c5d6f0",
+              "on-secondary-fixed": "#314055",
+              "surface-container": "#e8eff3",
+              "on-surface-variant": "#566166",
+              "secondary-dim": "#44546a",
+              "on-secondary-container": "#435368",
+              "primary": "#545f73",
+              "on-tertiary": "#e5fff2",
+              "on-error": "#fff7f6",
+              "on-background": "#2a3439",
+              "secondary": "#506076",
+              "inverse-surface": "#0b0f10",
+              "inverse-primary": "#dae6fe",
+              "tertiary-container": "#b8f9de",
+              "tertiary-dim": "#1d5d49",
+              "primary-container": "#d8e3fb",
+              "secondary-fixed": "#d3e4fe",
+              "on-primary": "#f6f7ff",
+              "tertiary-fixed": "#b8f9de",
+              "primary-fixed-dim": "#cad5ed",
+              "background": "#f7f9fb",
+              "surface-container-low": "#f0f4f7",
+              "surface-variant": "#d9e4ea",
+              "on-tertiary-container": "#22614d",
+              "error": "#9f403d",
+              "surface-tint": "#545f73",
+              "surface-container-high": "#e1e9ee"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+        }
+        .premium-gradient {
+            background: linear-gradient(135deg, #545f73 0%, #485367 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased min-h-screen flex items-center justify-center p-4">
+<!-- Background Layer (The Digital Estate) -->
+<div class="fixed inset-0 z-0">
+<img alt="Architectural Background" class="w-full h-full object-cover opacity-15 grayscale" data-alt="wide angle shot of a luxury modern residential building with large glass windows and clean concrete architecture at twilight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAR9LzcA7O7cdUJ4X4MAP56nOs-pfXfbCG3bMutyFVKxBS7d2cjvZl6uYaGHBZorZM1Uh-TRcnH9NK5p_l4tO-M0YOVbWBG6rtCCIDYf-k1Pd__zsMBKjBpBj5iug_gkNu4ueXDrPoT_foKPH_2wX0FpDGLAujoM6kfgFqJV6RiLTCkYnQtmwPl-0_fqv2fcAd1Qwm6M78duzCqdnFIjYmNpqo4hToYjbVdPh7_WmF7B_WVk4P6TIWBjp6RJwYYts5qQWN6P9zYO06L"/>
+<div class="absolute inset-0 bg-gradient-to-tr from-surface via-surface/90 to-transparent"></div>
+</div>
+<!-- Main Content Canvas -->
+<main class="relative z-10 w-full max-w-[480px]">
+<!-- Header / Brand Anchor -->
+<div class="text-center mb-10">
+<h1 class="font-headline font-extrabold text-3xl tracking-tight text-on-surface mb-2">Estate Metric</h1>
+<p class="text-on-surface-variant font-medium tracking-wide text-sm">ARCHITECTURAL ASSET MANAGEMENT</p>
+</div>
+<!-- Auth Card -->
+<div class="editorial-glass rounded-xl p-8 shadow-2xl shadow-on-surface/5 border border-outline-variant/10">
+<!-- Contextual Toggle -->
+<div class="flex p-1 bg-surface-container rounded-lg mb-8">
+<button class="flex-1 py-2 text-sm font-semibold rounded-lg bg-surface-container-lowest text-on-surface shadow-sm transition-all duration-200">
+                    Sign In
+                </button>
+<button class="flex-1 py-2 text-sm font-medium text-on-surface-variant hover:text-on-surface transition-all duration-200">
+                    Sign Up
+                </button>
+</div>
+<!-- Header Section -->
+<div class="mb-8">
+<h2 class="font-headline text-2xl font-bold text-on-surface mb-1">Welcome back</h2>
+<p class="text-on-surface-variant text-sm">Enter your credentials to access your portfolio</p>
+</div>
+<!-- Form -->
+<form class="space-y-5">
+<div class="space-y-1.5">
+<label class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant ml-1" for="email">Email Address</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[20px]">mail</span>
+<input class="w-full bg-surface-container-highest border-0 rounded-lg py-3.5 pl-12 pr-4 focus:ring-2 focus:ring-primary text-on-surface placeholder:text-outline transition-all" id="email" placeholder="landlord@estatemetric.com" type="email"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center px-1">
+<label class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant" for="password">Password</label>
+<a class="text-xs font-bold text-primary hover:text-primary-dim transition-colors" href="#">Forgot?</a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[20px]">lock</span>
+<input class="w-full bg-surface-container-highest border-0 rounded-lg py-3.5 pl-12 pr-4 focus:ring-2 focus:ring-primary text-on-surface placeholder:text-outline transition-all" id="password" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<button class="w-full premium-gradient text-on-primary font-semibold py-4 rounded-lg shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-200 active:scale-[0.98]" type="submit">
+                    Access Portfolio
+                </button>
+</form>
+<!-- Divider -->
+<div class="relative my-8">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant/30"></div>
+</div>
+<div class="relative flex justify-center text-xs uppercase tracking-widest">
+<span class="px-4 bg-transparent text-outline font-bold">Or continue with</span>
+</div>
+</div>
+<!-- Social Logins -->
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-3 py-3 bg-white border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-colors">
+<img alt="Google Logo" class="w-5 h-5 object-contain" data-alt="google g logo icon in colors red yellow green blue" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_EZCyi6LtaxPI8i-1ak-UrLzns8iOVAVJRzY79SNRYtPgChuJdLpfSbN2zT05tuipOGJOtyUEeaU21kvrRHIzoItYDRCYMgEqvaoqG-5mp3ws1qFfWxxxwRH0Cxy_A36Kljz_IRIO0fSTKnDpTZ3w4y9A32RDH3HzhjZRNrsio6JQrAXL6_iFFpY1UrtdYk10-JlUOobrxMgRMMvh-vyRdLEzxsjY77EP_iac6Ato3VkJliBCTUsM04vWjsnacTIRIJMpaMxT6EGg"/>
+<span class="text-sm font-semibold text-on-surface">Google</span>
+</button>
+<button class="flex items-center justify-center gap-3 py-3 bg-white border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">ios</span>
+<span class="text-sm font-semibold text-on-surface">Apple</span>
+</button>
+</div>
+</div>
+<!-- Footer Metadata -->
+<footer class="mt-8 flex justify-center gap-8">
+<a class="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Support</a>
+</footer>
+</main>
+<!-- Floating Security Badge -->
+<div class="fixed bottom-8 right-8 hidden lg:flex items-center gap-3 bg-surface-container-lowest/50 backdrop-blur-md p-3 rounded-full border border-outline-variant/10">
+<div class="bg-tertiary-container p-2 rounded-full">
+<span class="material-symbols-outlined text-on-tertiary-container text-[18px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div class="pr-3">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter leading-tight">Secured by</p>
+<p class="text-xs font-bold text-on-surface leading-tight">MetricGuard™ 256-bit</p>
+</div>
+</div>
+</body></html>

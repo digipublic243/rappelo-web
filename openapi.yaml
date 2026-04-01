@@ -1,0 +1,1882 @@
+openapi: 3.0.3
+info:
+  title: Rappelo API
+  version: 1.0.0
+  description: |
+    OpenAPI specification for Rappelo backend.
+    This file is manually aligned with the currently implemented DRF routers/viewsets.
+servers:
+  - url: http://localhost:8000
+    description: Local development
+
+tags:
+  - name: Auth
+  - name: Accounts
+  - name: Properties
+  - name: Tenants
+  - name: Leases
+  - name: Payments
+
+security:
+  - bearerAuth: []
+
+paths:
+  /api/auth/login/:
+    post:
+      tags: [Auth]
+      summary: Obtain JWT token pair (login)
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [phone_number, password]
+              properties:
+                phone_number:
+                  type: string
+                  example: "+1234567890"
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: JWT token pair
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPair'
+        '401':
+          description: Invalid credentials
+
+  /api/auth/refresh/:
+    post:
+      tags: [Auth]
+      summary: Refresh access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refresh]
+              properties:
+                refresh:
+                  type: string
+      responses:
+        '200':
+          description: New access token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access:
+                    type: string
+
+  /api/auth/verify/:
+    post:
+      tags: [Auth]
+      summary: Verify token validity
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token]
+              properties:
+                token:
+                  type: string
+      responses:
+        '200':
+          description: Token is valid
+        '401':
+          description: Token is invalid or expired
+
+  /api/accounts/users/:
+    get:
+      tags: [Accounts]
+      summary: List users
+      responses:
+        '200':
+          description: Users list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserList'
+    post:
+      tags: [Accounts]
+      summary: Create user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/accounts/users/{id}/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Accounts]
+      summary: Retrieve user
+      responses:
+        '200':
+          description: User detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+        '403':
+          description: Forbidden
+    patch:
+      tags: [Accounts]
+      summary: Update user partially
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+    put:
+      tags: [Accounts]
+      summary: Update user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+    delete:
+      tags: [Accounts]
+      summary: Delete user
+      responses:
+        '204':
+          description: Deleted
+
+  /api/accounts/users/{id}/change_password/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Accounts]
+      summary: Change user password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        '200':
+          description: Password changed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          description: Validation error
+
+  /api/accounts/users/{id}/deactivate/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Accounts]
+      summary: Deactivate user
+      responses:
+        '200':
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+
+  /api/accounts/users/{id}/activate/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Accounts]
+      summary: Activate user
+      responses:
+        '200':
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+
+  /api/accounts/users/me/:
+    get:
+      tags: [Accounts]
+      summary: Get current user profile
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+
+  /api/accounts/users/statistics/:
+    get:
+      tags: [Accounts]
+      summary: Get user statistics
+      responses:
+        '200':
+          description: User statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserStatistics'
+
+  /api/properties/properties/:
+    get:
+      tags: [Properties]
+      summary: List properties
+      responses:
+        '200':
+          description: Properties list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Property'
+    post:
+      tags: [Properties]
+      summary: Create property
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Property'
+      responses:
+        '201':
+          description: Property created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Property'
+
+  /api/properties/properties/{id}/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Properties]
+      summary: Retrieve property
+      responses:
+        '200':
+          description: Property detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Property'
+    patch:
+      tags: [Properties]
+      summary: Update property partially
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Property'
+      responses:
+        '200':
+          description: Property updated
+    put:
+      tags: [Properties]
+      summary: Update property
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Property'
+      responses:
+        '200':
+          description: Property updated
+    delete:
+      tags: [Properties]
+      summary: Delete property
+      responses:
+        '204':
+          description: Deleted
+
+  /api/properties/properties/{id}/activate/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Properties]
+      summary: Activate property
+      responses:
+        '200':
+          description: Property updated
+
+  /api/properties/properties/{id}/deactivate/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Properties]
+      summary: Deactivate property
+      responses:
+        '200':
+          description: Property updated
+
+  /api/properties/properties/{id}/financials/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Properties]
+      summary: Get property financials
+      responses:
+        '200':
+          description: Financial metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyFinancials'
+
+  /api/properties/properties/{id}/statistics/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Properties]
+      summary: Get property statistics
+      responses:
+        '200':
+          description: Property statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /api/properties/properties/{id}/assign_manager/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Properties]
+      summary: Assign manager to property
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyManager'
+      responses:
+        '201':
+          description: Manager assigned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyManager'
+
+  /api/properties/properties/{id}/managers/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Properties]
+      summary: List managers for property
+      responses:
+        '200':
+          description: Managers list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PropertyManager'
+
+  /api/properties/units/:
+    get:
+      tags: [Properties]
+      summary: List units
+      responses:
+        '200':
+          description: Units list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Unit'
+    post:
+      tags: [Properties]
+      summary: Create unit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Unit'
+      responses:
+        '201':
+          description: Unit created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unit'
+
+  /api/properties/units/{id}/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Properties]
+      summary: Retrieve unit
+      responses:
+        '200':
+          description: Unit detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unit'
+    patch:
+      tags: [Properties]
+      summary: Update unit partially
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Unit'
+      responses:
+        '200':
+          description: Unit updated
+    put:
+      tags: [Properties]
+      summary: Update unit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Unit'
+      responses:
+        '200':
+          description: Unit updated
+    delete:
+      tags: [Properties]
+      summary: Delete unit
+      responses:
+        '204':
+          description: Deleted
+
+  /api/properties/units/{id}/activate/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Properties]
+      summary: Activate unit
+      responses:
+        '200':
+          description: Unit updated
+
+  /api/properties/units/{id}/deactivate/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Properties]
+      summary: Deactivate unit
+      responses:
+        '200':
+          description: Unit updated
+
+  /api/properties/units/{id}/update_status/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Properties]
+      summary: Update unit status
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [vacant, occupied, maintenance, reserved]
+      responses:
+        '200':
+          description: Unit updated
+
+  /api/properties/units/available/:
+    get:
+      tags: [Properties]
+      summary: List available units
+      parameters:
+        - in: query
+          name: property_id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Available units
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Unit'
+
+  /api/properties/managers/:
+    get:
+      tags: [Properties]
+      summary: List property managers assignments
+      responses:
+        '200':
+          description: Manager assignments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PropertyManager'
+    post:
+      tags: [Properties]
+      summary: Create manager assignment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyManager'
+      responses:
+        '201':
+          description: Assignment created
+
+  /api/properties/managers/{id}/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Properties]
+      summary: Retrieve manager assignment
+      responses:
+        '200':
+          description: Assignment detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyManager'
+    patch:
+      tags: [Properties]
+      summary: Update manager assignment partially
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyManager'
+      responses:
+        '200':
+          description: Assignment updated
+    put:
+      tags: [Properties]
+      summary: Update manager assignment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyManager'
+      responses:
+        '200':
+          description: Assignment updated
+    delete:
+      tags: [Properties]
+      summary: Delete manager assignment
+      responses:
+        '204':
+          description: Deleted
+
+  /api/properties/managers/{id}/update_permissions/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Properties]
+      summary: Update manager permissions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Updated assignment
+
+  /api/properties/managers/{id}/remove/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Properties]
+      summary: Remove manager from property
+      responses:
+        '200':
+          description: Removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+
+  /api/tenants/profiles/:
+    get:
+      tags: [Tenants]
+      summary: List tenant profiles
+      responses:
+        '200':
+          description: Profiles list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TenantProfile'
+    post:
+      tags: [Tenants]
+      summary: Create tenant profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantProfile'
+      responses:
+        '201':
+          description: Profile created
+
+  /api/tenants/profiles/{id}/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Tenants]
+      summary: Retrieve tenant profile
+      responses:
+        '200':
+          description: Profile detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantProfile'
+    patch:
+      tags: [Tenants]
+      summary: Update tenant profile partially
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantProfile'
+      responses:
+        '200':
+          description: Profile updated
+    put:
+      tags: [Tenants]
+      summary: Update tenant profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantProfile'
+      responses:
+        '200':
+          description: Profile updated
+    delete:
+      tags: [Tenants]
+      summary: Delete tenant profile
+      responses:
+        '204':
+          description: Deleted
+
+  /api/tenants/profiles/{id}/activate/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Tenants]
+      summary: Activate tenant profile
+      responses:
+        '200':
+          description: Profile updated
+
+  /api/tenants/profiles/{id}/deactivate/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Tenants]
+      summary: Deactivate tenant profile
+      responses:
+        '200':
+          description: Profile updated
+
+  /api/tenants/profiles/{id}/statistics/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Tenants]
+      summary: Get tenant profile statistics
+      responses:
+        '200':
+          description: Profile statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /api/tenants/emergency-contacts/:
+    get:
+      tags: [Tenants]
+      summary: List emergency contacts
+      responses:
+        '200':
+          description: Contacts list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmergencyContact'
+    post:
+      tags: [Tenants]
+      summary: Create emergency contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmergencyContact'
+      responses:
+        '201':
+          description: Contact created
+
+  /api/tenants/emergency-contacts/{id}/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Tenants]
+      summary: Retrieve emergency contact
+      responses:
+        '200':
+          description: Contact detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmergencyContact'
+    patch:
+      tags: [Tenants]
+      summary: Update emergency contact partially
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmergencyContact'
+      responses:
+        '200':
+          description: Contact updated
+    put:
+      tags: [Tenants]
+      summary: Update emergency contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmergencyContact'
+      responses:
+        '200':
+          description: Contact updated
+    delete:
+      tags: [Tenants]
+      summary: Delete emergency contact
+      responses:
+        '204':
+          description: Deleted
+
+  /api/tenants/emergency-contacts/{id}/set_primary/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Tenants]
+      summary: Set emergency contact as primary
+      responses:
+        '200':
+          description: Contact updated
+
+  /api/tenants/employment-info/:
+    get:
+      tags: [Tenants]
+      summary: List employment info
+      responses:
+        '200':
+          description: Employment list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmploymentInfo'
+    post:
+      tags: [Tenants]
+      summary: Create employment info
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmploymentInfo'
+      responses:
+        '201':
+          description: Employment created
+
+  /api/tenants/employment-info/{id}/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Tenants]
+      summary: Retrieve employment info
+      responses:
+        '200':
+          description: Employment detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmploymentInfo'
+    patch:
+      tags: [Tenants]
+      summary: Update employment info partially
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmploymentInfo'
+      responses:
+        '200':
+          description: Employment updated
+    put:
+      tags: [Tenants]
+      summary: Update employment info
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmploymentInfo'
+      responses:
+        '200':
+          description: Employment updated
+    delete:
+      tags: [Tenants]
+      summary: Delete employment info
+      responses:
+        '204':
+          description: Deleted
+
+  /api/tenants/employment-info/{id}/set_current/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Tenants]
+      summary: Set employment info as current
+      responses:
+        '200':
+          description: Employment updated
+
+  /api/tenants/references/:
+    get:
+      tags: [Tenants]
+      summary: List references
+      responses:
+        '200':
+          description: References list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TenantReference'
+    post:
+      tags: [Tenants]
+      summary: Create reference
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantReference'
+      responses:
+        '201':
+          description: Reference created
+
+  /api/tenants/references/{id}/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Tenants]
+      summary: Retrieve reference
+      responses:
+        '200':
+          description: Reference detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantReference'
+    patch:
+      tags: [Tenants]
+      summary: Update reference partially
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantReference'
+      responses:
+        '200':
+          description: Reference updated
+    put:
+      tags: [Tenants]
+      summary: Update reference
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantReference'
+      responses:
+        '200':
+          description: Reference updated
+    delete:
+      tags: [Tenants]
+      summary: Delete reference
+      responses:
+        '204':
+          description: Deleted
+
+  /api/tenants/references/{id}/verify/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Tenants]
+      summary: Verify reference
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                verification_notes:
+                  type: string
+      responses:
+        '200':
+          description: Reference updated
+
+  /api/tenants/references/{id}/unverify/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Tenants]
+      summary: Unverify reference
+      responses:
+        '200':
+          description: Reference updated
+
+  /api/leases/leases/:
+    get:
+      tags: [Leases]
+      summary: List leases
+      responses:
+        '200':
+          description: Leases list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Lease'
+    post:
+      tags: [Leases]
+      summary: Create lease
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeaseCreateRequest'
+      responses:
+        '201':
+          description: Lease created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lease'
+
+  /api/leases/leases/{id}/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Leases]
+      summary: Retrieve lease
+      responses:
+        '200':
+          description: Lease detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lease'
+    patch:
+      tags: [Leases]
+      summary: Update lease partially
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeaseUpdateRequest'
+      responses:
+        '200':
+          description: Lease updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lease'
+    put:
+      tags: [Leases]
+      summary: Update lease
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeaseUpdateRequest'
+      responses:
+        '200':
+          description: Lease updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lease'
+    delete:
+      tags: [Leases]
+      summary: Delete lease
+      responses:
+        '204':
+          description: Deleted
+
+  /api/leases/leases/{id}/activate/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Leases]
+      summary: Activate lease
+      responses:
+        '200':
+          description: Lease activated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lease'
+
+  /api/leases/leases/{id}/terminate/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Leases]
+      summary: Terminate lease
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                move_out_date:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: Lease terminated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lease'
+
+  /api/leases/leases/{id}/renew/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Leases]
+      summary: Renew lease
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [new_end_date]
+              properties:
+                new_end_date:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: Lease renewed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lease'
+
+  /api/payments/payments/:
+    get:
+      tags: [Payments]
+      summary: List payments
+      responses:
+        '200':
+          description: Payments list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Payment'
+    post:
+      tags: [Payments]
+      summary: Create payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentCreateRequest'
+      responses:
+        '201':
+          description: Payment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+
+  /api/payments/payments/{id}/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Payments]
+      summary: Retrieve payment
+      responses:
+        '200':
+          description: Payment detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+    patch:
+      tags: [Payments]
+      summary: Update payment partially
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentUpdateRequest'
+      responses:
+        '200':
+          description: Payment updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+    put:
+      tags: [Payments]
+      summary: Update payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentUpdateRequest'
+      responses:
+        '200':
+          description: Payment updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+    delete:
+      tags: [Payments]
+      summary: Delete payment
+      responses:
+        '204':
+          description: Deleted
+
+  /api/payments/payments/{id}/confirm/:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Payments]
+      summary: Confirm payment (mark as paid)
+      responses:
+        '200':
+          description: Payment confirmed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+
+  /api/payments/payments/overdue/:
+    get:
+      tags: [Payments]
+      summary: List overdue pending payments
+      responses:
+        '200':
+          description: Overdue payments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Payment'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    IdPath:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+
+  schemas:
+    TokenPair:
+      type: object
+      properties:
+        access:
+          type: string
+        refresh:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+
+    MessageResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+        message:
+          type: string
+
+    UserCreateRequest:
+      type: object
+      required: [phone_number, password, password2]
+      properties:
+        phone_number:
+          type: string
+          maxLength: 15
+        email:
+          type: string
+          format: email
+          nullable: true
+        first_name:
+          type: string
+        last_name:
+          type: string
+        password:
+          type: string
+          format: password
+        password2:
+          type: string
+          format: password
+        role:
+          type: string
+          enum: [landlord, tenant, property_manager, admin]
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+
+    UserUpdateRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          nullable: true
+        first_name:
+          type: string
+        last_name:
+          type: string
+        role:
+          type: string
+          enum: [landlord, tenant, property_manager, admin]
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        is_active:
+          type: boolean
+
+    ChangePasswordRequest:
+      type: object
+      required: [old_password, new_password, new_password2]
+      properties:
+        old_password:
+          type: string
+          format: password
+        new_password:
+          type: string
+          format: password
+        new_password2:
+          type: string
+          format: password
+
+    UserList:
+      type: object
+      properties:
+        id:
+          type: integer
+        phone_number:
+          type: string
+        full_name:
+          type: string
+        email:
+          type: string
+          format: email
+          nullable: true
+        role:
+          type: string
+          enum: [landlord, tenant, property_manager, admin]
+        is_active:
+          type: boolean
+
+    UserDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        phone_number:
+          type: string
+        email:
+          type: string
+          format: email
+          nullable: true
+        first_name:
+          type: string
+        last_name:
+          type: string
+        full_name:
+          type: string
+        role:
+          type: string
+          enum: [landlord, tenant, property_manager, admin]
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        is_active:
+          type: boolean
+        date_joined:
+          type: string
+          format: date-time
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+
+    UserStatistics:
+      type: object
+      properties:
+        total_users:
+          type: integer
+        active_users:
+          type: integer
+        landlords:
+          type: integer
+        tenants:
+          type: integer
+        property_managers:
+          type: integer
+
+    Property:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        property_type:
+          type: string
+          enum: [apartment, house, condo, townhouse, commercial, other]
+        status:
+          type: string
+          enum: [active, inactive, maintenance, sold]
+        address_line_1:
+          type: string
+        address_line_2:
+          type: string
+          nullable: true
+        city:
+          type: string
+        state:
+          type: string
+        postal_code:
+          type: string
+        country:
+          type: string
+        description:
+          type: string
+          nullable: true
+        year_built:
+          type: integer
+          nullable: true
+        total_units:
+          type: integer
+        square_footage:
+          type: integer
+          nullable: true
+        purchase_price:
+          type: number
+          format: double
+          nullable: true
+        current_value:
+          type: number
+          format: double
+          nullable: true
+        monthly_rent_total:
+          type: number
+          format: double
+          nullable: true
+        landlord:
+          type: integer
+        is_active:
+          type: boolean
+
+    Unit:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: integer
+        property:
+          type: integer
+        unit_number:
+          type: string
+        unit_type:
+          type: string
+          enum: [studio, 1br, 2br, 3br, 4br, commercial, other]
+        status:
+          type: string
+          enum: [vacant, occupied, maintenance, reserved]
+        bedrooms:
+          type: integer
+        bathrooms:
+          type: number
+          format: double
+        square_footage:
+          type: integer
+          nullable: true
+        monthly_rent:
+          type: number
+          format: double
+        security_deposit:
+          type: number
+          format: double
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        floor_number:
+          type: integer
+          nullable: true
+        is_furnished:
+          type: boolean
+        is_active:
+          type: boolean
+
+    PropertyManager:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: integer
+        property_id:
+          type: integer
+        manager:
+          type: integer
+        is_active:
+          type: boolean
+
+    TenantProfile:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: integer
+        user:
+          type: integer
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        ssn:
+          type: string
+          nullable: true
+        ssn_last_four:
+          type: string
+          nullable: true
+        employment_status:
+          type: string
+          enum: [employed, self_employed, unemployed, student, retired]
+          nullable: true
+        annual_income:
+          type: number
+          format: double
+          nullable: true
+        is_active:
+          type: boolean
+
+    EmergencyContact:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        relationship:
+          type: string
+        phone_number:
+          type: string
+        email:
+          type: string
+          format: email
+          nullable: true
+        address_line_1:
+          type: string
+          nullable: true
+        address_line_2:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        zip_code:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        is_primary:
+          type: boolean
+        is_active:
+          type: boolean
+
+    EmploymentInfo:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: integer
+        employer_name:
+          type: string
+        job_title:
+          type: string
+        employment_type:
+          type: string
+        employer_phone:
+          type: string
+          nullable: true
+        supervisor_name:
+          type: string
+          nullable: true
+        supervisor_phone:
+          type: string
+          nullable: true
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+          nullable: true
+        gross_income:
+          type: number
+          format: double
+        income_frequency:
+          type: string
+        can_contact_employer:
+          type: boolean
+        notes:
+          type: string
+          nullable: true
+        is_current:
+          type: boolean
+        is_active:
+          type: boolean
+
+    TenantReference:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        reference_type:
+          type: string
+        phone_number:
+          type: string
+        email:
+          type: string
+          format: email
+          nullable: true
+        organization:
+          type: string
+          nullable: true
+        is_verified:
+          type: boolean
+        is_active:
+          type: boolean
+
+    LeaseCreateRequest:
+      type: object
+      required: [lease_number, unit, tenant, start_date, end_date, monthly_rent]
+      properties:
+        lease_number:
+          type: string
+          maxLength: 64
+        unit:
+          type: integer
+        tenant:
+          type: integer
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        monthly_rent:
+          type: number
+          format: double
+        security_deposit:
+          type: number
+          format: double
+          nullable: true
+        status:
+          type: string
+          enum: [draft, active, terminated, expired]
+        move_in_date:
+          type: string
+          format: date
+          nullable: true
+        move_out_date:
+          type: string
+          format: date
+          nullable: true
+        notes:
+          type: string
+        is_active:
+          type: boolean
+
+    LeaseUpdateRequest:
+      type: object
+      properties:
+        lease_number:
+          type: string
+          maxLength: 64
+        unit:
+          type: integer
+        tenant:
+          type: integer
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        monthly_rent:
+          type: number
+          format: double
+        security_deposit:
+          type: number
+          format: double
+          nullable: true
+        status:
+          type: string
+          enum: [draft, active, terminated, expired]
+        move_in_date:
+          type: string
+          format: date
+          nullable: true
+        move_out_date:
+          type: string
+          format: date
+          nullable: true
+        notes:
+          type: string
+        is_active:
+          type: boolean
+
+    Lease:
+      allOf:
+        - $ref: '#/components/schemas/LeaseUpdateRequest'
+        - type: object
+          properties:
+            id:
+              type: integer
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+
+    PaymentCreateRequest:
+      type: object
+      required: [lease, tenant, amount, due_date]
+      properties:
+        lease:
+          type: integer
+        tenant:
+          type: integer
+        amount:
+          type: number
+          format: double
+        due_date:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [pending, paid, failed, refunded]
+        payment_method:
+          type: string
+          enum: [cash, bank_transfer, card, mobile_money, other]
+        transaction_reference:
+          type: string
+          maxLength: 120
+        notes:
+          type: string
+        is_active:
+          type: boolean
+
+    PaymentUpdateRequest:
+      type: object
+      properties:
+        lease:
+          type: integer
+        tenant:
+          type: integer
+        amount:
+          type: number
+          format: double
+        due_date:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [pending, paid, failed, refunded]
+        payment_method:
+          type: string
+          enum: [cash, bank_transfer, card, mobile_money, other]
+        transaction_reference:
+          type: string
+          maxLength: 120
+        notes:
+          type: string
+        is_active:
+          type: boolean
+
+    Payment:
+      allOf:
+        - $ref: '#/components/schemas/PaymentUpdateRequest'
+        - type: object
+          properties:
+            id:
+              type: integer
+            paid_at:
+              type: string
+              format: date-time
+              nullable: true
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+
+    PropertyFinancials:
+      type: object
+      properties:
+        monthly_rent_total:
+          type: number
+          format: double
+          nullable: true
+        purchase_price:
+          type: number
+          format: double
+          nullable: true
+        current_value:
+          type: number
+          format: double
+          nullable: true
+        occupancy_rate:
+          type: number
+          format: double
+        occupied_units:
+          type: integer
+        vacant_units:
+          type: integer

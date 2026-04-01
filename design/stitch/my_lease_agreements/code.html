@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-fixed-variant": "#2e6b57",
+              "on-primary-fixed": "#354053",
+              "tertiary": "#2c6a55",
+              "on-secondary": "#f7f9ff",
+              "secondary-container": "#d3e4fe",
+              "tertiary-fixed-dim": "#aaead0",
+              "on-tertiary-fixed": "#074e3b",
+              "surface-container-highest": "#d9e4ea",
+              "surface-bright": "#f7f9fb",
+              "on-primary-container": "#475266",
+              "primary-dim": "#485367",
+              "on-secondary-fixed-variant": "#4d5d73",
+              "inverse-on-surface": "#9a9d9f",
+              "outline": "#717c82",
+              "primary-fixed": "#d8e3fb",
+              "on-surface": "#2a3439",
+              "error-container": "#fe8983",
+              "surface": "#f7f9fb",
+              "on-primary-fixed-variant": "#515c70",
+              "on-error-container": "#752121",
+              "error-dim": "#4e0309",
+              "surface-dim": "#cfdce3",
+              "surface-container-lowest": "#ffffff",
+              "outline-variant": "#a9b4b9",
+              "secondary-fixed-dim": "#c5d6f0",
+              "on-secondary-fixed": "#314055",
+              "surface-container": "#e8eff3",
+              "on-surface-variant": "#566166",
+              "secondary-dim": "#44546a",
+              "on-secondary-container": "#435368",
+              "primary": "#545f73",
+              "on-tertiary": "#e5fff2",
+              "on-error": "#fff7f6",
+              "on-background": "#2a3439",
+              "secondary": "#506076",
+              "inverse-surface": "#0b0f10",
+              "inverse-primary": "#dae6fe",
+              "tertiary-container": "#b8f9de",
+              "tertiary-dim": "#1d5d49",
+              "primary-container": "#d8e3fb",
+              "secondary-fixed": "#d3e4fe",
+              "on-primary": "#f6f7ff",
+              "tertiary-fixed": "#b8f9de",
+              "primary-fixed-dim": "#cad5ed",
+              "background": "#f7f9fb",
+              "surface-container-low": "#f0f4f7",
+              "surface-variant": "#d9e4ea",
+              "on-tertiary-container": "#22614d",
+              "error": "#9f403d",
+              "surface-tint": "#545f73",
+              "surface-container-high": "#e1e9ee"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        display: inline-block;
+        line-height: 1;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f7f9fb;
+        color: #2a3439;
+      }
+      h1, h2, h3 {
+        font-family: 'Manrope', sans-serif;
+      }
+    </style>
+</head>
+<body class="min-h-screen">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm dark:shadow-none flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Estate Metric</span>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-slate-900 dark:text-white font-semibold Inter body-md" href="#">Dashboard</a>
+<a class="text-slate-900 dark:text-white font-semibold Inter body-md" href="#">My Stays</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 transition-colors Inter body-md" href="#">Payments</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 transition-colors Inter body-md" href="#">Browse Properties</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="bg-slate-100 border-none rounded-lg pl-10 pr-4 py-1.5 text-sm focus:ring-2 focus:ring-primary/20 w-64" placeholder="Search agreements..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden ml-2">
+<img alt="User profile" data-alt="professional headshot of a young modern tenant with a minimalist background soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvw4tgN4jBZq3sONH4w-8n9kAYWeqMKdRS17ZyamP4xFff1uJvhQ3PTrLSDUG8oE3v8w91f7KQ6ZHs-rPLAsst3XMU64gGhFWyDiseJZLiRtLmWe7CEpbV38-67tDl6uYpkc6DMHVaxEU3OrLumro2T2asIAOIhwRloOCKbY3S1XNISJ4n8nGbaBX2iEXJoyGoc7eovfv6Jz46xouqfEo_423RZ3axF6ayeKO8UITWuUX8Cj6S-I1Hn5bxcIUMtyCmU641kgRGXZD6"/>
+</div>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Hidden on Mobile) -->
+<aside class="hidden lg:flex flex-col h-screen w-64 fixed left-0 top-16 bg-slate-50 dark:bg-slate-950 p-4 gap-2 border-r-0">
+<div class="mb-6 px-2">
+<h2 class="Manrope text-lg font-black text-slate-900 dark:text-white">Tenant Portal</h2>
+<p class="Inter text-xs text-slate-500">Resident Services</p>
+</div>
+<nav class="space-y-1 flex-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 rounded-lg transition-all duration-200 Inter body-md" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg shadow-sm font-bold Inter body-md" href="#">
+<span class="material-symbols-outlined" data-icon="book_online">book_online</span>
+<span>My Stays</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 rounded-lg transition-all duration-200 Inter body-md" href="#">
+<span class="material-symbols-outlined" data-icon="credit_card">credit_card</span>
+<span>Payments</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 rounded-lg transition-all duration-200 Inter body-md" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span>Browse Properties</span>
+</a>
+</nav>
+<div class="mt-auto space-y-1 border-t border-slate-200 pt-4 px-2">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 rounded-lg transition-all duration-200 Inter body-md" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span>Account</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-64 pt-24 px-6 pb-12">
+<div class="max-w-6xl mx-auto">
+<!-- Header Section -->
+<header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="text-4xl font-extrabold tracking-tight text-on-surface mb-2">Tenant Leases</h1>
+<p class="text-on-surface-variant max-w-lg">Manage your legal agreements, track lease periods, and download official documents for your current and past residences.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="bg-surface-container-high text-on-surface px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-xl">filter_list</span>
+                        Filter
+                    </button>
+<button class="bg-primary text-on-primary px-5 py-2 rounded-lg font-semibold shadow-sm hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-xl">add</span>
+                        Apply for New
+                    </button>
+</div>
+</header>
+<!-- Leases Bento/Hybrid List -->
+<div class="space-y-6">
+<!-- Section: Active Leases -->
+<section>
+<div class="flex items-center gap-2 mb-4 px-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<h2 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Active Leases</h2>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<!-- Lease Item 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-transparent hover:border-outline-variant/10 transition-all group">
+<div class="flex flex-col md:flex-row md:items-center gap-6">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Property" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="luxurious modern apartment exterior with large glass windows and architectural detail daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-kZocX6A8bvUQTdnUd45gJfQzDK0vASIsHhfDjJBywqZtWzdyqgUA04R-N0bMudP0htFaHkj1u3Eb7nT8CU8HosztH07omBMU7UGzBwKvGDbQhxhDwJO8mzsuw7hjOk3rjFxaFb-LmNiI_8An2xFIPF-T0uN2jjk1QPn3QH8r6SMG_krfKHSaAOVrbiNVtBlPF-qJkUIruRvQMM9yrUHoRRVc8a3eUpAkPqzdJwEEmzr9sit8NdxgoCD36ouuVEyKnjs1q40ZxQCr"/>
+</div>
+<div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div>
+<p class="text-xs text-on-surface-variant font-medium mb-1">Property</p>
+<h3 class="font-bold text-slate-800">Skyline Penthouse 402</h3>
+<p class="text-sm text-slate-500">122 Architecture Way, London</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-medium mb-1">Lease Period</p>
+<p class="text-sm font-semibold text-slate-700">Oct 2023 — Oct 2024</p>
+<p class="text-xs text-tertiary font-medium">8 months remaining</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-medium mb-1">Monthly Rent</p>
+<p class="text-xl font-bold text-primary">$3,450.00</p>
+<p class="text-xs text-slate-500">Due on the 1st</p>
+</div>
+<div class="flex flex-col justify-center">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container w-fit text-xs font-bold mb-3">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                            ACTIVE
+                                        </div>
+<a class="flex items-center gap-2 text-primary font-bold text-sm hover:underline" href="#">
+<span class="material-symbols-outlined text-lg">download</span>
+                                            Lease Agreement.pdf
+                                        </a>
+</div>
+</div>
+</div>
+</div>
+<!-- Lease Item 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-transparent hover:border-outline-variant/10 transition-all group">
+<div class="flex flex-col md:flex-row md:items-center gap-6">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Property" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="minimalist residential townhouse with clean lines and natural wood accents soft afternoon sun" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJfgNQuKFTMl6x4eWgC69dmtLh6wDjQHpYQiQXY-pZP_tNjNRRBdbiG-mXazypGcdwtSe7EOy_RnHnYdSGXv-pc08gfyNbdjDQtCzWmX0JlSawuJUvTJrDR6DSUBbc1lvsP7enf72OrtLSsD50Nr0n1a4kvkbhgloaQoBKo8LXJCEZcbzoIdtOnL6ABGFCFJcN1UJHL_RFWniYgpfSnyynmXzRzb4wPtEHj0w3F3RgUCTXnS4l3XzeQqdfqnjLcbu7yBCsbujyFYTR"/>
+</div>
+<div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div>
+<p class="text-xs text-on-surface-variant font-medium mb-1">Property</p>
+<h3 class="font-bold text-slate-800">The Willow Studio #B</h3>
+<p class="text-sm text-slate-500">45 Garden District, Manchester</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-medium mb-1">Lease Period</p>
+<p class="text-sm font-semibold text-slate-700">Jan 2024 — Jan 2025</p>
+<p class="text-xs text-tertiary font-medium">11 months remaining</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-medium mb-1">Monthly Rent</p>
+<p class="text-xl font-bold text-primary">$1,800.00</p>
+<p class="text-xs text-slate-500">Due on the 5th</p>
+</div>
+<div class="flex flex-col justify-center">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container w-fit text-xs font-bold mb-3">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                            ACTIVE
+                                        </div>
+<a class="flex items-center gap-2 text-primary font-bold text-sm hover:underline" href="#">
+<span class="material-symbols-outlined text-lg">download</span>
+                                            Studio_Agreement.pdf
+                                        </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Historic Leases -->
+<section class="mt-12">
+<div class="flex items-center gap-2 mb-4 px-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<h2 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Historic Leases</h2>
+</div>
+<div class="bg-white rounded-xl shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant text-xs uppercase tracking-wider font-bold">
+<th class="px-6 py-4">Property</th>
+<th class="px-6 py-4">Period</th>
+<th class="px-6 py-4">Rent</th>
+<th class="px-6 py-4">Document</th>
+<th class="px-6 py-4 text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-5">
+<p class="font-bold text-slate-700">Urban Loft 12A</p>
+<p class="text-xs text-slate-500">Shoreditch High St, London</p>
+</td>
+<td class="px-6 py-5 text-sm text-slate-600">Jan 2022 — Dec 2022</td>
+<td class="px-6 py-5 text-sm font-semibold text-slate-700">$2,100.00</td>
+<td class="px-6 py-5">
+<a class="flex items-center gap-1 text-primary text-sm font-medium hover:underline" href="#">
+<span class="material-symbols-outlined text-base">description</span>
+                                                Archived_Lease.pdf
+                                            </a>
+</td>
+<td class="px-6 py-5 text-right">
+<span class="inline-block px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant text-[10px] font-bold">EXPIRED</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-5">
+<p class="font-bold text-slate-700">Riverside Flat 03</p>
+<p class="text-xs text-slate-500">Thames Path, London</p>
+</td>
+<td class="px-6 py-5 text-sm text-slate-600">Jun 2020 — Jun 2021</td>
+<td class="px-6 py-5 text-sm font-semibold text-slate-700">$1,950.00</td>
+<td class="px-6 py-5">
+<a class="flex items-center gap-1 text-primary text-sm font-medium hover:underline" href="#">
+<span class="material-symbols-outlined text-base">description</span>
+                                                Archive_2020.pdf
+                                            </a>
+</td>
+<td class="px-6 py-5 text-right">
+<span class="inline-block px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant text-[10px] font-bold">TERMINATED</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- Empty State (Conditional Display Example) -->
+<!-- 
+                <section class="flex flex-col items-center justify-center py-20 px-6 text-center bg-surface-container-low rounded-3xl border-2 border-dashed border-outline-variant/20">
+                    <div class="w-16 h-16 bg-surface-container-highest rounded-full flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-3xl text-outline">contract_edit</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">No active leases found.</h3>
+                    <p class="text-slate-500 max-w-sm mb-6">It looks like you don't have any current rental agreements. Start browsing properties to find your next home.</p>
+                    <button class="bg-primary text-white px-6 py-2.5 rounded-lg font-bold">Browse Properties</button>
+                </section> 
+                -->
+</div>
+</div>
+</main>
+<!-- Floating Quick Action (Mobile Only) -->
+<button class="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center z-50">
+<span class="material-symbols-outlined">add</span>
+</button>
+</body></html>

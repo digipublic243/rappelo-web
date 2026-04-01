@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-fixed-variant": "#2e6b57",
+              "on-primary-fixed": "#354053",
+              "tertiary": "#2c6a55",
+              "on-secondary": "#f7f9ff",
+              "secondary-container": "#d3e4fe",
+              "tertiary-fixed-dim": "#aaead0",
+              "on-tertiary-fixed": "#074e3b",
+              "surface-container-highest": "#d9e4ea",
+              "surface-bright": "#f7f9fb",
+              "on-primary-container": "#475266",
+              "primary-dim": "#485367",
+              "on-secondary-fixed-variant": "#4d5d73",
+              "inverse-on-surface": "#9a9d9f",
+              "outline": "#717c82",
+              "primary-fixed": "#d8e3fb",
+              "on-surface": "#2a3439",
+              "error-container": "#fe8983",
+              "surface": "#f7f9fb",
+              "on-primary-fixed-variant": "#515c70",
+              "on-error-container": "#752121",
+              "error-dim": "#4e0309",
+              "surface-dim": "#cfdce3",
+              "surface-container-lowest": "#ffffff",
+              "outline-variant": "#a9b4b9",
+              "secondary-fixed-dim": "#c5d6f0",
+              "on-secondary-fixed": "#314055",
+              "surface-container": "#e8eff3",
+              "on-surface-variant": "#566166",
+              "secondary-dim": "#44546a",
+              "on-secondary-container": "#435368",
+              "primary": "#545f73",
+              "on-tertiary": "#e5fff2",
+              "on-error": "#fff7f6",
+              "on-background": "#2a3439",
+              "secondary": "#506076",
+              "inverse-surface": "#0b0f10",
+              "inverse-primary": "#dae6fe",
+              "tertiary-container": "#b8f9de",
+              "tertiary-dim": "#1d5d49",
+              "primary-container": "#d8e3fb",
+              "secondary-fixed": "#d3e4fe",
+              "on-primary": "#f6f7ff",
+              "tertiary-fixed": "#b8f9de",
+              "primary-fixed-dim": "#cad5ed",
+              "background": "#f7f9fb",
+              "surface-container-low": "#f0f4f7",
+              "surface-variant": "#d9e4ea",
+              "on-tertiary-container": "#22614d",
+              "error": "#9f403d",
+              "surface-tint": "#545f73",
+              "surface-container-high": "#e1e9ee"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+            color: #2a3439;
+        }
+        .headline-font { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar Execution -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm dark:shadow-none flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100 headline-font">Estate Metric</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 transition-colors headline-font text-sm font-semibold" href="#">Dashboard</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 transition-colors headline-font text-sm font-semibold" href="#">My Stays</a>
+<a class="text-slate-900 dark:text-white font-semibold headline-font text-sm" href="#">Payments</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 transition-colors headline-font text-sm font-semibold" href="#">Browse Properties</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="material-symbols-outlined text-slate-600 cursor-pointer p-2 rounded-full hover:bg-slate-100 transition-colors">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<span class="material-symbols-outlined text-slate-600 cursor-pointer p-2 rounded-full hover:bg-slate-100 transition-colors">apps</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="professional portrait of a woman with a friendly smile, soft natural lighting, minimalist studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6BI0GuWqNnpjIQmE_esnNgeOZxRsDbtaO7Ygfb6gkadE-I24Mf9pERFORKYLxIpyIBOwJbpCq6yYxsZFbR1zZ4PRNGakPgBlXoQ6Zdj204zlpjIIGtInHhWUc8-2GIxHwq5NN_mVXHRR8TIBbaXzvj5tLQ_T5NsH2L1ftdBc1gduRwsLQyOKk-JUUfeiVSY-wW_xLcki2KE_AzpLZjeHvAIDGxgGcsX2jecSRD2d6KoJSA3-w9dbMKu5zphucbTDdNN9aHGa_tzXA"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-12 px-6 max-w-7xl mx-auto">
+<!-- Editorial Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<h1 class="headline-font text-4xl font-extrabold tracking-tight text-on-surface mb-2">Financial Ledger</h1>
+<p class="text-on-surface-variant font-body">Review your payment history and manage upcoming bills for <span class="font-semibold">Apartment 4B, The Spruce Residences</span>.</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex items-center gap-6 min-w-[320px]">
+<div class="p-3 bg-tertiary-container rounded-lg">
+<span class="material-symbols-outlined text-on-tertiary-container" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+<div>
+<p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1">Total Paid This Year</p>
+<p class="headline-font text-2xl font-bold text-on-surface">$24,450.00</p>
+</div>
+</div>
+</div>
+<!-- Bento Layout for Payment Summary -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+<!-- Outstanding Balance Card -->
+<div class="col-span-1 md:col-span-2 bg-surface-container-low rounded-xl p-8 flex flex-col justify-between relative overflow-hidden group">
+<div class="relative z-10">
+<h3 class="headline-font text-lg font-bold text-on-surface-variant mb-6">Current Balance</h3>
+<div class="flex items-baseline gap-2">
+<span class="headline-font text-5xl font-black text-on-surface">$2,100.00</span>
+<span class="text-on-surface-variant font-medium">Due by Oct 01</span>
+</div>
+</div>
+<div class="mt-8 flex gap-4 relative z-10">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-primary-dim transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm">bolt</span>
+                        Pay Now
+                    </button>
+<button class="text-primary font-bold px-6 py-3 hover:bg-white/50 rounded-lg transition-all">
+                        Setup Autopay
+                    </button>
+</div>
+<!-- Abstract architectural background element -->
+<div class="absolute right-0 bottom-0 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[160px]" style="font-variation-settings: 'wght' 100;">account_balance_wallet</span>
+</div>
+</div>
+<!-- Next Due Date Mini Card -->
+<div class="bg-white rounded-xl p-8 shadow-sm flex flex-col justify-center items-center text-center">
+<div class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-on-secondary-container text-3xl">event</span>
+</div>
+<p class="text-on-surface-variant text-sm font-medium mb-1">Next Statement</p>
+<p class="headline-font text-xl font-bold text-on-surface">October 01, 2023</p>
+<div class="mt-4 pt-4 border-t border-surface-container w-full">
+<p class="text-xs text-on-surface-variant italic">Invoice generated 5 days prior</p>
+</div>
+</div>
+</div>
+<!-- Ledger Table Section -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden">
+<div class="px-8 py-6 flex justify-between items-center bg-surface-container-low/50">
+<h2 class="headline-font text-xl font-bold text-on-surface">Payment History</h2>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg hover:bg-surface-container transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<button class="p-2 rounded-lg hover:bg-surface-container transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">download</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-on-surface-variant text-xs font-bold uppercase tracking-widest bg-surface-container-low/30">
+<th class="px-8 py-4">Billing Date</th>
+<th class="px-8 py-4">Description</th>
+<th class="px-8 py-4">Amount</th>
+<th class="px-8 py-4">Status</th>
+<th class="px-8 py-4">Payment Date</th>
+<th class="px-8 py-4 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container/30">
+<!-- Overdue Row -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-8 py-6 font-medium">Sep 01, 2023</td>
+<td class="px-8 py-6">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">Monthly Rent</span>
+<span class="text-xs text-on-surface-variant">September 2023 Occupancy</span>
+</div>
+</td>
+<td class="px-8 py-6 font-bold text-on-surface">$2,100.00</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 bg-error-container/20 text-on-error-container text-xs font-bold rounded-full border border-error-container/30">Overdue</span>
+</td>
+<td class="px-8 py-6 text-on-surface-variant italic">—</td>
+<td class="px-8 py-6 text-right">
+<button class="text-error font-bold text-sm hover:underline">Pay Now</button>
+</td>
+</tr>
+<!-- Paid Row -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-6 font-medium">Aug 01, 2023</td>
+<td class="px-8 py-6">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">Monthly Rent</span>
+<span class="text-xs text-on-surface-variant">August 2023 Occupancy</span>
+</div>
+</td>
+<td class="px-8 py-6 font-bold text-on-surface">$2,100.00</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 bg-tertiary-container/40 text-on-tertiary-container text-xs font-bold rounded-full">Paid</span>
+</td>
+<td class="px-8 py-6 text-on-surface-variant">Aug 02, 2023</td>
+<td class="px-8 py-6 text-right">
+<button class="text-primary p-2 hover:bg-surface-container rounded-lg">
+<span class="material-symbols-outlined text-lg">receipt_long</span>
+</button>
+</td>
+</tr>
+<!-- One-time Fee Row -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-6 font-medium">Jul 15, 2023</td>
+<td class="px-8 py-6">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">Maintenance Fee</span>
+<span class="text-xs text-on-surface-variant">HVAC Filter Replacement</span>
+</div>
+</td>
+<td class="px-8 py-6 font-bold text-on-surface">$45.00</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 bg-tertiary-container/40 text-on-tertiary-container text-xs font-bold rounded-full">Paid</span>
+</td>
+<td class="px-8 py-6 text-on-surface-variant">Jul 16, 2023</td>
+<td class="px-8 py-6 text-right">
+<button class="text-primary p-2 hover:bg-surface-container rounded-lg">
+<span class="material-symbols-outlined text-lg">receipt_long</span>
+</button>
+</td>
+</tr>
+<!-- Deposit Row -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-6 font-medium">Jul 01, 2023</td>
+<td class="px-8 py-6">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">Security Deposit</span>
+<span class="text-xs text-on-surface-variant">Refundable Deposit Holding</span>
+</div>
+</td>
+<td class="px-8 py-6 font-bold text-on-surface">$4,200.00</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 bg-tertiary-container/40 text-on-tertiary-container text-xs font-bold rounded-full">Paid</span>
+</td>
+<td class="px-8 py-6 text-on-surface-variant">Jul 01, 2023</td>
+<td class="px-8 py-6 text-right">
+<button class="text-primary p-2 hover:bg-surface-container rounded-lg">
+<span class="material-symbols-outlined text-lg">receipt_long</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-8 py-6 flex justify-between items-center text-sm text-on-surface-variant border-t border-surface-container">
+<p>Showing 1-4 of 12 transactions</p>
+<div class="flex gap-4">
+<button class="font-bold text-primary disabled:opacity-50" disabled="">Previous</button>
+<button class="font-bold text-primary">Next</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Suppressed on Details/Payments as per rule, but if mandated for 'Add Payment' it would be here) -->
+<!-- Suppression logic: Screen is 'Details' or 'Transactional', so we skip FAB to prioritize Ledger content -->
+<!-- Responsive Bottom Nav (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] h-20 px-6 flex items-center justify-around z-50">
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">book_online</span>
+<span class="text-[10px] font-bold">Stays</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-900">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">credit_card</span>
+<span class="text-[10px] font-bold">Payments</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">search</span>
+<span class="text-[10px] font-bold">Explore</span>
+</div>
+</nav>
+</body></html>

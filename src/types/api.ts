@@ -1,0 +1,207 @@
+export type ApiUserRole = "landlord" | "tenant" | "property_manager" | "admin";
+export type ApiPropertyStatus = "active" | "inactive" | "maintenance" | "sold";
+export type ApiUnitStatus = "vacant" | "occupied" | "maintenance" | "reserved";
+export type ApiLeaseStatus = "draft" | "active" | "terminated" | "expired";
+export type ApiPaymentStatus = "pending" | "paid" | "failed" | "refunded";
+export type ApiPaymentMethod = "cash" | "bank_transfer" | "card" | "mobile_money" | "other";
+export type ApiEmploymentStatus = "employed" | "self_employed" | "unemployed" | "student" | "retired";
+
+export interface SessionTokens {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface ApiErrorResponse {
+  detail?: string;
+  message?: string;
+  [key: string]: unknown;
+}
+
+export interface ApiTokenPair {
+  access: string;
+  refresh: string;
+}
+
+export interface ApiLoginRequest {
+  phone_number: string;
+  password: string;
+}
+
+export interface ApiUserCreateRequest {
+  phone_number: string;
+  password: string;
+  password2: string;
+  role: ApiUserRole;
+  email?: string | null;
+  first_name?: string;
+  last_name?: string;
+  date_of_birth?: string | null;
+}
+
+export interface ApiUserStatistics {
+  total_users: number;
+  active_users: number;
+  landlords: number;
+  tenants: number;
+  property_managers: number;
+}
+
+export interface ApiUserDetail {
+  id: number;
+  phone_number: string;
+  email: string | null;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  role: ApiUserRole;
+  date_of_birth: string | null;
+  is_active: boolean;
+  date_joined: string;
+  last_login: string | null;
+}
+
+export interface ApiProperty {
+  id: number | string;
+  name: string;
+  property_type: string;
+  status: ApiPropertyStatus;
+  address_line_1: string;
+  address_line_2?: string | null;
+  city: string;
+  state: string;
+  postal_code: string;
+  country: string;
+  description?: string | null;
+  year_built?: number | null;
+  total_units: number;
+  square_footage?: number | null;
+  purchase_price?: number | null;
+  current_value?: number | null;
+  monthly_rent_total?: number | null;
+  landlord?: number;
+  is_active: boolean;
+  [key: string]: unknown;
+}
+
+export interface ApiPropertyUpsertRequest {
+  name: string;
+  property_type: string;
+  status: ApiPropertyStatus;
+  address_line_1: string;
+  address_line_2?: string | null;
+  city: string;
+  state: string;
+  postal_code: string;
+  country: string;
+  description?: string | null;
+  year_built?: number | null;
+  total_units: number;
+  square_footage?: number | null;
+  purchase_price?: number | null;
+  current_value?: number | null;
+  is_active: boolean;
+}
+
+export interface ApiPropertyFinancials {
+  monthly_rent_total?: number | null;
+  purchase_price?: number | null;
+  current_value?: number | null;
+  occupancy_rate: number;
+  occupied_units: number;
+  vacant_units: number;
+}
+
+export interface ApiUnit {
+  id: number | string;
+  property: number | string;
+  unit_number: string;
+  unit_type: string;
+  status: ApiUnitStatus;
+  bedrooms: number;
+  bathrooms: number;
+  square_footage?: number | null;
+  monthly_rent: number;
+  security_deposit?: number | null;
+  description?: string | null;
+  floor_number?: number | null;
+  is_furnished: boolean;
+  is_active: boolean;
+  rent_period?: "daily" | "weekly" | "monthly" | "other";
+  booking_deposit?: number | null;
+  allowed_payment_methods?: string[];
+  [key: string]: unknown;
+}
+
+export interface ApiTenantProfile {
+  id: number | string;
+  user: number;
+  date_of_birth?: string | null;
+  ssn?: string | null;
+  ssn_last_four?: string | null;
+  employment_status?: ApiEmploymentStatus | null;
+  annual_income?: number | null;
+  is_active: boolean;
+  [key: string]: unknown;
+}
+
+export interface ApiLease {
+  id: number | string;
+  lease_number?: string;
+  unit: number | string;
+  tenant: number | string;
+  start_date: string;
+  end_date: string;
+  monthly_rent: number;
+  security_deposit?: number | null;
+  status: ApiLeaseStatus;
+  move_in_date?: string | null;
+  move_out_date?: string | null;
+  notes?: string;
+  is_active?: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ApiLeaseRenewRequest {
+  new_end_date: string;
+}
+
+export interface ApiLeaseTerminateRequest {
+  move_out_date?: string;
+}
+
+export interface ApiPayment {
+  id: number | string;
+  lease?: number | string;
+  tenant: number | string;
+  amount: number;
+  due_date: string;
+  status: ApiPaymentStatus;
+  payment_method?: ApiPaymentMethod;
+  transaction_reference?: string;
+  notes?: string;
+  is_active?: boolean;
+  paid_at?: string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ApiPaymentCreateRequest {
+  lease: number | string;
+  tenant: number | string;
+  amount: number;
+  due_date: string;
+  status?: ApiPaymentStatus;
+  payment_method?: ApiPaymentMethod;
+  transaction_reference?: string;
+  notes?: string;
+  is_active?: boolean;
+}
+
+export interface AuthenticatedUser {
+  id: string;
+  role: ApiUserRole;
+  fullName: string;
+  phoneNumber: string;
+  email?: string | null;
+}

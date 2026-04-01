@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Estate Metric | Lease Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed-variant": "#2e6b57",
+                        "on-primary-fixed": "#354053",
+                        "tertiary": "#2c6a55",
+                        "on-secondary": "#f7f9ff",
+                        "secondary-container": "#d3e4fe",
+                        "tertiary-fixed-dim": "#aaead0",
+                        "on-tertiary-fixed": "#074e3b",
+                        "surface-container-highest": "#d9e4ea",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-container": "#475266",
+                        "primary-dim": "#485367",
+                        "on-secondary-fixed-variant": "#4d5d73",
+                        "inverse-on-surface": "#9a9d9f",
+                        "outline": "#717c82",
+                        "primary-fixed": "#d8e3fb",
+                        "on-surface": "#2a3439",
+                        "error-container": "#fe8983",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed-variant": "#515c70",
+                        "on-error-container": "#752121",
+                        "error-dim": "#4e0309",
+                        "surface-dim": "#cfdce3",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#a9b4b9",
+                        "secondary-fixed-dim": "#c5d6f0",
+                        "on-secondary-fixed": "#314055",
+                        "surface-container": "#e8eff3",
+                        "on-surface-variant": "#566166",
+                        "secondary-dim": "#44546a",
+                        "on-secondary-container": "#435368",
+                        "primary": "#545f73",
+                        "on-tertiary": "#e5fff2",
+                        "on-error": "#fff7f6",
+                        "on-background": "#2a3439",
+                        "secondary": "#506076",
+                        "inverse-surface": "#0b0f10",
+                        "inverse-primary": "#dae6fe",
+                        "tertiary-container": "#b8f9de",
+                        "tertiary-dim": "#1d5d49",
+                        "primary-container": "#d8e3fb",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-primary": "#f6f7ff",
+                        "tertiary-fixed": "#b8f9de",
+                        "primary-fixed-dim": "#cad5ed",
+                        "background": "#f7f9fb",
+                        "surface-container-low": "#f0f4f7",
+                        "surface-variant": "#d9e4ea",
+                        "on-tertiary-container": "#22614d",
+                        "error": "#9f403d",
+                        "surface-tint": "#545f73",
+                        "surface-container-high": "#e1e9ee"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar Component -->
+<aside class="h-screen w-64 fixed left-0 bg-slate-50 dark:bg-slate-950 flex flex-col p-4 gap-2 border-r-0 z-40">
+<div class="mb-8 px-2">
+<h1 class="text-lg font-black text-slate-900 dark:text-white uppercase tracking-wider">Estate Metric</h1>
+<p class="text-xs font-semibold text-slate-500 uppercase tracking-widest">Portfolio Manager</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg shadow-sm font-bold transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span class="font-body text-sm">Portfolio</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body text-sm">Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-body text-sm">Finance</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-1 pt-4 border-t border-slate-200 dark:border-slate-800">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-700 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body text-sm">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-700 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-body text-sm">Support</span>
+</a>
+<div class="mt-4 flex items-center gap-3 px-2 py-3 bg-surface-container rounded-xl">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="professional male property manager headshot with neutral background, soft studio lighting, wearing a grey blazer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQSHoTaAThCGqyMYs2HfMPa1XRkwrvzHXGbhe9p4rrWiHejkDMgduCsVFQxcCcWTONs-4hpVlz5ruzzyD-2clBhih4DdEYjHuuGPWQZyIjqFqA_2AepllURWuoS16MGJtBy53nbi_dFOeHI8-eABFvKS9h2WYE8FutDvRbGSzYHDFFL1TjF9qzsWm_t5ZwS36Zki3B252SetNEn3mJTS1k_Aym-qEWWJq8D9c7J8ZJjDm7bgwn7PJSuNf08Ye90UpDCB7TDNOZWO8X"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900">Marcus Sterling</span>
+<span class="text-[10px] uppercase font-bold text-primary tracking-tighter">Principal Owner</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar Component -->
+<header class="fixed top-0 right-0 left-64 h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm flex items-center justify-between px-8 z-30">
+<div class="flex items-center gap-4">
+<h2 class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Lease Agreements</h2>
+<div class="h-4 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center bg-surface-container px-3 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-slate-400 text-sm" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface-variant placeholder:text-slate-400 w-64" placeholder="Search leases..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+</button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:bg-primary-dim transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                    New Lease
+                </button>
+</div>
+</header>
+<div class="pt-24 px-8 pb-12">
+<!-- Statistics Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-transparent hover:border-outline-variant/10 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary-container text-primary rounded-lg">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<span class="text-xs font-bold text-tertiary">+12% vs LY</span>
+</div>
+<p class="text-on-surface-variant text-sm font-medium">Total Active Leases</p>
+<h3 class="text-3xl font-extrabold text-on-surface mt-1">142</h3>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-transparent hover:border-outline-variant/10 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-secondary-container text-secondary rounded-lg">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+</div>
+<span class="text-xs font-bold text-secondary">8 Urgent</span>
+</div>
+<p class="text-on-surface-variant text-sm font-medium">Pending Signatures</p>
+<h3 class="text-3xl font-extrabold text-on-surface mt-1">24</h3>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-transparent hover:border-outline-variant/10 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-error-container/20 text-error rounded-lg">
+<span class="material-symbols-outlined" data-icon="event_busy">event_busy</span>
+</div>
+<span class="text-xs font-bold text-error">Next 30 days</span>
+</div>
+<p class="text-on-surface-variant text-sm font-medium">Expiring Soon</p>
+<h3 class="text-3xl font-extrabold text-on-surface mt-1">07</h3>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-transparent hover:border-outline-variant/10 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-tertiary-container text-tertiary rounded-lg">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+</div>
+<span class="text-xs font-bold text-tertiary">98.2%</span>
+</div>
+<p class="text-on-surface-variant text-sm font-medium">Occupancy Rate</p>
+<h3 class="text-3xl font-extrabold text-on-surface mt-1">Stable</h3>
+</div>
+</div>
+<!-- Main Table Section -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-outline-variant/10">
+<div class="p-6 flex justify-between items-center bg-white">
+<div class="flex gap-4">
+<button class="px-4 py-2 text-sm font-bold bg-primary-container text-on-primary-container rounded-full">All Leases</button>
+<button class="px-4 py-2 text-sm font-semibold text-on-surface-variant hover:bg-surface-container rounded-full transition-colors">Active</button>
+<button class="px-4 py-2 text-sm font-semibold text-on-surface-variant hover:bg-surface-container rounded-full transition-colors">Pending</button>
+<button class="px-4 py-2 text-sm font-semibold text-on-surface-variant hover:bg-surface-container rounded-full transition-colors">Expiring</button>
+</div>
+<button class="flex items-center gap-2 text-primary font-bold text-sm">
+<span class="material-symbols-outlined text-base" data-icon="filter_list">filter_list</span>
+                        Advanced Filters
+                    </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low text-on-surface-variant uppercase text-[11px] font-bold tracking-widest">
+<tr>
+<th class="px-6 py-4">Lease ID</th>
+<th class="px-6 py-4">Tenant</th>
+<th class="px-6 py-4">Unit</th>
+<th class="px-6 py-4">Term (Start/End)</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y-0">
+<!-- Active Row -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5 font-body text-sm font-semibold text-on-surface">#L-98421</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full" data-alt="close-up portrait of a young professional woman with glasses, smiling, professional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQzzRRiZdB01tbMBFdxFdJzTk1HpKPqEPFURZWMKtNxxIK_oEt16ibU0Xzow7BSW8MMEMh3PNId8f_F5iXe_gEQW1YhWNyr8l7WG03mAeZNRagX2lyimW9q4j64DoVfdpMVAE5iNsIWkdXmrXSxazd7WNvDG-LRJMOEYe7YgSWaklbBO8y3uBkbB-r_SFAb8nR_woq3h78acKxwK1PkrT0NPVRb7rMqtxgs7c5mfPspDRHvaGnzkuHmHm4W9AzjCP6mWw8dh2HJovU"/>
+<div>
+<p class="text-sm font-bold text-on-surface">Elena Rodriguez</p>
+<p class="text-xs text-on-surface-variant">Residential - Studio</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-medium text-on-surface">The Heights, Apt 402</span>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm font-semibold text-on-surface">Jan 12, 2023</p>
+<p class="text-xs text-on-surface-variant">Ends Jan 11, 2024</p>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-container text-on-tertiary-container text-[11px] font-bold uppercase tracking-tight">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                                        Active
+                                    </span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-primary hover:bg-primary-container rounded-lg transition-colors" title="View Document">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+</button>
+<button class="p-2 text-secondary hover:bg-secondary-container rounded-lg transition-colors" title="Renew Lease">
+<span class="material-symbols-outlined text-lg" data-icon="autorenew">autorenew</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Expiring Soon Row -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5 font-body text-sm font-semibold text-on-surface">#L-97554</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full" data-alt="middle-aged man with beard and casual business attire, neutral background, studio headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDBuDGjwa-AS3HsSaKloYNRkqQfb0hrENCQrES9L_6UjLVwOAklyTQjmbchF2gIsGg4e1PzR-5tK7IphQiNNcrqFmuEs5bVnFzHxnGd_Uf0S54B9z2EVWzgPwQreMs8NeeFk44FJH43wbM0UP5U2NVSUDLAryZjrq9MzfK6Hsp4V8WuX_33ix-uyes_Z6Kh4aSI9bOqKosNPtq9UiCoZc_f5AbyAF-oAaCbWQX0ICUXbOtTGkmcexTiAAii29Q_oD_mCZs_uf5tGQ4"/>
+<div>
+<p class="text-sm font-bold text-on-surface">Julian Vance</p>
+<p class="text-xs text-on-surface-variant">Commercial - Office</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-medium text-on-surface">Pine Tower, Ste 1200</span>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm font-semibold text-on-surface">Nov 01, 2022</p>
+<p class="text-xs text-error font-bold italic">Ends Oct 31, 2023</p>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container text-on-error-container text-[11px] font-bold uppercase tracking-tight">
+<span class="material-symbols-outlined text-[12px]" data-icon="warning">warning</span>
+                                        Expiring Soon
+                                    </span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2">
+<button class="bg-primary text-on-primary text-[11px] font-bold uppercase px-3 py-1.5 rounded-lg hover:bg-primary-dim transition-colors shadow-sm">
+                                            Renew Lease
+                                        </button>
+</div>
+</td>
+</tr>
+<!-- Pending Sign Row -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5 font-body text-sm font-semibold text-on-surface">#L-10293</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant font-bold text-xs">SM</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Sarah Miller</p>
+<p class="text-xs text-on-surface-variant">Residential - Loft</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-medium text-on-surface">Urban Lofts, Unit 12B</span>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm font-semibold text-on-surface">Oct 25, 2023</p>
+<p class="text-xs text-on-surface-variant">Pending Start</p>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-bold uppercase tracking-tight">
+<span class="material-symbols-outlined text-[12px]" data-icon="history">history</span>
+                                        Pending Sign
+                                    </span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2">
+<button class="bg-secondary text-on-secondary text-[11px] font-bold uppercase px-3 py-1.5 rounded-lg hover:bg-secondary-dim transition-colors shadow-sm">
+                                            Send Reminder
+                                        </button>
+</div>
+</td>
+</tr>
+<!-- Completed Row -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5 font-body text-sm font-semibold text-on-surface">#L-87221</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full" data-alt="confident elderly woman with grey hair, sophisticated studio portrait, soft neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrRfBt50Z5FDrDKz-KhJW-_lS-plkHU09iXn2u5GisNYXXOY7e9-IOUYWl4urgQNL7WaU_nNHSoc6rciX4J8pin8DfhE3ueNzJFe1_porjOiSiiXbITbQJt5UYk_MVkqgR3NcjXQPYvEGcOoYvc0ttSNetbJbmiiJMN2eP_4lofU7SU247DtZcwI6n2hIf54et8a1ULkUywY4c-XF1fvsMYGIUfL3u56BOVtKGBEyAVLLxcXEDJ4wPFH5xc_nq_JhOF3tCFbKw9OXW"/>
+<div>
+<p class="text-sm font-bold text-on-surface">Beatrice Thorne</p>
+<p class="text-xs text-on-surface-variant">Residential - 2BR</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-medium text-on-surface">Grand Manor, Apt 104</span>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">
+<p class="text-sm font-semibold">Sep 01, 2022</p>
+<p class="text-xs">Ended Aug 31, 2023</p>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-bold uppercase tracking-tight">
+<span class="material-symbols-outlined text-[12px]" data-icon="task_alt">task_alt</span>
+                                        Completed
+                                    </span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 text-outline hover:bg-surface-container rounded-lg transition-colors" title="Archive">
+<span class="material-symbols-outlined text-lg" data-icon="archive">archive</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-surface-container flex items-center justify-between">
+<p class="text-xs text-on-surface-variant font-medium tracking-wide uppercase">Showing 1-10 of 142 leases</p>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg hover:bg-surface-container disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="p-2 rounded-lg hover:bg-surface-container">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

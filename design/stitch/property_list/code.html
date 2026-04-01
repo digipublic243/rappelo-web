@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Estate Metric | Landlord Portfolio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed-variant": "#2e6b57",
+                        "on-primary-fixed": "#354053",
+                        "tertiary": "#2c6a55",
+                        "on-secondary": "#f7f9ff",
+                        "secondary-container": "#d3e4fe",
+                        "tertiary-fixed-dim": "#aaead0",
+                        "on-tertiary-fixed": "#074e3b",
+                        "surface-container-highest": "#d9e4ea",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-container": "#475266",
+                        "primary-dim": "#485367",
+                        "on-secondary-fixed-variant": "#4d5d73",
+                        "inverse-on-surface": "#9a9d9f",
+                        "outline": "#717c82",
+                        "primary-fixed": "#d8e3fb",
+                        "on-surface": "#2a3439",
+                        "error-container": "#fe8983",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed-variant": "#515c70",
+                        "on-error-container": "#752121",
+                        "error-dim": "#4e0309",
+                        "surface-dim": "#cfdce3",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#a9b4b9",
+                        "secondary-fixed-dim": "#c5d6f0",
+                        "on-secondary-fixed": "#314055",
+                        "surface-container": "#e8eff3",
+                        "on-surface-variant": "#566166",
+                        "secondary-dim": "#44546a",
+                        "on-secondary-container": "#435368",
+                        "primary": "#545f73",
+                        "on-tertiary": "#e5fff2",
+                        "on-error": "#fff7f6",
+                        "on-background": "#2a3439",
+                        "secondary": "#506076",
+                        "inverse-surface": "#0b0f10",
+                        "inverse-primary": "#dae6fe",
+                        "tertiary-container": "#b8f9de",
+                        "tertiary-dim": "#1d5d49",
+                        "primary-container": "#d8e3fb",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-primary": "#f6f7ff",
+                        "tertiary-fixed": "#b8f9de",
+                        "primary-fixed-dim": "#cad5ed",
+                        "background": "#f7f9fb",
+                        "surface-container-low": "#f0f4f7",
+                        "surface-variant": "#d9e4ea",
+                        "on-tertiary-container": "#22614d",
+                        "error": "#9f403d",
+                        "surface-tint": "#545f73",
+                        "surface-container-high": "#e1e9ee"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm dark:shadow-none flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Estate Metric</span>
+<div class="hidden md:flex items-center bg-surface-container rounded-lg px-3 py-1.5 gap-2">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-64" placeholder="Search portfolio..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-slate-100 transition-colors">
+<span class="material-symbols-outlined text-slate-600">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-100 transition-colors">
+<span class="material-symbols-outlined text-slate-600">apps</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant/20">
+<img alt="User profile with role indicator" data-alt="Close up portrait of a professional man in a dark blazer, soft studio lighting, professional corporate headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxdijgoQV0-Rs4olP6P0_i5kVsAnWEBUlGfCnIHR2jXYGQbd_IQhSat39gd0gojeGyJ-18l5ANiPldLKqzEJzGBrp-Qak6cq0RV-f60efyndjRAzfOls1Bfql6e78WuWLYN3Mq3eii-5U3EYQ_eyieDU4ub8JpS4qh0BcVlf6g1MLinR8oi2c6fZfAJNfrm4Qn0_3UlOfD_iqmv4hY0mS0ZlMVyXEus3ze7RoFrNvrPYJsdNCzX1bGBdHM5HJni9zCTzMfoX3BUcNj"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 pt-16 bg-slate-50 dark:bg-slate-950 flex flex-col p-4 gap-2 border-r-0">
+<div class="px-4 py-6">
+<h2 class="text-lg font-black text-slate-900 dark:text-white font-headline">Landlord Portal</h2>
+<p class="text-xs text-slate-500 font-body">Portfolio Manager</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-700 transition-all duration-200 font-body" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg shadow-sm font-bold transition-all duration-200 font-body" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">domain</span>
+<span>Portfolio</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-700 transition-all duration-200 font-body" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>Management</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-700 transition-all duration-200 font-body" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Finance</span>
+</a>
+</nav>
+<div class="mt-auto space-y-1 border-t border-slate-200 pt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-700 transition-all duration-200 font-body" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-700 transition-all duration-200 font-body" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 pt-16 min-h-screen">
+<div class="max-w-7xl mx-auto p-8">
+<!-- Editorial Header Section -->
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<h1 class="text-display-sm md:text-headline-md font-extrabold tracking-tight text-on-surface mb-2">Properties</h1>
+<p class="text-on-surface-variant max-w-md">Overview of your real estate assets, occupancy rates, and financial performance across regions.</p>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-lg flex items-center gap-2 font-semibold shadow-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add</span>
+<span>Add Property</span>
+</button>
+</header>
+<!-- Filter Bar: Tonal Layering Level 1 -->
+<section class="bg-surface-container-low rounded-xl p-4 mb-8 flex flex-wrap items-center gap-4">
+<div class="flex items-center gap-2 bg-surface-container-lowest px-4 py-2 rounded-lg text-sm border border-outline-variant/10">
+<span class="text-outline">Status:</span>
+<select class="bg-transparent border-none p-0 focus:ring-0 font-semibold text-primary">
+<option>All Assets</option>
+<option>Occupied</option>
+<option>Vacant</option>
+</select>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-lowest px-4 py-2 rounded-lg text-sm border border-outline-variant/10">
+<span class="text-outline">City:</span>
+<select class="bg-transparent border-none p-0 focus:ring-0 font-semibold text-primary">
+<option>All Cities</option>
+<option>Seattle</option>
+<option>Austin</option>
+<option>New York</option>
+</select>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-lowest px-4 py-2 rounded-lg text-sm border border-outline-variant/10">
+<span class="text-outline">Type:</span>
+<select class="bg-transparent border-none p-0 focus:ring-0 font-semibold text-primary">
+<option>Commercial/Residential</option>
+<option>Residential</option>
+<option>Commercial</option>
+</select>
+</div>
+<div class="ml-auto text-label-sm text-outline font-medium">
+                    Showing 3 of 3 Properties
+                </div>
+</section>
+<!-- Property List: Card/Table Hybrid Bento Style -->
+<div class="grid grid-cols-1 gap-6">
+<!-- Property Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-col md:flex-row group transition-all">
+<div class="md:w-72 h-48 md:h-auto overflow-hidden">
+<img alt="Luxury residential property" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Modern luxury suburban house with large glass windows, clean architectural lines, manicured lawn at twilight with warm interior lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_8Qpk0jnrCtOyVluF6u1xsh-oyw9-0wx_trbBWhU5b-zs8rzFTXAyOxn3Cil_CzjgMDaaHsMUFes2r2ltTI1ljBhDFtx5jJ_uR2qDhGJdMIC_9S0iOySfKguPuuksEZFUUh02CwI52bA2vmFu6giwocKWHbQVJKwmqcMX_R49DOaXtXa16X5Fcmdg5LnwSXlL3GCj-0PJAXj6zlHv3MqPB1CqsQEvzwlsljF9OBZcazJviswgvTO39kURazM5WVNSr40eHrBP0ngP"/>
+</div>
+<div class="flex-1 p-6 grid grid-cols-1 lg:grid-cols-4 items-center gap-6">
+<div class="lg:col-span-1">
+<h3 class="text-title-md font-bold text-on-surface">The Meridian Lofts</h3>
+<p class="text-sm text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-xs">location_on</span>
+                                1221 Spruce Ave, Seattle, WA
+                            </p>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-xs text-outline font-medium uppercase tracking-wider">Inventory</span>
+<span class="text-title-md font-bold">24 Units</span>
+<span class="text-xs text-tertiary font-semibold">12 Commercial</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center text-xs text-outline font-medium">
+<span>Occupancy</span>
+<span class="text-on-surface">92%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary" style="width: 92%"></div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="text-xs text-outline font-medium uppercase tracking-wider">Monthly Revenue</span>
+<span class="text-headline-sm font-bold text-primary">$148,200</span>
+<div class="bg-tertiary-container text-on-tertiary-container px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">Paid</div>
+</div>
+</div>
+</div>
+<!-- Property Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-col md:flex-row group transition-all">
+<div class="md:w-72 h-48 md:h-auto overflow-hidden">
+<img alt="Modern glass skyscraper" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="High-rise commercial office building with blue glass facade reflecting the sky, architectural detail, bright daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8n2BtmE8RC4ZOpQmhldhIRON6NDH1eXOQXTvMaRAHOFGJyosi6GKyJR3_V_QoARrhgN8Z-5KqW9rg4rEuzS1hFR1ZzpJxkfx87-Xt5hAV8potFplOMuZJuMJ99rs__hEogqhSq9vGKvP6kPhmrxWKS0S3L-vnvzk7pLi-XQ8VnlibKE0keIllnK1-EUvEDeJcAYA4rCToC5XtglvrP9EAr7MXzO0ziOOGr3p3V9jCDr_fMvH9Gzp7raMXyf0Qqy3uJOCK877xBcGZ"/>
+</div>
+<div class="flex-1 p-6 grid grid-cols-1 lg:grid-cols-4 items-center gap-6">
+<div class="lg:col-span-1">
+<h3 class="text-title-md font-bold text-on-surface">Capital Tech Center</h3>
+<p class="text-sm text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-xs">location_on</span>
+                                405 Innovation Way, Austin, TX
+                            </p>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-xs text-outline font-medium uppercase tracking-wider">Inventory</span>
+<span class="text-title-md font-bold">8 Floors</span>
+<span class="text-xs text-secondary font-semibold">Office Space</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center text-xs text-outline font-medium">
+<span>Occupancy</span>
+<span class="text-on-surface">100%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary" style="width: 100%"></div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="text-xs text-outline font-medium uppercase tracking-wider">Monthly Revenue</span>
+<span class="text-headline-sm font-bold text-primary">$325,000</span>
+<div class="bg-tertiary-container text-on-tertiary-container px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">Paid</div>
+</div>
+</div>
+</div>
+<!-- Property Card 3 (Status Variant) -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex flex-col md:flex-row group transition-all">
+<div class="md:w-72 h-48 md:h-auto overflow-hidden">
+<img alt="Boutique apartment building" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Modern minimalist boutique apartment building with charcoal grey panels and wood accents, sunny afternoon light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBARah9qGxETatuArrIO1TuTt0oLrxnLefeWKTJeOCRjj6nB2xOW0U-ZumL6REzWMc5yWfGuXzeCIR5TVLezKKZQz39PZVMobsdGlhjvPJCW9EwVmLuePySREmFcHJRIJXiSqyr81KN5msonVWpAovJOkjG7LA5C8_btP8uTOyxUHzgW_fngu8H9u_gOF_sPdkA6G0uGDz07WU3LeMk2X8QmT_5WY9n2dKh3A8x8Um71e0Cwr2v1uq0NQZtIglsrbzwUe5MMrZGBzE4"/>
+</div>
+<div class="flex-1 p-6 grid grid-cols-1 lg:grid-cols-4 items-center gap-6">
+<div class="lg:col-span-1">
+<h3 class="text-title-md font-bold text-on-surface">The Hudson West</h3>
+<p class="text-sm text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-xs">location_on</span>
+                                88 Hudson St, New York, NY
+                            </p>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-xs text-outline font-medium uppercase tracking-wider">Inventory</span>
+<span class="text-title-md font-bold">12 Units</span>
+<span class="text-xs text-secondary font-semibold">Residential</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center text-xs text-outline font-medium">
+<span>Occupancy</span>
+<span class="text-on-surface">65%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary" style="width: 65%"></div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="text-xs text-outline font-medium uppercase tracking-wider">Monthly Revenue</span>
+<span class="text-headline-sm font-bold text-primary">$86,400</span>
+<div class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">Pending</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State Section (Instructional Fallback) -->
+<section class="mt-20 py-16 border-2 border-dashed border-outline-variant/30 rounded-2xl flex flex-col items-center text-center">
+<div class="h-16 w-16 bg-surface-container rounded-full flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">domain_add</span>
+</div>
+<h2 class="text-headline-sm font-bold text-on-surface">Expanding your portfolio?</h2>
+<p class="text-on-surface-variant max-w-sm mt-2 mb-8">Add your first property by uploading a CSV of units or manually entering building details to start tracking occupancy.</p>
+<div class="flex gap-4">
+<button class="px-6 py-2 border border-outline-variant text-primary font-semibold rounded-lg hover:bg-surface-container transition-colors">
+                        Import Data
+                    </button>
+<button class="px-6 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:opacity-90 transition-opacity">
+                        Add Manually
+                    </button>
+</div>
+</section>
+</div>
+</main>
+<!-- Contextual FAB (Mobile Only) -->
+<button class="md:hidden fixed bottom-8 right-8 h-14 w-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center z-50">
+<span class="material-symbols-outlined">add</span>
+</button>
+</body></html>

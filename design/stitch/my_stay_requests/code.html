@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-fixed-variant": "#2e6b57",
+              "on-primary-fixed": "#354053",
+              "tertiary": "#2c6a55",
+              "on-secondary": "#f7f9ff",
+              "secondary-container": "#d3e4fe",
+              "tertiary-fixed-dim": "#aaead0",
+              "on-tertiary-fixed": "#074e3b",
+              "surface-container-highest": "#d9e4ea",
+              "surface-bright": "#f7f9fb",
+              "on-primary-container": "#475266",
+              "primary-dim": "#485367",
+              "on-secondary-fixed-variant": "#4d5d73",
+              "inverse-on-surface": "#9a9d9f",
+              "outline": "#717c82",
+              "primary-fixed": "#d8e3fb",
+              "on-surface": "#2a3439",
+              "error-container": "#fe8983",
+              "surface": "#f7f9fb",
+              "on-primary-fixed-variant": "#515c70",
+              "on-error-container": "#752121",
+              "error-dim": "#4e0309",
+              "surface-dim": "#cfdce3",
+              "surface-container-lowest": "#ffffff",
+              "outline-variant": "#a9b4b9",
+              "secondary-fixed-dim": "#c5d6f0",
+              "on-secondary-fixed": "#314055",
+              "surface-container": "#e8eff3",
+              "on-surface-variant": "#566166",
+              "secondary-dim": "#44546a",
+              "on-secondary-container": "#435368",
+              "primary": "#545f73",
+              "on-tertiary": "#e5fff2",
+              "on-error": "#fff7f6",
+              "on-background": "#2a3439",
+              "secondary": "#506076",
+              "inverse-surface": "#0b0f10",
+              "inverse-primary": "#dae6fe",
+              "tertiary-container": "#b8f9de",
+              "tertiary-dim": "#1d5d49",
+              "primary-container": "#d8e3fb",
+              "secondary-fixed": "#d3e4fe",
+              "on-primary": "#f6f7ff",
+              "tertiary-fixed": "#b8f9de",
+              "primary-fixed-dim": "#cad5ed",
+              "background": "#f7f9fb",
+              "surface-container-low": "#f0f4f7",
+              "surface-variant": "#d9e4ea",
+              "on-tertiary-container": "#22614d",
+              "error": "#9f403d",
+              "surface-tint": "#545f73",
+              "surface-container-high": "#e1e9ee"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .brand { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm dark:shadow-none flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Estate Metric</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 transition-colors text-sm font-medium" href="#">Dashboard</a>
+<a class="text-slate-900 dark:text-white font-semibold transition-colors text-sm" href="#">My Stays</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 transition-colors text-sm font-medium" href="#">Payments</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 transition-colors text-sm font-medium" href="#">Browse Properties</a>
+</div>
+</div>
+<div class="flex items-center gap-4 text-slate-600 dark:text-slate-300">
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors rounded-full">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="User profile with role indicator" data-alt="Close up portrait of a young professional man with a friendly smile, clean lighting, blurred office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAX7HIMNTmuZQqmi-OBmWhP2jIR7W2kskKt4Twa5velu8Syl1CFCCRigX5MPY7aSIegPqMNn3luKrPPbqkdq1XJeePOcCrMFdFJqdwdtQ_iFQm2NnXYhzAFHMkxPgk56apPMFshsI_kZCc7s7Bsm9Q3qiMOnQjHcRK6JOmb4ZAUkDifDNDzUKb98D_CgoeCFEOHilfNC3cbKTxYslAYOF53eBs5mObC6Xp-5IJgDmU0lyHitgG2IjMkcgdXwprd1hweZWP_cuSQBZ4P"/>
+</div>
+</div>
+</nav>
+<!-- Side Navigation (Web Only) -->
+<aside class="hidden lg:flex h-screen w-64 fixed left-0 top-16 bg-slate-50 dark:bg-slate-950 flex-col p-4 gap-2 border-r-0">
+<div class="mb-6 px-2">
+<h2 class="text-lg font-black text-slate-900 dark:text-white">Tenant Portal</h2>
+<p class="text-xs text-slate-500">Resident Services</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg shadow-sm font-bold transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="book_online">book_online</span>
+<span class="text-sm">My Stays</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="credit_card">credit_card</span>
+<span class="text-sm font-medium">Payments</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="text-sm font-medium">Browse Properties</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-slate-200/50 dark:border-slate-800/50 pt-4">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="text-sm font-medium">Account</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-24 lg:pl-72 pr-6 pb-20 max-w-7xl mx-auto">
+<header class="mb-10 px-2 lg:px-0">
+<h1 class="text-4xl font-extrabold tracking-tight text-on-surface mb-2">My Stays</h1>
+<p class="text-on-surface-variant max-w-2xl">Manage your active reservations, check the status of pending requests, and view your stay history across our premium property network.</p>
+</header>
+<!-- Booking Filter Tabs -->
+<div class="flex gap-4 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full text-sm font-semibold whitespace-nowrap">All Bookings</button>
+<button class="px-6 py-2 bg-surface-container hover:bg-surface-container-high transition-colors rounded-full text-sm font-medium text-on-surface-variant whitespace-nowrap">Active</button>
+<button class="px-6 py-2 bg-surface-container hover:bg-surface-container-high transition-colors rounded-full text-sm font-medium text-on-surface-variant whitespace-nowrap">Pending</button>
+<button class="px-6 py-2 bg-surface-container hover:bg-surface-container-high transition-colors rounded-full text-sm font-medium text-on-surface-variant whitespace-nowrap">Completed</button>
+</div>
+<!-- Booking Cards Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Card 1: Requested -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-6 relative overflow-hidden group border border-outline-variant/10">
+<div class="w-full md:w-40 h-40 rounded-lg overflow-hidden shrink-0">
+<img alt="Modern apartment interior" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Sun-drenched modern apartment interior with clean lines, white walls, minimalist furniture, and large windows with greenery outside" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSzhsA0JzKOA2vk2Q1s-o-qBFh3fz4PxtImg01Lcw3J5L90MPKRTWYqcxZZttd6pc_irtkbHzrbKIkSxpLOAxaKayrzOtliqZNb1WHTI6U4xZV3LEXeagCNv7kczJxtKFcGFg1-2Izdv9J0ikcSOmBzgdc30r5T3ZpKuTACRAsFZMaXH36SPZo0X12tF_3JMMG7h-bPB_l33q_zuhyKGfyUaSm0-JtlmxzYhDtSdzZ36FLd0KEQZJpVf_S5KfSZ8TCD2S0_O28g8vV"/>
+</div>
+<div class="flex flex-col flex-1 justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-on-surface">The Skyline Penthouse</h3>
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-wider rounded-full">Requested</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant text-sm mb-4">
+<span class="material-symbols-outlined text-base" data-icon="calendar_today">calendar_today</span>
+<span>Oct 12 — Oct 28, 2023</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-extrabold text-on-surface">$2,400</span>
+<span class="text-xs text-on-surface-variant">total stay</span>
+</div>
+</div>
+<div class="flex gap-3 mt-6">
+<button class="flex-1 py-2 text-sm font-bold bg-primary text-on-primary rounded-lg hover:bg-primary-dim transition-colors">View Details</button>
+<button class="px-4 py-2 text-sm font-bold text-error bg-error-container/20 rounded-lg hover:bg-error-container/30 transition-colors">Cancel</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Approved -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-6 relative overflow-hidden group border border-outline-variant/10">
+<div class="w-full md:w-40 h-40 rounded-lg overflow-hidden shrink-0">
+<img alt="High-end loft living room" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Industrial chic loft apartment with exposed brick, leather sofa, warm ambient lighting, and large indoor plants" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbhLsL83YQLs1kbI6oKRrq9Qp9CM7Tc67gnRJmskJrtp7UCD1ttQ0Va8uJxZpu1wog4m5JXfjCaAmNuB4OrKDFPB-qxr0Oy6MQ14xapqtnyewMbFJllXbGPHsnSb4P3nZFkecQtt0a5XKdHT86gJvzD58SVFLJhEXIrgAX67PLBF81-tQg6kOV_rm4o7Xnqsy_tcYD7Ny8rDlHgqnA_NEoZN6MEHhu0mRH0S73j3F7pTPZQFW8M6KQAR9tRgG4AsUMXO_jzgm7QQrq"/>
+</div>
+<div class="flex flex-col flex-1 justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-on-surface">Harbor View Suite</h3>
+<span class="px-3 py-1 bg-tertiary-container text-on-tertiary-container text-[10px] font-bold uppercase tracking-wider rounded-full">Approved</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant text-sm mb-4">
+<span class="material-symbols-outlined text-base" data-icon="calendar_today">calendar_today</span>
+<span>Nov 05 — Nov 20, 2023</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-extrabold text-on-surface">$3,150</span>
+<span class="text-xs text-on-surface-variant">total stay</span>
+</div>
+</div>
+<div class="flex gap-3 mt-6">
+<button class="w-full py-2 text-sm font-bold bg-primary text-on-primary rounded-lg hover:bg-primary-dim transition-colors">View Details</button>
+</div>
+</div>
+</div>
+<!-- Card 3: Completed -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-6 relative overflow-hidden group opacity-80 hover:opacity-100 transition-opacity border border-outline-variant/10">
+<div class="w-full md:w-40 h-40 rounded-lg overflow-hidden shrink-0 filter grayscale group-hover:grayscale-0 transition-all duration-500">
+<img alt="Cozy studio apartment" class="w-full h-full object-cover" data-alt="Cozy minimalist studio apartment with grey furniture, soft textiles, and warm light reflecting off polished wooden floors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAP5kUeUoNSejSKRFlRM5nwz6Vu_F4s_epWaQMck8erNAaw7xCv_7fiwbX56mObAnWzoGPtp0plhA09RnIySRBCzZYyf998XgSFHQL_eoBYhiVeUYieRJaOLlh1y8fC5IycFdVfBJIEkBsw4b4sCfzYGqtAPBR_ebuaqz7cEhY4RX4UilOnWMtjJ7iGJF_jQdrxfeGcDx4-lt4KsR17c2tmMVjz8mNRkJwtALdmfOVj_fOxiCqBz-_bc2enRLPLzaa9deaUxP6eb3mk"/>
+</div>
+<div class="flex flex-col flex-1 justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-on-surface">The Oak Studio</h3>
+<span class="px-3 py-1 bg-surface-container text-on-surface-variant text-[10px] font-bold uppercase tracking-wider rounded-full">Completed</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant text-sm mb-4">
+<span class="material-symbols-outlined text-base" data-icon="calendar_today">calendar_today</span>
+<span>Sep 01 — Sep 14, 2023</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-extrabold text-on-surface">$1,200</span>
+<span class="text-xs text-on-surface-variant">total stay</span>
+</div>
+</div>
+<div class="flex gap-3 mt-6">
+<button class="w-full py-2 text-sm font-bold bg-surface-container text-on-surface-variant rounded-lg hover:bg-surface-container-high transition-colors">View Receipt</button>
+</div>
+</div>
+</div>
+<!-- Card 4: Requested -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-6 relative overflow-hidden group border border-outline-variant/10">
+<div class="w-full md:w-40 h-40 rounded-lg overflow-hidden shrink-0">
+<img alt="Bright kitchen area" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Modern kitchen with marble countertops, high-end stainless steel appliances, and minimalist bar stools under pendant lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfNdmkXP-WHsOAECU3v51cCg3eIss1F0IE8n9VmpM0syE0P0gPhNIaxbbz2njAmQCEWiIw1FEYQ0wnRVzcs-ABl4vl_uTMx9f_HRdUyRaRYIHiPjbYFPuE-rpzZY0IXnTBJPcZIXJ1VacylASPDArjLG0EJa-S9LfjxRZqo3k7NkabK_flrl98JPlk1q3UN3o5Lr2D_TkzuEIfOiH_DSiv24Mr_a8OgQW4DFXo93M89IDJOJ07XMoq8FQb8mh6T_mdZf5ZNAk5fXuJ"/>
+</div>
+<div class="flex flex-col flex-1 justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-on-surface">Cedar Village Loft</h3>
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-wider rounded-full">Requested</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant text-sm mb-4">
+<span class="material-symbols-outlined text-base" data-icon="calendar_today">calendar_today</span>
+<span>Dec 20 — Jan 05, 2024</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-extrabold text-on-surface">$1,950</span>
+<span class="text-xs text-on-surface-variant">total stay</span>
+</div>
+</div>
+<div class="flex gap-3 mt-6">
+<button class="flex-1 py-2 text-sm font-bold bg-primary text-on-primary rounded-lg hover:bg-primary-dim transition-colors">View Details</button>
+<button class="px-4 py-2 text-sm font-bold text-error bg-error-container/20 rounded-lg hover:bg-error-container/30 transition-colors">Cancel</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Asymmetric Summary Bento Section -->
+<section class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 bg-primary p-8 rounded-2xl flex flex-col justify-between text-on-primary min-h-[240px]">
+<div>
+<h2 class="text-2xl font-bold mb-2">Upcoming Adventures</h2>
+<p class="opacity-80 text-sm max-w-sm">You have 2 stays approved and waiting for your arrival. We've prepared a checklist for your next check-in at Harbor View.</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-6 py-2 bg-white text-primary rounded-lg text-sm font-bold shadow-sm">Get Travel Guide</button>
+<span class="text-xs font-medium opacity-60">PDF, 4.2 MB</span>
+</div>
+</div>
+<div class="bg-surface-container-high p-8 rounded-2xl flex flex-col justify-between">
+<div class="h-12 w-12 bg-white rounded-xl flex items-center justify-center shadow-sm mb-4">
+<span class="material-symbols-outlined text-primary" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-on-surface mb-1">Portfolio Value</h3>
+<p class="text-3xl font-black text-primary">$6,750</p>
+<p class="text-xs text-on-surface-variant mt-1">Total stay expenditure this year</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg flex justify-around items-center h-16 z-50 border-t border-slate-100">
+<button class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-[10px] mt-1 font-medium">Dashboard</span>
+</button>
+<button class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined" data-icon="book_online" style="font-variation-settings: 'FILL' 1;">book_online</span>
+<span class="text-[10px] mt-1 font-bold">My Stays</span>
+</button>
+<button class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined" data-icon="credit_card">credit_card</span>
+<span class="text-[10px] mt-1 font-medium">Payments</span>
+</button>
+<button class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="text-[10px] mt-1 font-medium">Browse</span>
+</button>
+</nav>
+</body></html>

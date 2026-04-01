@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Estate Metric - Reminder Dispatch</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed-variant": "#2e6b57",
+                        "on-primary-fixed": "#354053",
+                        "tertiary": "#2c6a55",
+                        "on-secondary": "#f7f9ff",
+                        "secondary-container": "#d3e4fe",
+                        "tertiary-fixed-dim": "#aaead0",
+                        "on-tertiary-fixed": "#074e3b",
+                        "surface-container-highest": "#d9e4ea",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-container": "#475266",
+                        "primary-dim": "#485367",
+                        "on-secondary-fixed-variant": "#4d5d73",
+                        "inverse-on-surface": "#9a9d9f",
+                        "outline": "#717c82",
+                        "primary-fixed": "#d8e3fb",
+                        "on-surface": "#2a3439",
+                        "error-container": "#fe8983",
+                        "on-error-container": "#752121",
+                        "error-dim": "#4e0309",
+                        "surface-dim": "#cfdce3",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#a9b4b9",
+                        "secondary-fixed-dim": "#c5d6f0",
+                        "on-secondary-fixed": "#314055",
+                        "surface-container": "#e8eff3",
+                        "on-surface-variant": "#566166",
+                        "secondary-dim": "#44546a",
+                        "on-secondary-container": "#435368",
+                        "primary": "#545f73",
+                        "on-tertiary": "#e5fff2",
+                        "on-error": "#fff7f6",
+                        "on-background": "#2a3439",
+                        "secondary": "#506076",
+                        "inverse-surface": "#0b0f10",
+                        "inverse-primary": "#dae6fe",
+                        "tertiary-container": "#b8f9de",
+                        "tertiary-dim": "#1d5d49",
+                        "primary-container": "#d8e3fb",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-primary": "#f6f7ff",
+                        "tertiary-fixed": "#b8f9de",
+                        "primary-fixed-dim": "#cad5ed",
+                        "background": "#f7f9fb",
+                        "surface-container-low": "#f0f4f7",
+                        "surface-variant": "#d9e4ea",
+                        "on-tertiary-container": "#22614d",
+                        "error": "#9f403d",
+                        "surface-tint": "#545f73",
+                        "surface-container-high": "#e1e9ee"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-shadow {
+            box-shadow: 0 12px 32px -4px rgba(42, 52, 57, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm dark:shadow-none flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100 font-headline">Estate Metric</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-slate-900 dark:text-white font-semibold transition-colors font-body text-sm" href="#">Dashboard</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 transition-colors font-body text-sm" href="#">Portfolio</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 transition-colors font-body text-sm" href="#">Management</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden bg-surface-container">
+<img alt="User profile with role indicator" data-alt="Professional headshot of a middle-aged property manager in a corporate setting, soft studio lighting, neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSOT_C54c_Dph_0gNJzlMjByvgCQfuvj7BdDSacesl0DmHPVUIhEPjP_byEM-z-LKeoUj1T_S1EKzywtNhG_ePZiTFYVgXAOvRd8-wH3n07FJU50NSDvTiqKMQCWkPqroZqJNoDYecycjg-FXuE0Ic8DMum50itsg3WYLVzKwlIGBY8HmHGahcAZB6GKAJE8cTf5ut2_mETN4a5mvEpmdJwOuPQJgnAnskN2_Mf3KOaUrwKbrH2Ldc4BPibT-W08SDy2CpM_5HwEQC"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Landlord) -->
+<aside class="h-screen w-64 fixed left-0 hidden md:flex flex-col p-4 gap-2 bg-slate-50 dark:bg-slate-950 pt-20">
+<div class="px-4 mb-6">
+<h2 class="font-headline text-lg font-black text-slate-900 dark:text-white">Landlord Portal</h2>
+<p class="text-xs text-slate-500 font-body">Portfolio Manager</p>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="text-sm font-medium">Portfolio</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg shadow-sm font-bold transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Management</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-sm font-medium">Finance</span>
+</a>
+</div>
+<div class="mt-auto flex flex-col gap-1 border-t border-slate-200 dark:border-slate-800 pt-4">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-slate-700 text-sm" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-slate-700 text-sm" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-24 px-6 pb-12 min-h-screen">
+<!-- Backdrop Blur for Modal Context -->
+<div class="max-w-5xl mx-auto opacity-40 select-none pointer-events-none">
+<header class="mb-12">
+<h1 class="font-headline text-display-sm text-on-surface font-bold tracking-tight">Management Overview</h1>
+<p class="text-on-surface-variant mt-2 font-body">Reviewing overdue tenant accounts for Willow Creek Estate.</p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 space-y-6">
+<div class="bg-surface-container-lowest rounded-xl p-8 editorial-shadow">
+<div class="h-6 w-1/3 bg-surface-container rounded mb-4"></div>
+<div class="space-y-3">
+<div class="h-4 w-full bg-surface-container rounded"></div>
+<div class="h-4 w-5/6 bg-surface-container rounded"></div>
+<div class="h-4 w-4/6 bg-surface-container rounded"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- REMINDER MODAL -->
+<div class="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6">
+<!-- Modal Backdrop -->
+<div class="absolute inset-0 bg-on-surface/10 backdrop-blur-sm"></div>
+<!-- Modal Surface -->
+<div class="relative w-full max-w-lg bg-surface-container-lowest rounded-xl editorial-shadow overflow-hidden flex flex-col max-h-[921px]">
+<!-- Header -->
+<div class="px-8 pt-8 pb-6 bg-surface-container-low">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline text-xl font-bold text-on-surface leading-tight">Send Payment Reminder</h3>
+<p class="text-on-surface-variant text-sm mt-1">Ref No: INV-2024-0892</p>
+</div>
+<button class="p-1 rounded-full hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">close</span>
+</button>
+</div>
+<!-- Recipient Quick Info -->
+<div class="mt-6 flex items-center gap-4 bg-white p-4 rounded-lg shadow-sm">
+<div class="h-12 w-12 rounded-full overflow-hidden bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Julianne Sterling</p>
+<p class="text-xs text-on-surface-variant font-medium">Unit 402 • Willow Creek</p>
+</div>
+<div class="ml-auto text-right">
+<p class="text-error font-bold font-headline">$2,450.00</p>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-error-container text-on-error-container uppercase tracking-wider">
+                                12 Days Late
+                            </span>
+</div>
+</div>
+</div>
+<!-- Modal Body (Scrollable) -->
+<div class="p-8 overflow-y-auto space-y-8">
+<!-- Template Selection -->
+<div>
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">Message Tone</label>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 border-primary bg-primary-container/20 text-on-primary-container font-semibold transition-all">
+<span class="material-symbols-outlined text-sm">potted_plant</span>
+<span class="text-sm">Soft Reminder</span>
+</button>
+<button class="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-all">
+<span class="material-symbols-outlined text-sm">gavel</span>
+<span class="text-sm">Formal Notice</span>
+</button>
+</div>
+</div>
+<!-- Message Preview -->
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Message Preview</label>
+<button class="text-primary text-xs font-semibold hover:underline">Edit Manually</button>
+</div>
+<div class="bg-surface-container-low p-6 rounded-lg text-sm leading-relaxed text-on-surface border-l-4 border-primary">
+<p class="mb-4">Dear <span class="font-bold">Julianne Sterling</span>,</p>
+<p class="mb-4">We're reaching out as we haven't yet received the rent payment of <span class="font-bold">$2,450.00</span> for Unit 402, which was due 12 days ago.</p>
+<p class="mb-4">If you've already sent the payment, please disregard this notice. Otherwise, please settle the outstanding balance at your earliest convenience to avoid any late fees.</p>
+<p>Thank you,<br/><span class="italic text-on-surface-variant">Estate Metric Management</span></p>
+</div>
+</div>
+<!-- Delivery Channels -->
+<div class="flex items-center gap-6">
+<label class="flex items-center gap-2 cursor-pointer group">
+<div class="w-5 h-5 rounded border-2 border-primary bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[16px]">check</span>
+</div>
+<span class="text-sm text-on-surface font-medium group-hover:text-primary transition-colors">Send via Email</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group opacity-50">
+<div class="w-5 h-5 rounded border-2 border-outline flex items-center justify-center"></div>
+<span class="text-sm text-on-surface-variant font-medium">Send via SMS</span>
+</label>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="p-6 bg-surface-container-low flex items-center justify-between gap-4">
+<button class="px-6 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5 rounded-lg transition-colors">
+                        Cancel
+                    </button>
+<button class="flex-1 flex items-center justify-center gap-2 bg-primary text-on-primary px-8 py-3 rounded-lg font-bold editorial-shadow hover:bg-primary-dim active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined">send</span>
+                        Send Reminder
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation Shell (Filter Applied) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t-0 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] flex items-center justify-around px-2 z-40">
+<a class="flex flex-col items-center justify-center text-slate-400" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400" href="#">
+<span class="material-symbols-outlined">domain</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-900" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400" href="#">
+<span class="material-symbols-outlined">payments</span>
+</a>
+</nav>
+</body></html>

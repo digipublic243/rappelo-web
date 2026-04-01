@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Estate Metric | Landlord Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-fixed-variant": "#2e6b57",
+              "on-primary-fixed": "#354053",
+              "tertiary": "#2c6a55",
+              "on-secondary": "#f7f9ff",
+              "secondary-container": "#d3e4fe",
+              "tertiary-fixed-dim": "#aaead0",
+              "on-tertiary-fixed": "#074e3b",
+              "surface-container-highest": "#d9e4ea",
+              "surface-bright": "#f7f9fb",
+              "on-primary-container": "#475266",
+              "primary-dim": "#485367",
+              "on-secondary-fixed-variant": "#4d5d73",
+              "inverse-on-surface": "#9a9d9f",
+              "outline": "#717c82",
+              "primary-fixed": "#d8e3fb",
+              "on-surface": "#2a3439",
+              "error-container": "#fe8983",
+              "surface": "#f7f9fb",
+              "on-primary-fixed-variant": "#515c70",
+              "on-error-container": "#752121",
+              "error-dim": "#4e0309",
+              "surface-dim": "#cfdce3",
+              "surface-container-lowest": "#ffffff",
+              "outline-variant": "#a9b4b9",
+              "secondary-fixed-dim": "#c5d6f0",
+              "on-secondary-fixed": "#314055",
+              "surface-container": "#e8eff3",
+              "on-surface-variant": "#566166",
+              "secondary-dim": "#44546a",
+              "on-secondary-container": "#435368",
+              "primary": "#545f73",
+              "on-tertiary": "#e5fff2",
+              "on-error": "#fff7f6",
+              "on-background": "#2a3439",
+              "secondary": "#506076",
+              "inverse-surface": "#0b0f10",
+              "inverse-primary": "#dae6fe",
+              "tertiary-container": "#b8f9de",
+              "tertiary-dim": "#1d5d49",
+              "primary-container": "#d8e3fb",
+              "secondary-fixed": "#d3e4fe",
+              "on-primary": "#f6f7ff",
+              "tertiary-fixed": "#b8f9de",
+              "primary-fixed-dim": "#cad5ed",
+              "background": "#f7f9fb",
+              "surface-container-low": "#f0f4f7",
+              "surface-variant": "#d9e4ea",
+              "on-tertiary-container": "#22614d",
+              "error": "#9f403d",
+              "surface-tint": "#545f73",
+              "surface-container-high": "#e1e9ee"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        vertical-align: middle;
+      }
+      body { font-family: 'Inter', sans-serif; }
+      h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar Integration -->
+<aside class="h-screen w-64 fixed left-0 border-r-0 bg-slate-50 dark:bg-slate-950 flex flex-col h-full p-4 gap-2 z-40">
+<div class="mb-8 px-2">
+<h1 class="text-lg font-black text-slate-900 dark:text-white">Estate Metric</h1>
+<p class="text-xs font-body text-slate-500 uppercase tracking-widest mt-1">Landlord Portal</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Active Tab: Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg shadow-sm font-bold transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span class="font-body">Portfolio</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body">Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-body">Finance</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t border-slate-200/50 dark:border-slate-800/50 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-body">Support</span>
+</a>
+<div class="flex items-center gap-3 px-3 py-4 mt-2 bg-surface-container-low rounded-xl">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="professional male property manager in business attire looking confident against a modern office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVTSfmJnyIp_pcGjnN47HwYBGqp84B4eWYKnOVQnQzt2uPAzGtT_ZEsjQ_JWfBmU6A8suhke-YeuF_Re__nCuCmEtKg-idiWGqpaQkUDnxaZ3dpqDOA_zEDGVuBx2uPMUykCjhVPGYyM4VmS2UYHC4p1fLCF_REk1oQbFV1fvTrtdowF8ClB_dX5wMjPpfUEZrU6ak7MXrniH7Ddb91foDKSoummIR-FmhKqjuiQ2F_Booco-GminHsiPo31l3TJRnvNxEo5FqsL8t"/>
+<div class="overflow-hidden">
+<p class="text-sm font-bold truncate">Arthur Sterling</p>
+<p class="text-xs text-slate-500 truncate">Portfolio Manager</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar Integration -->
+<header class="fixed top-0 right-0 left-64 h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-30 shadow-sm dark:shadow-none flex justify-between items-center px-8">
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-slate-100 dark:bg-slate-800 border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search properties, tenants..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-full transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="pt-24 px-8 pb-12">
+<div class="mb-10">
+<p class="text-primary font-semibold tracking-wide uppercase text-xs mb-1">Portfolio Insights</p>
+<h2 class="text-4xl font-black text-on-surface tracking-tight">Executive Dashboard</h2>
+</div>
+<!-- Bento KPI Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<!-- KPI Card: Revenue -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-l-4 border-primary">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary-container rounded-lg text-primary">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+</div>
+<span class="text-tertiary font-bold text-xs bg-tertiary-container px-2 py-1 rounded-full">+12.5%</span>
+</div>
+<p class="text-sm font-medium text-on-surface-variant">Total Revenue</p>
+<h3 class="text-2xl font-bold mt-1 tracking-tight">$42,850.00</h3>
+<div class="mt-4 h-1 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[85%]"></div>
+</div>
+</div>
+<!-- KPI Card: Occupancy -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-secondary-container rounded-lg text-secondary">
+<span class="material-symbols-outlined" data-icon="hotel_class">hotel_class</span>
+</div>
+<span class="text-secondary font-bold text-xs bg-secondary-container px-2 py-1 rounded-full">Steady</span>
+</div>
+<p class="text-sm font-medium text-on-surface-variant">Occupancy Rate %</p>
+<h3 class="text-2xl font-bold mt-1 tracking-tight">96.4%</h3>
+<p class="text-xs text-on-surface-variant mt-2">24/25 Units Occupied</p>
+</div>
+<!-- KPI Card: Active Leases -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-tertiary-container rounded-lg text-tertiary">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<span class="text-on-surface-variant font-bold text-xs bg-surface-container px-2 py-1 rounded-full">Active</span>
+</div>
+<p class="text-sm font-medium text-on-surface-variant">Active Leases</p>
+<h3 class="text-2xl font-bold mt-1 tracking-tight">18</h3>
+<p class="text-xs text-on-surface-variant mt-2">3 Pending renewal</p>
+</div>
+<!-- KPI Card: Pending Bookings -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-l-4 border-secondary">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-surface-container-highest rounded-lg text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="event_repeat">event_repeat</span>
+</div>
+<span class="text-error font-bold text-xs bg-error-container/20 px-2 py-1 rounded-full">Alert</span>
+</div>
+<p class="text-sm font-medium text-on-surface-variant">Pending Bookings</p>
+<h3 class="text-2xl font-bold mt-1 tracking-tight">4</h3>
+<p class="text-xs text-on-surface-variant mt-2">Average 24h response time</p>
+</div>
+</div>
+<!-- Asymmetric Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Main Activity & Attention Column -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Section: Needs Attention -->
+<section>
+<div class="flex justify-between items-end mb-4">
+<h3 class="text-xl font-bold tracking-tight">Needs Attention</h3>
+<button class="text-primary text-sm font-semibold hover:underline">Manage All Tasks</button>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="divide-y divide-surface-container">
+<!-- Task 1 -->
+<div class="p-5 flex items-center gap-6 hover:bg-surface-bright transition-colors">
+<div class="w-12 h-12 rounded-xl bg-error-container/10 flex items-center justify-center text-error shrink-0">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold">Unit 402 - Overdue Payment</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container text-[10px] font-bold uppercase tracking-wider">Overdue</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">Tenant: Jonathan Reed. Amount: $1,250.00. Due since June 1st.</p>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg text-xs font-bold hover:bg-primary-dim transition-all">Send Notice</button>
+</div>
+<!-- Task 2 -->
+<div class="p-5 flex items-center gap-6 hover:bg-surface-bright transition-colors">
+<div class="w-12 h-12 rounded-xl bg-secondary-container/30 flex items-center justify-center text-secondary shrink-0">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold">Lease Expiry: Skyview Apts 12B</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-wider">Pending</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">Lease expires in 15 days. Renewal options prepared.</p>
+</div>
+<button class="border border-outline-variant text-primary px-4 py-2 rounded-lg text-xs font-bold hover:bg-surface-container transition-all">View Lease</button>
+</div>
+<!-- Task 3 -->
+<div class="p-5 flex items-center gap-6 hover:bg-surface-bright transition-colors">
+<div class="w-12 h-12 rounded-xl bg-tertiary-container/30 flex items-center justify-center text-tertiary shrink-0">
+<span class="material-symbols-outlined" data-icon="add_home">add_home</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold">New Booking Request</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container text-on-tertiary-container text-[10px] font-bold uppercase tracking-wider">New</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">Lakeside Cabin - Booking for July 12-19 from Sarah Miller.</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg text-xs font-bold hover:bg-primary-dim transition-all">Approve</button>
+<button class="text-error px-3 py-2 rounded-lg text-xs font-bold hover:bg-error-container/10 transition-all">Decline</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Recent Activity -->
+<section>
+<h3 class="text-xl font-bold tracking-tight mb-4">Recent Activity</h3>
+<div class="bg-surface-container rounded-2xl p-6 relative">
+<div class="absolute left-10 top-10 bottom-10 w-0.5 bg-outline-variant/30"></div>
+<div class="space-y-8 relative">
+<!-- Activity 1 -->
+<div class="flex gap-6 items-start">
+<div class="w-8 h-8 rounded-full bg-tertiary flex items-center justify-center text-on-tertiary ring-4 ring-surface-container z-10 shrink-0">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="text-sm"><span class="font-bold">Maintenance Resolved</span> for Unit 109</p>
+<p class="text-xs text-on-surface-variant mt-1">2 hours ago • Plumbing issues fixed by Contractor</p>
+</div>
+</div>
+<!-- Activity 2 -->
+<div class="flex gap-6 items-start">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary ring-4 ring-surface-container z-10 shrink-0">
+<span class="material-symbols-outlined text-sm" data-icon="credit_card">credit_card</span>
+</div>
+<div>
+<p class="text-sm"><span class="font-bold">Payment Received</span> from Emma Vance</p>
+<p class="text-xs text-on-surface-variant mt-1">6 hours ago • Rent payment for June 2024</p>
+</div>
+</div>
+<!-- Activity 3 -->
+<div class="flex gap-6 items-start">
+<div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary ring-4 ring-surface-container z-10 shrink-0">
+<span class="material-symbols-outlined text-sm" data-icon="person_add">person_add</span>
+</div>
+<div>
+<p class="text-sm"><span class="font-bold">New Prospect Inquiry</span> for Downtown Loft</p>
+<p class="text-xs text-on-surface-variant mt-1">Yesterday • Scheduling tour for Saturday</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Sidebar / Widget Column -->
+<div class="lg:col-span-4 space-y-8">
+<!-- Widget: Revenue Mini-Chart -->
+<div class="bg-on-surface text-surface p-6 rounded-2xl shadow-xl">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-bold text-lg">Revenue Trend</h4>
+<span class="text-xs text-outline-variant uppercase tracking-widest">Last 6 Months</span>
+</div>
+<div class="flex items-end gap-3 h-32 mb-6">
+<div class="flex-1 bg-primary/40 rounded-t-lg transition-all hover:bg-primary cursor-pointer" style="height: 60%"></div>
+<div class="flex-1 bg-primary/40 rounded-t-lg transition-all hover:bg-primary cursor-pointer" style="height: 45%"></div>
+<div class="flex-1 bg-primary/40 rounded-t-lg transition-all hover:bg-primary cursor-pointer" style="height: 75%"></div>
+<div class="flex-1 bg-primary/40 rounded-t-lg transition-all hover:bg-primary cursor-pointer" style="height: 65%"></div>
+<div class="flex-1 bg-primary/40 rounded-t-lg transition-all hover:bg-primary cursor-pointer" style="height: 90%"></div>
+<div class="flex-1 bg-primary rounded-t-lg" style="height: 80%"></div>
+</div>
+<div class="pt-6 border-t border-white/10 flex justify-between">
+<div>
+<p class="text-[10px] uppercase text-outline-variant">Avg Monthly</p>
+<p class="text-lg font-bold tracking-tight">$7,142</p>
+</div>
+<div class="text-right">
+<p class="text-[10px] uppercase text-outline-variant">Projected</p>
+<p class="text-lg font-bold tracking-tight text-tertiary-fixed-dim">$8,200</p>
+</div>
+</div>
+</div>
+<!-- Widget: Featured Property (Editorial Glassmorphism) -->
+<div class="relative rounded-2xl overflow-hidden group h-64">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="high-end luxury apartment building exterior with large glass windows and minimalist architectural lines at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0khsecVKnm0y_6SzF8zMM_utCzZJmI3focsnANin-KbJB3uvgCiDTZ_thIFOt7IVdObSuyTZmpwrghR_Ewssm6GMEzrvWTDZqmq4B8v9hL2r7iJgUotyxRmhH5kOHf9g4hOwgUn62xItzZEcdVYnae6yvGlcklcsareXV4Afp83bviVuFxGs-RToii_AOoJeIM3dX1rmSOSYHG6JAXvl3PqG837a5Titv2bVZhWPT_lRkignjE8IiVZK-BvCuoTRXLdMvUYdavbWZ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 right-0 p-6 backdrop-blur-md bg-white/10 border-t border-white/10">
+<span class="bg-tertiary/80 text-white text-[10px] font-bold px-2 py-0.5 rounded mb-2 inline-block">MOST VALUABLE</span>
+<h4 class="text-white font-bold text-lg leading-tight">The Sterling Heights Penthouse</h4>
+<p class="text-white/60 text-xs mt-1">1024 Grand Avenue, Tower A</p>
+</div>
+</div>
+<!-- Widget: Quick Access -->
+<div class="bg-surface-container-low p-6 rounded-2xl">
+<h4 class="font-bold text-sm mb-4 text-on-surface-variant">Resources</h4>
+<div class="space-y-3">
+<button class="w-full flex items-center justify-between p-3 bg-white rounded-xl shadow-sm hover:translate-x-1 transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="cloud_download">cloud_download</span>
+<span class="text-sm font-semibold">Financial Reports</span>
+</div>
+<span class="material-symbols-outlined text-slate-400" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-3 bg-white rounded-xl shadow-sm hover:translate-x-1 transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="gavel">gavel</span>
+<span class="text-sm font-semibold">Lease Templates</span>
+</div>
+<span class="material-symbols-outlined text-slate-400" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-3 bg-white rounded-xl shadow-sm hover:translate-x-1 transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="support_agent">support_agent</span>
+<span class="text-sm font-semibold">Concierge Support</span>
+</div>
+<span class="material-symbols-outlined text-slate-400" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button for Dashboard Context -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</body></html>

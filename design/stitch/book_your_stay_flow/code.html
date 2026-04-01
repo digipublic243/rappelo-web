@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Estate Metric | Book Your Stay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed-variant": "#2e6b57",
+                        "on-primary-fixed": "#354053",
+                        "tertiary": "#2c6a55",
+                        "on-secondary": "#f7f9ff",
+                        "secondary-container": "#d3e4fe",
+                        "tertiary-fixed-dim": "#aaead0",
+                        "on-tertiary-fixed": "#074e3b",
+                        "surface-container-highest": "#d9e4ea",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-container": "#475266",
+                        "primary-dim": "#485367",
+                        "on-secondary-fixed-variant": "#4d5d73",
+                        "inverse-on-surface": "#9a9d9f",
+                        "outline": "#717c82",
+                        "primary-fixed": "#d8e3fb",
+                        "on-surface": "#2a3439",
+                        "error-container": "#fe8983",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed-variant": "#515c70",
+                        "on-error-container": "#752121",
+                        "error-dim": "#4e0309",
+                        "surface-dim": "#cfdce3",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#a9b4b9",
+                        "secondary-fixed-dim": "#c5d6f0",
+                        "on-secondary-fixed": "#314055",
+                        "surface-container": "#e8eff3",
+                        "on-surface-variant": "#566166",
+                        "secondary-dim": "#44546a",
+                        "on-secondary-container": "#435368",
+                        "primary": "#545f73",
+                        "on-tertiary": "#e5fff2",
+                        "on-error": "#fff7f6",
+                        "on-background": "#2a3439",
+                        "secondary": "#506076",
+                        "inverse-surface": "#0b0f10",
+                        "inverse-primary": "#dae6fe",
+                        "tertiary-container": "#b8f9de",
+                        "tertiary-dim": "#1d5d49",
+                        "primary-container": "#d8e3fb",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-primary": "#f6f7ff",
+                        "tertiary-fixed": "#b8f9de",
+                        "primary-fixed-dim": "#cad5ed",
+                        "background": "#f7f9fb",
+                        "surface-container-low": "#f0f4f7",
+                        "surface-variant": "#d9e4ea",
+                        "on-tertiary-container": "#22614d",
+                        "error": "#9f403d",
+                        "surface-tint": "#545f73",
+                        "surface-container-high": "#e1e9ee"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .editorial-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+            color: #2a3439;
+        }
+        h1, h2, h3, .font-headline {
+            font-family: 'Manrope', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm dark:shadow-none flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Estate Metric</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-slate-900 dark:text-white font-semibold font-body text-sm" href="#">Dashboard</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 font-body text-sm" href="#">Browse Properties</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-600">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-600">
+<span class="material-symbols-outlined">apps</span>
+</button>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden">
+<img alt="User Profile" data-alt="close-up portrait of a professional woman with a friendly expression in a modern office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbMZJY0UZnpKCmhyMNuy1zbt3A45dORbQG-jhw96KHm6PxuxK7h7jH3SnzKeVX67BkR_L6918UjE1MO6m6mBPjfTcHNB2odC94csWoJOXfdZ90fX7eSYhZ6YIKN50dk3s0E7DY4rY9O6EoBPliEiPs--O6EeuJ1cbzdgciRaahHMd8EwncL3lYxJONubYliSVcsc-zC2gw3dKtQ9B__8SN-xNtkyHJWQF2szbXTSSyBDSyQr7fNX9e4SbBxKiM7qDDKxmQPshWEXmS"/>
+</div>
+</div>
+</nav>
+<main class="pt-24 pb-12 px-6 max-w-7xl mx-auto">
+<!-- Multi-Step Stepper -->
+<div class="mb-12">
+<div class="flex items-center justify-between max-w-2xl mx-auto relative">
+<!-- Progress Line -->
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-surface-container-highest -z-10 -translate-y-1/2"></div>
+<!-- Step 1 (Active) -->
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold">1</div>
+<span class="text-xs font-semibold text-primary font-label">Property</span>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold">2</div>
+<span class="text-xs font-semibold text-on-surface-variant font-label">Guests &amp; Dates</span>
+</div>
+<!-- Step 3 -->
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold">3</div>
+<span class="text-xs font-semibold text-on-surface-variant font-label">Review</span>
+</div>
+<!-- Step 4 -->
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold">4</div>
+<span class="text-xs font-semibold text-on-surface-variant font-label">Confirm</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left Column: Main Booking Flow -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Page Header Editorial Style -->
+<div class="editorial-stack mb-4">
+<span class="text-xs uppercase tracking-widest text-primary font-bold">Step 1: Selection</span>
+<h1 class="text-4xl font-extrabold text-on-surface tracking-tight">Select your luxury unit</h1>
+<p class="text-on-surface-variant max-w-lg">Choose from our curated collection of premium residences in the city's heart.</p>
+</div>
+<!-- Bento Grid Gallery -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="md:col-span-3 md:row-span-2 rounded-xl overflow-hidden group relative h-[400px]">
+<img alt="Living Room" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="ultra-modern penthouse living room with floor-to-ceiling windows overlooking a sunset cityscape, minimalist furniture, and warm ambient lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1XfSFaKYiSPM-G6ramG6wdPdjgA2gEhtFd_S--vr-uxGlHjbcKQQenpopYGXmLEXZEe1kOJtSXCx9sUBo3xk1XcouPRZSffgQnoYc6w0QWMcvXKVkjHTuVZS59HVYfEDQ2RWqHAPCGXL_OTdYm2IVzxEpqG3cBIW8JwnwRk2WNTZKbLuWRR3lUZrbxziLFtiifZwMNCMnAfh6f4enH48NPlpqva5d0DfGYTRNGnZ_jQfILL8iNwdyV0-waKbjRngW9wINUwRe9FZR"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-6 left-6 text-white">
+<h2 class="text-2xl font-bold">The Obsidian Suite</h2>
+<p class="text-sm text-white/80">3 Bedroom • 2.5 Bath • 2,400 sqft</p>
+</div>
+</div>
+<div class="rounded-xl overflow-hidden h-[192px]">
+<img alt="Bedroom" class="w-full h-full object-cover" data-alt="serene master bedroom with neutral tones, high-quality linen bedding, and large windows bringing in soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi5Txm4rd0hOYth78wGWE-JWS6c6BujODBxsbqpQNVoLhc0TXiEwBUaEkhOQSBQcpDbt4qpVDnoYHhfzNUY7ETq9VoNPiYUmRfG2t-WdxS48emnDIhj3UtiMZ1suEIye8L5yB-g4CiYKrxhyIBRSBEgf4cjAJ2aQWXdGK3Pw5Pm0HgvgxpBqXoilvpFBgvGpg-VYf8zvrgIpTZYMs7sL0CnfhAXzejnXI6HSP7vBE97I1phezF11o1S74GmYmKSFzi4q3rOWf0uIzY"/>
+</div>
+<div class="rounded-xl overflow-hidden h-[192px]">
+<img alt="Kitchen" class="w-full h-full object-cover" data-alt="sleek modern kitchen with charcoal cabinetry, marble island, and high-end stainless steel appliances" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI7Ur38wgAxzmKJckhoZgL1WjqQHgQvHU6BppYoHw9fTY27sGtjQqcn5xH5_X5raQRbpkHTVhFP3m8HxjsYDcUwvUdJTDyy5uKuhEpotgl2gFV07xnLlV1YSZFbzyDSPju7AE-mJlJTipYq5zFqnSXm52-UMb0SqecyK6QNjsHc7yfn4_TC5nynWmRly1SHcYie8xlGqqs4iLYUkjgux7gZ5OZor6KpYynpGy9jxGzitlA6kRLGjfT6YBOld6zC3EmZ65Vg5yplLqu"/>
+</div>
+</div>
+<!-- Unit Selection Section -->
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-xl font-bold font-headline">Available Configurations</h3>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-tertiary-container text-on-tertiary-container rounded-full text-xs font-bold">Most Popular</span>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Unit Card 1 (Selected) -->
+<div class="p-6 rounded-xl bg-surface-container-lowest border-2 border-primary shadow-sm flex flex-col md:flex-row gap-6">
+<div class="flex-1 space-y-2">
+<div class="flex justify-between items-start">
+<h4 class="text-lg font-bold">Unit 402 - Skyline View</h4>
+<span class="text-primary font-bold text-lg">$3,200<span class="text-sm font-normal text-on-surface-variant">/mo</span></span>
+</div>
+<p class="text-sm text-on-surface-variant">North-facing corner unit with panoramic views of the financial district and a private terrace.</p>
+<div class="flex gap-4 pt-2">
+<div class="flex items-center gap-1 text-xs font-medium text-secondary">
+<span class="material-symbols-outlined text-sm">square_foot</span>
+                                        1,200 sqft
+                                    </div>
+<div class="flex items-center gap-1 text-xs font-medium text-secondary">
+<span class="material-symbols-outlined text-sm">bed</span>
+                                        2 Beds
+                                    </div>
+<div class="flex items-center gap-1 text-xs font-medium text-secondary">
+<span class="material-symbols-outlined text-sm">bathtub</span>
+                                        2 Baths
+                                    </div>
+</div>
+</div>
+<div class="flex items-center">
+<div class="w-6 h-6 rounded-full border-2 border-primary flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+</div>
+</div>
+</div>
+<!-- Unit Card 2 -->
+<div class="p-6 rounded-xl bg-surface-container hover:bg-surface-container-high transition-colors flex flex-col md:flex-row gap-6 cursor-pointer">
+<div class="flex-1 space-y-2">
+<div class="flex justify-between items-start">
+<h4 class="text-lg font-bold">Unit 205 - Garden Level</h4>
+<span class="text-primary font-bold text-lg">$2,850<span class="text-sm font-normal text-on-surface-variant">/mo</span></span>
+</div>
+<p class="text-sm text-on-surface-variant">Direct access to the private residential garden and infinity pool deck. Quiet and private.</p>
+<div class="flex gap-4 pt-2">
+<div class="flex items-center gap-1 text-xs font-medium text-secondary">
+<span class="material-symbols-outlined text-sm">square_foot</span>
+                                        1,050 sqft
+                                    </div>
+<div class="flex items-center gap-1 text-xs font-medium text-secondary">
+<span class="material-symbols-outlined text-sm">bed</span>
+                                        2 Beds
+                                    </div>
+<div class="flex items-center gap-1 text-xs font-medium text-secondary">
+<span class="material-symbols-outlined text-sm">bathtub</span>
+                                        1 Bath
+                                    </div>
+</div>
+</div>
+<div class="flex items-center">
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Configuration/Dates Section (Peek of Next Step) -->
+<div class="p-8 rounded-xl bg-surface-container-low space-y-6">
+<h3 class="text-xl font-bold font-headline">Stay Details</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-xs font-bold text-primary uppercase tracking-wider">Lease Term</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest border-0 rounded-lg py-3 px-4 text-sm focus:ring-2 focus:ring-primary appearance-none">
+<option>12 Months (Recommended)</option>
+<option>6 Months</option>
+<option>Monthly</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold text-primary uppercase tracking-wider">Move-in Date</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-0 rounded-lg py-3 px-4 text-sm focus:ring-2 focus:ring-primary" type="text" value="October 15, 2024"/>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-on-surface-variant">calendar_today</span>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold text-primary uppercase tracking-wider">Number of Occupants</label>
+<div class="flex gap-4">
+<button class="px-6 py-2 rounded-lg bg-white shadow-sm font-semibold border-2 border-primary text-primary">2 Adults</button>
+<button class="px-6 py-2 rounded-lg bg-surface-container hover:bg-surface-container-highest transition-colors font-semibold">1 Adult</button>
+<button class="px-6 py-2 rounded-lg bg-surface-container hover:bg-surface-container-highest transition-colors font-semibold">Custom</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Pricing & Summary (Floating Glass Panel) -->
+<div class="lg:col-span-4 lg:sticky lg:top-24">
+<div class="glass-panel p-8 rounded-2xl shadow-sm border border-white/20 space-y-8">
+<div class="space-y-2">
+<h3 class="text-2xl font-bold tracking-tight">Booking Summary</h3>
+<p class="text-xs text-on-surface-variant">Obsidian Suite • Unit 402</p>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">Monthly Rent</span>
+<span class="font-semibold">$3,200.00</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">Security Deposit (Refundable)</span>
+<span class="font-semibold">$1,500.00</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">Administration Fee</span>
+<span class="font-semibold">$150.00</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">Amenity Access (Annual)</span>
+<span class="font-semibold">$300.00</span>
+</div>
+<div class="h-px bg-surface-container-highest my-4"></div>
+<div class="flex justify-between items-end">
+<div class="editorial-stack">
+<span class="text-xs font-bold text-primary uppercase tracking-widest">Total Due at Move-in</span>
+<span class="text-3xl font-extrabold text-on-surface">$5,150.00</span>
+</div>
+</div>
+</div>
+<div class="space-y-4 pt-4">
+<button class="w-full bg-primary text-on-primary py-4 rounded-xl font-bold text-sm tracking-wide transition-all hover:opacity-90 active:scale-[0.98]">
+                            Proceed to Review
+                        </button>
+<p class="text-[10px] text-center text-on-surface-variant px-4">
+                            By clicking proceed, you agree to our <a class="underline" href="#">Terms of Service</a> and <a class="underline" href="#">Privacy Policy</a>. No payment is charged at this step.
+                        </p>
+</div>
+<!-- Trust Indicators -->
+<div class="grid grid-cols-2 gap-4 pt-4">
+<div class="flex flex-col items-center text-center gap-1">
+<span class="material-symbols-outlined text-tertiary">verified_user</span>
+<span class="text-[10px] font-bold text-on-surface">Verified Landlord</span>
+</div>
+<div class="flex flex-col items-center text-center gap-1">
+<span class="material-symbols-outlined text-tertiary">lock</span>
+<span class="text-[10px] font-bold text-on-surface">Secure Application</span>
+</div>
+</div>
+</div>
+<!-- Secondary Info Card -->
+<div class="mt-6 p-6 rounded-xl bg-surface-container-low space-y-3">
+<h4 class="text-xs font-bold text-primary uppercase tracking-wider flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">info</span>
+                        Application Tip
+                    </h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                        Having your proof of income and identity documents ready will speed up the approval process by up to 48 hours.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Spacing for Mobile -->
+<div class="h-12 md:hidden"></div>
+</body></html>

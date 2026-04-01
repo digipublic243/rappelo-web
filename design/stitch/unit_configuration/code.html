@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-tertiary-fixed-variant": "#2e6b57",
+            "on-primary-fixed": "#354053",
+            "tertiary": "#2c6a55",
+            "on-secondary": "#f7f9ff",
+            "secondary-container": "#d3e4fe",
+            "tertiary-fixed-dim": "#aaead0",
+            "on-tertiary-fixed": "#074e3b",
+            "surface-container-highest": "#d9e4ea",
+            "surface-bright": "#f7f9fb",
+            "on-primary-container": "#475266",
+            "primary-dim": "#485367",
+            "on-secondary-fixed-variant": "#4d5d73",
+            "inverse-on-surface": "#9a9d9f",
+            "outline": "#717c82",
+            "primary-fixed": "#d8e3fb",
+            "on-surface": "#2a3439",
+            "error-container": "#fe8983",
+            "surface": "#f7f9fb",
+            "on-primary-fixed-variant": "#515c70",
+            "on-error-container": "#752121",
+            "error-dim": "#4e0309",
+            "surface-dim": "#cfdce3",
+            "surface-container-lowest": "#ffffff",
+            "outline-variant": "#a9b4b9",
+            "secondary-fixed-dim": "#c5d6f0",
+            "on-secondary-fixed": "#314055",
+            "surface-container": "#e8eff3",
+            "on-surface-variant": "#566166",
+            "secondary-dim": "#44546a",
+            "on-secondary-container": "#435368",
+            "primary": "#545f73",
+            "on-tertiary": "#e5fff2",
+            "on-error": "#fff7f6",
+            "on-background": "#2a3439",
+            "secondary": "#506076",
+            "inverse-surface": "#0b0f10",
+            "inverse-primary": "#dae6fe",
+            "tertiary-container": "#b8f9de",
+            "tertiary-dim": "#1d5d49",
+            "primary-container": "#d8e3fb",
+            "secondary-fixed": "#d3e4fe",
+            "on-primary": "#f6f7ff",
+            "tertiary-fixed": "#b8f9de",
+            "primary-fixed-dim": "#cad5ed",
+            "background": "#f7f9fb",
+            "surface-container-low": "#f0f4f7",
+            "surface-variant": "#d9e4ea",
+            "on-tertiary-container": "#22614d",
+            "error": "#9f403d",
+            "surface-tint": "#545f73",
+            "surface-container-high": "#e1e9ee"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .headline-font { font-family: 'Manrope', sans-serif; }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar for Landlord Portal -->
+<aside class="h-screen w-64 fixed left-0 bg-slate-50 dark:bg-slate-950 flex flex-col p-4 gap-2 z-40">
+<div class="mb-8 px-2">
+<h2 class="headline-font text-lg font-black text-slate-900 dark:text-white">Landlord Portal</h2>
+<p class="text-xs text-slate-500">Portfolio Manager</p>
+</div>
+<nav class="flex-grow flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg shadow-sm font-bold transition-all duration-200" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-medium">Portfolio</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-medium">Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-medium">Finance</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-slate-200/50 pt-4 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-medium">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-64 h-16 bg-white/80 backdrop-blur-md flex justify-between items-center px-8 z-30">
+<div class="flex items-center gap-4">
+<nav class="flex items-center gap-2 text-sm text-slate-500">
+<span>Portfolio</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span>Blue Spruce Apartments</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-slate-900 font-semibold">Unit 402 Configuration</span>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="Landlord avatar" class="object-cover h-full w-full" data-alt="professional male property manager in business attire smiling in a bright modern office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOsTAOu5sfwdq5nGuviyZVJIGKBOi_ittfcqaIZg-3kMpjQoudocWtQumjwnzk_NYrbYLHHJ_K9Beuie79KsYTFBmpaGQ9jLM67KNf1UMk8P2_z1yOpSqAGmT36_b9GYk6WZdp9UyavzYij9CxglMIiydE0xuQJmGpkPS_J-rlkJaQsjVc0Xr-qyEZe5DclTmzo74fo0S6ko0iSd36LAK3cX9k3BYCqpf4C5cpEP4uM-HyZmtZ-OBesEicceWBymIVDdtCL_DFmcue"/>
+</div>
+</div>
+</header>
+<!-- Configuration Form Body -->
+<div class="pt-24 pb-12 px-8 max-w-6xl">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h1 class="headline-font text-3xl font-extrabold text-on-surface tracking-tight">Unit 402 Configuration</h1>
+<p class="text-on-surface-variant mt-1">Adjust pricing logic, lease rules, and visibility status.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-2.5 rounded-lg text-primary font-semibold hover:bg-surface-container-high transition-colors">Discard</button>
+<button class="px-6 py-2.5 rounded-lg bg-primary text-on-primary font-bold shadow-sm hover:opacity-90 transition-opacity">Save Configuration</button>
+</div>
+</div>
+<!-- Grid Layout for Settings -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Left Column: Pricing & Basics -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-6">
+<!-- Pricing Section -->
+<section class="bg-surface-container-lowest p-8 rounded-xl">
+<h3 class="headline-font text-lg font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">payments</span>
+              Pricing Strategy
+            </h3>
+<div class="grid grid-cols-2 gap-6">
+<div class="col-span-2">
+<label class="block text-xs font-bold uppercase tracking-wider text-outline mb-2">Pricing Cadence</label>
+<div class="flex gap-2 p-1 bg-surface-container rounded-lg">
+<button class="flex-1 py-2 text-sm font-semibold rounded-md bg-white shadow-sm text-primary">Month</button>
+<button class="flex-1 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-primary transition-colors">Week</button>
+<button class="flex-1 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-primary transition-colors">Day</button>
+<button class="flex-1 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-primary transition-colors">Custom</button>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-outline mb-2">Base Price (USD)</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-medium">$</span>
+<input class="w-full pl-8 pr-4 py-3 bg-surface-container rounded-lg border-none focus:ring-2 focus:ring-primary text-on-surface font-semibold" type="number" value="2450"/>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-outline mb-2">Security Deposit</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-medium">$</span>
+<input class="w-full pl-8 pr-4 py-3 bg-surface-container rounded-lg border-none focus:ring-2 focus:ring-primary text-on-surface font-semibold" type="number" value="1200"/>
+</div>
+</div>
+<div class="col-span-2">
+<label class="block text-xs font-bold uppercase tracking-wider text-outline mb-2">Advance Payment Policy</label>
+<div class="flex items-center gap-4">
+<div class="flex-grow relative">
+<input class="w-full pr-12 py-3 bg-surface-container rounded-lg border-none focus:ring-2 focus:ring-primary text-on-surface font-semibold" type="number" value="15"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant">%</span>
+</div>
+<span class="text-sm font-medium text-slate-400">or</span>
+<div class="flex-grow relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-medium">$</span>
+<input class="w-full pl-8 pr-4 py-3 bg-surface-container rounded-lg border-none focus:ring-2 focus:ring-primary text-on-surface font-semibold" placeholder="Fixed" type="number"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Discounts & Promotions -->
+<section class="bg-surface-container-lowest p-8 rounded-xl">
+<div class="flex justify-between items-center mb-6">
+<h3 class="headline-font text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">sell</span>
+                Discounts &amp; Offers
+              </h3>
+<button class="text-primary text-sm font-bold flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+                Add Rule
+              </button>
+</div>
+<div class="space-y-4">
+<!-- Discount Card 1 -->
+<div class="p-4 bg-surface-container-low rounded-lg flex items-center justify-between border-l-4 border-tertiary">
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 rounded bg-tertiary-container flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined">celebration</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Early Bird Renewal</p>
+<p class="text-xs text-on-surface-variant">Active: Oct 1 - Dec 31 • 10% off base price</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-2 py-1 rounded bg-tertiary-container text-on-tertiary-container text-[10px] font-bold uppercase tracking-wider">Tenant Context</span>
+<button class="material-symbols-outlined text-outline hover:text-error transition-colors">delete</button>
+</div>
+</div>
+<!-- Discount Card 2 -->
+<div class="p-4 bg-surface-container-low rounded-lg flex items-center justify-between border-l-4 border-secondary-dim">
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 rounded bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Long-term Stay (12m+)</p>
+<p class="text-xs text-on-surface-variant">Permanent • $150 fixed credit</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-wider">Public</span>
+<button class="material-symbols-outlined text-outline hover:text-error transition-colors">delete</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Payment Methods -->
+<section class="bg-surface-container-lowest p-8 rounded-xl">
+<h3 class="headline-font text-lg font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">account_balance_wallet</span>
+              Allowed Payment Methods
+            </h3>
+<div class="grid grid-cols-2 gap-4">
+<label class="flex items-center gap-4 p-4 rounded-lg bg-surface-container-low cursor-pointer hover:bg-surface-container-high transition-colors">
+<input checked="" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<div>
+<span class="font-bold block">EasyPay Digital</span>
+<span class="text-xs text-on-surface-variant">Instant processing, 1% fee</span>
+</div>
+</label>
+<label class="flex items-center gap-4 p-4 rounded-lg bg-surface-container-low cursor-pointer hover:bg-surface-container-high transition-colors">
+<input checked="" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<div>
+<span class="font-bold block">Cash / Wire</span>
+<span class="text-xs text-on-surface-variant">Manual verification required</span>
+</div>
+</label>
+<label class="flex items-center gap-4 p-4 rounded-lg bg-surface-container-low opacity-50 cursor-not-allowed">
+<input class="w-5 h-5 rounded border-outline-variant text-primary" disabled="" type="checkbox"/>
+<div>
+<span class="font-bold block">Crypto (BETA)</span>
+<span class="text-xs text-on-surface-variant">Currently unavailable</span>
+</div>
+</label>
+</div>
+</section>
+</div>
+<!-- Right Column: Status & Preview -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<!-- Status Toggle Card -->
+<section class="bg-primary text-on-primary p-8 rounded-xl shadow-lg">
+<h3 class="headline-font text-lg font-bold mb-6">Unit Lifecycle Status</h3>
+<div class="flex flex-col gap-3">
+<label class="flex items-center justify-between p-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined">person</span>
+<span class="font-semibold">Occupied</span>
+</div>
+<div class="w-10 h-6 bg-slate-300/30 rounded-full relative">
+<div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+</div>
+</label>
+<label class="flex items-center justify-between p-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors cursor-pointer group border-2 border-white/40">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined">meeting_room</span>
+<span class="font-semibold">Vacant</span>
+</div>
+<div class="w-10 h-6 bg-tertiary-container rounded-full relative">
+<div class="absolute right-1 top-1 w-4 h-4 bg-tertiary rounded-full"></div>
+</div>
+</label>
+<label class="flex items-center justify-between p-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined">build</span>
+<span class="font-semibold">Under Maintenance</span>
+</div>
+<div class="w-10 h-6 bg-slate-300/30 rounded-full relative">
+<div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+</div>
+</label>
+</div>
+<p class="text-xs text-on-primary/60 mt-6 leading-relaxed">Changing status to "Vacant" will automatically list this unit on the public browse page using current pricing rules.</p>
+</section>
+<!-- Unit Media Preview -->
+<section class="bg-surface-container-lowest p-6 rounded-xl">
+<h3 class="headline-font text-sm font-bold mb-4 uppercase tracking-wider text-outline">Media Preview</h3>
+<div class="aspect-video w-full rounded-lg bg-surface-container overflow-hidden relative group">
+<img alt="Apartment interior" class="object-cover h-full w-full" data-alt="modern minimalist apartment interior with wide windows light wooden floors and stylish gray sofa at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTZXTTDFzeNcunjbGeT48a1lGQBf2rRoyJmk6LnrI4y-EHVu76-UvPOHE6nplgnAjqjBfa3YLX5dN0YlUhaGrcKTVETfdBQGfYdisSGQ1st25oRnCbl3vJfZr2AWAJIBeRQKLmAR3ivhFvmIC2wt4K8kksBw4FyeXGiyVeTG3crCL1eYzifPl5eBPXE0Yrgc9z48SgOogufcLr8P8TognjyRJ61J38OfPHDaIBsC1igSyY1lkLmpoqF4iX5ruTz08AFTB97HDwpkU-"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-white text-3xl">edit</span>
+</div>
+</div>
+<div class="mt-4 grid grid-cols-4 gap-2">
+<div class="aspect-square bg-surface-container rounded-md overflow-hidden">
+<img alt="Kitchen" class="object-cover h-full w-full" data-alt="clean modern kitchen with white marble countertops and stainless steel appliances" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyAvdtSPt5D3ngQLZvo5TijO5ZLsz5VyON1R4JkLyhlcvKgc_OsvaliVhhOgSEpIGpvAGpI-PezxMjpK5-SeZuPB7Zv8j8mbYlwFYWhhl_8xC4apprZPgJZ1lEOdLeLJUE4o_mYrPUUVFXT9ju0dZTHUxpxT9-KEdY19VEtuAtRkOn2o99Otz0b_1knS1iD7WfM91wFBRUma6fiy3qbxRZrytlPKhwkYUNUlMvohCivxC1K6iREB6dzLwPN4eXbBIrUm6Ihw1BBpO6"/>
+</div>
+<div class="aspect-square bg-surface-container rounded-md overflow-hidden">
+<img alt="Bathroom" class="object-cover h-full w-full" data-alt="luxury bathroom with walk-in glass shower and designer tiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgamX6PVqWy_R5hYyiZZ1EK5rpvruAL2Y6mLSwQ7d2ZL428RQeTy9iMjuFo4LEP-rGWSPgZXSnWedXMs_Vq3Kn_PNl3XoX8EI8Btdgo2CcqBbGh_vAXMYj3A5N-RoTc9Q4UHo24FG4W3AzU4cVqPq84zNpnPS2wYG-2o8HsFkphO12zdK_Xf-tsPIpociiT2Wzse1khQMP7TNxLGD0PXByTl2C1Pr_uuLcUKon7Sx7DtFIloU1KffavSbs4p-RxusAqSpwYqbVNLQk"/>
+</div>
+<div class="aspect-square bg-surface-container rounded-md flex items-center justify-center text-outline cursor-pointer hover:bg-surface-container-high">
+<span class="material-symbols-outlined">add</span>
+</div>
+<div class="aspect-square bg-surface-container rounded-md flex items-center justify-center text-outline cursor-pointer hover:bg-surface-container-high">
+<span class="material-symbols-outlined">more_horiz</span>
+</div>
+</div>
+</section>
+<!-- Quick Stats Asymmetric Card -->
+<section class="bg-surface-container p-6 rounded-xl relative overflow-hidden">
+<div class="relative z-10">
+<h3 class="headline-font text-sm font-bold mb-4 uppercase tracking-wider text-outline">Unit Performance</h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-xs font-bold mb-1">
+<span>90-Day Occupancy</span>
+<span class="text-primary">94%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[94%]"></div>
+</div>
+</div>
+<div class="flex items-end gap-2">
+<span class="text-2xl font-black headline-font text-on-surface">$28,400</span>
+<span class="text-xs font-bold text-tertiary mb-1">+12% vs LY</span>
+</div>
+<p class="text-xs text-on-surface-variant">Annual Projected Revenue</p>
+</div>
+</div>
+<!-- Decorative background shape -->
+<div class="absolute -right-4 -bottom-4 w-24 h-24 bg-primary/5 rounded-full blur-xl"></div>
+</section>
+</div>
+</div>
+</div>
+</main>
+</body></html>

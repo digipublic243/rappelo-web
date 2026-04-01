@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Estate Metric - Tenant Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed-variant": "#2e6b57",
+                        "on-primary-fixed": "#354053",
+                        "tertiary": "#2c6a55",
+                        "on-secondary": "#f7f9ff",
+                        "secondary-container": "#d3e4fe",
+                        "tertiary-fixed-dim": "#aaead0",
+                        "on-tertiary-fixed": "#074e3b",
+                        "surface-container-highest": "#d9e4ea",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-container": "#475266",
+                        "primary-dim": "#485367",
+                        "on-secondary-fixed-variant": "#4d5d73",
+                        "inverse-on-surface": "#9a9d9f",
+                        "outline": "#717c82",
+                        "primary-fixed": "#d8e3fb",
+                        "on-surface": "#2a3439",
+                        "error-container": "#fe8983",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed-variant": "#515c70",
+                        "on-error-container": "#752121",
+                        "error-dim": "#4e0309",
+                        "surface-dim": "#cfdce3",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#a9b4b9",
+                        "secondary-fixed-dim": "#c5d6f0",
+                        "on-secondary-fixed": "#314055",
+                        "surface-container": "#e8eff3",
+                        "on-surface-variant": "#566166",
+                        "secondary-dim": "#44546a",
+                        "on-secondary-container": "#435368",
+                        "primary": "#545f73",
+                        "on-tertiary": "#e5fff2",
+                        "on-error": "#fff7f6",
+                        "on-background": "#2a3439",
+                        "secondary": "#506076",
+                        "inverse-surface": "#0b0f10",
+                        "inverse-primary": "#dae6fe",
+                        "tertiary-container": "#b8f9de",
+                        "tertiary-dim": "#1d5d49",
+                        "primary-container": "#d8e3fb",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-primary": "#f6f7ff",
+                        "tertiary-fixed": "#b8f9de",
+                        "primary-fixed-dim": "#cad5ed",
+                        "background": "#f7f9fb",
+                        "surface-container-low": "#f0f4f7",
+                        "surface-variant": "#d9e4ea",
+                        "on-tertiary-container": "#22614d",
+                        "error": "#9f403d",
+                        "surface-tint": "#545f73",
+                        "surface-container-high": "#e1e9ee"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex min-h-screen">
+<!-- SideNavBar (Landlord Portal) -->
+<aside class="h-screen w-64 fixed left-0 bg-slate-50 dark:bg-slate-950 flex flex-col p-4 gap-2 border-r-0 z-40">
+<div class="mb-8 px-2">
+<h1 class="text-lg font-black text-slate-900 dark:text-white tracking-tight">Estate Metric</h1>
+<p class="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-1">Landlord Portal</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg shadow-sm font-bold transition-all duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body text-sm">Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-body text-sm font-medium">Portfolio</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body text-sm font-medium">Finance</span>
+</a>
+</nav>
+<div class="mt-auto space-y-1 pt-4 border-t border-slate-200 dark:border-slate-800">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body text-sm font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body text-sm font-medium">Support</span>
+</a>
+<div class="mt-4 flex items-center gap-3 px-3 py-3 bg-surface-container-low rounded-xl">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="professional portrait of a property manager in a light-filled modern office with architectural sketches in the background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2H9PnzfEnADd_gekBl-GcPYxEDLpYJu1rDhKVOs0wXyxXalkDZxh6SNoGjRvEzGaf1Z-ZYHqdnwHU-WugAhTKn7NQR0lzYNxSDa7bHUKZ-fSt_ezuzNxVqH-nWe3i82W8EaII34sCA40K7owXFvBo4VVuHswJvy-bK2Ei4Hj75razyODu1WTbbIjbEYT-faAmn2dfO7WBcwR2EyZM8NZqLsA8WyizVKDQoAO2AG4Umbk1Acd6_UwZ7TOuKbmJBB9kP-4SSzwnBDBL"/>
+<div class="overflow-hidden">
+<p class="text-sm font-bold text-on-surface truncate">Alex Sterling</p>
+<p class="text-xs text-on-surface-variant truncate">Portfolio Manager</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 flex-1 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-64 right-0 h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-30 shadow-sm dark:shadow-none flex justify-between items-center px-8">
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-2 text-sm w-80 focus:ring-2 focus:ring-primary transition-all" placeholder="Search tenants, units..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+<span class="material-symbols-outlined">apps</span>
+</button>
+</div>
+</header>
+<!-- Content Area -->
+<div class="mt-16 p-8 flex-1">
+<div class="max-w-7xl mx-auto">
+<!-- Header Section -->
+<div class="mb-10 flex justify-between items-end">
+<div>
+<h2 class="text-display-sm font-headline text-3xl font-extrabold text-on-surface tracking-tight">Active Tenants</h2>
+<p class="text-on-surface-variant mt-2 max-w-lg">Monitor lease health and payment status across your residential portfolio.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-low text-primary font-semibold rounded-lg hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-xl">filter_list</span>
+                            Filters
+                        </button>
+<button class="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary font-bold rounded-lg hover:brightness-110 transition-all shadow-sm">
+<span class="material-symbols-outlined text-xl">person_add</span>
+                            Add Tenant
+                        </button>
+</div>
+</div>
+<!-- Stats Overview (Bento Style) -->
+<div class="grid grid-cols-4 gap-6 mb-10">
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-none">
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Total Tenants</p>
+<p class="text-3xl font-headline font-extrabold text-on-surface">142</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-none">
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Portfolio Health</p>
+<div class="flex items-center gap-2">
+<p class="text-3xl font-headline font-extrabold text-tertiary">98.2%</p>
+<span class="material-symbols-outlined text-tertiary text-xl" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-none">
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Upcoming Renewals</p>
+<p class="text-3xl font-headline font-extrabold text-secondary">12</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-none">
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Late Payments</p>
+<div class="flex items-center gap-2">
+<p class="text-3xl font-headline font-extrabold text-error">3</p>
+<span class="material-symbols-outlined text-error text-xl" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+</div>
+</div>
+<!-- Professional Table Container -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full border-collapse text-left">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Tenant Name</th>
+<th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Active Lease</th>
+<th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Payment Health</th>
+<th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Last Activity</th>
+<th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y-0">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="professional headshot of a smiling young woman with dark hair against a soft blue studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNbFdknMm3LAtMlsObtRis4nvOQEx1wtJeqQH-N0LCe6ExzbRDKT1TqoSO-nEjN2MCvmVZvEOTaI7XCdb2tLJl13-bbLs3SjWrkExqwm3ehNztlo7d6Agh_oD4IQfIdQZVlWc6boFXbVpB9P784gfy9vNX1lBzENFBTO9wH-7qhFGDyNOcW-yyu3p0z2BtdtU43xoy0ipJ2MO34rPwmM8_7E9zgAooug6yTGv9eNeiuaI3UzRQlF-AvQnATpPg0fBRQAjC90aqHdGn"/>
+<div>
+<p class="text-sm font-bold text-on-surface">Sarah Jenkins</p>
+<p class="text-xs text-on-surface-variant">sarah.j@example.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div>
+<p class="text-sm font-semibold text-on-surface">Grandview Heights</p>
+<p class="text-xs text-on-surface-variant">Unit 402B • $2,400/mo</p>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-col gap-1">
+<div class="flex gap-1">
+<span class="w-2 h-4 rounded-sm bg-tertiary"></span>
+<span class="w-2 h-4 rounded-sm bg-tertiary"></span>
+<span class="w-2 h-4 rounded-sm bg-tertiary"></span>
+<span class="w-2 h-4 rounded-sm bg-tertiary"></span>
+<span class="w-2 h-4 rounded-sm bg-tertiary"></span>
+</div>
+<span class="text-[10px] font-bold text-tertiary uppercase tracking-tight">On-Time consistent</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm text-on-surface">2 hours ago</p>
+<p class="text-xs text-on-surface-variant italic">Maintenance request filed</p>
+</td>
+<td class="px-6 py-5">
+<button class="p-2 hover:bg-surface-container rounded-lg text-primary transition-all">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="close up portrait of a middle aged man with graying beard and glasses in a professional warm light setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiX4SGx_9a7S_DFGAfjGoFofdosZY1viqiAlKtVJLSkhRarTEazoGsjGFC4YvUnlAB014jYhP9O6gAQjwAkXcIGs2cdpWpZjj3H2jE1LroNLNy6zx-yof3aljoKC2zBW9LkqZ7gwvldS0Yz_y7sStxuLF9plO0OZBfftRPPKXfLsYIToesUPnOjjKbIdoZHRINbI-0tV5s372ZRMThp1keHx1IR8eJLz6MK0mtQXp2DDiBsKEc01Rg7L_BxodGXkMqTZNXWOcW0NvI"/>
+<div>
+<p class="text-sm font-bold text-on-surface">Marcus Thorne</p>
+<p class="text-xs text-on-surface-variant">m.thorne@corp.net</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div>
+<p class="text-sm font-semibold text-on-surface">The Spruce Lofts</p>
+<p class="text-xs text-on-surface-variant">Penthouse 1 • $5,800/mo</p>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-col gap-1">
+<div class="flex gap-1">
+<span class="w-2 h-4 rounded-sm bg-tertiary"></span>
+<span class="w-2 h-4 rounded-sm bg-tertiary"></span>
+<span class="w-2 h-4 rounded-sm bg-tertiary"></span>
+<span class="w-2 h-4 rounded-sm bg-secondary"></span>
+<span class="w-2 h-4 rounded-sm bg-secondary-container"></span>
+</div>
+<span class="text-[10px] font-bold text-secondary uppercase tracking-tight">Occasional grace period</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm text-on-surface">Yesterday</p>
+<p class="text-xs text-on-surface-variant">Rent payment processed</p>
+</td>
+<td class="px-6 py-5">
+<button class="p-2 hover:bg-surface-container rounded-lg text-primary transition-all">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 (Late status) -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary font-bold">EW</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Elena Wells</p>
+<p class="text-xs text-on-surface-variant">elena.w@web.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div>
+<p class="text-sm font-semibold text-on-surface">Riverfront Residences</p>
+<p class="text-xs text-on-surface-variant">Unit 12C • $3,100/mo</p>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-col gap-1">
+<div class="flex gap-1">
+<span class="w-2 h-4 rounded-sm bg-tertiary"></span>
+<span class="w-2 h-4 rounded-sm bg-tertiary"></span>
+<span class="w-2 h-4 rounded-sm bg-error"></span>
+<span class="w-2 h-4 rounded-sm bg-error"></span>
+<span class="w-2 h-4 rounded-sm bg-error"></span>
+</div>
+<span class="text-[10px] font-bold text-error uppercase tracking-tight">Overdue: 4 Days</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm text-on-surface">4 days ago</p>
+<p class="text-xs text-error font-medium italic">Missed payment notification</p>
+</td>
+<td class="px-6 py-5">
+<button class="p-2 hover:bg-surface-container rounded-lg text-primary transition-all">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination / Footer Table -->
+<div class="p-4 bg-surface-container-low border-t-0 flex justify-between items-center px-8">
+<p class="text-xs text-on-surface-variant font-medium">Showing 1-10 of 142 tenants</p>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded bg-white text-slate-400 cursor-not-allowed">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-white text-slate-700 font-bold border-none shadow-sm">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-white text-slate-500 transition-colors">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-white text-slate-500 transition-colors">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-white text-slate-700 shadow-sm">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Empty State (Hidden/Template) -->
+<div class="hidden flex flex-col items-center justify-center py-24 text-center">
+<div class="w-20 h-20 bg-surface-container rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-4xl text-outline-variant">person_off</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-on-surface mb-2">No tenants registered yet.</h3>
+<p class="text-on-surface-variant max-w-sm mb-8">Get started by importing your lease agreements or manually adding your first tenant.</p>
+<button class="px-6 py-3 bg-primary text-on-primary font-bold rounded-lg hover:brightness-110 transition-all shadow-md flex items-center gap-2 mx-auto">
+<span class="material-symbols-outlined">add</span>
+                        New Registration
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button (Shell) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+</body></html>

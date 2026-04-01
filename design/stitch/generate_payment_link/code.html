@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Estate Metric - Payment Request</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-fixed-variant": "#2e6b57",
+              "on-primary-fixed": "#354053",
+              "tertiary": "#2c6a55",
+              "on-secondary": "#f7f9ff",
+              "secondary-container": "#d3e4fe",
+              "tertiary-fixed-dim": "#aaead0",
+              "on-tertiary-fixed": "#074e3b",
+              "surface-container-highest": "#d9e4ea",
+              "surface-bright": "#f7f9fb",
+              "on-primary-container": "#475266",
+              "primary-dim": "#485367",
+              "on-secondary-fixed-variant": "#4d5d73",
+              "inverse-on-surface": "#9a9d9f",
+              "outline": "#717c82",
+              "primary-fixed": "#d8e3fb",
+              "on-surface": "#2a3439",
+              "error-container": "#fe8983",
+              "surface": "#f7f9fb",
+              "on-primary-fixed-variant": "#515c70",
+              "on-error-container": "#752121",
+              "error-dim": "#4e0309",
+              "surface-dim": "#cfdce3",
+              "surface-container-lowest": "#ffffff",
+              "outline-variant": "#a9b4b9",
+              "secondary-fixed-dim": "#c5d6f0",
+              "on-secondary-fixed": "#314055",
+              "surface-container": "#e8eff3",
+              "on-surface-variant": "#566166",
+              "secondary-dim": "#44546a",
+              "on-secondary-container": "#435368",
+              "primary": "#545f73",
+              "on-tertiary": "#e5fff2",
+              "on-error": "#fff7f6",
+              "on-background": "#2a3439",
+              "secondary": "#506076",
+              "inverse-surface": "#0b0f10",
+              "inverse-primary": "#dae6fe",
+              "tertiary-container": "#b8f9de",
+              "tertiary-dim": "#1d5d49",
+              "primary-container": "#d8e3fb",
+              "secondary-fixed": "#d3e4fe",
+              "on-primary": "#f6f7ff",
+              "tertiary-fixed": "#b8f9de",
+              "primary-fixed-dim": "#cad5ed",
+              "background": "#f7f9fb",
+              "surface-container-low": "#f0f4f7",
+              "surface-variant": "#d9e4ea",
+              "on-tertiary-container": "#22614d",
+              "error": "#9f403d",
+              "surface-tint": "#545f73",
+              "surface-container-high": "#e1e9ee"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      h1, h2, h3 {
+        font-family: 'Manrope', sans-serif;
+      }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- Shell: TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Estate Metric</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 transition-colors" href="#">Dashboard</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 transition-colors" href="#">Portfolio</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 transition-colors" href="#">Management</a>
+<a class="text-slate-900 dark:text-white font-semibold" href="#">Finance</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors rounded-full">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors rounded-full">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/20">
+<img alt="User profile with role indicator" class="w-full h-full object-cover" data-alt="Professional portrait of a male landlord in a business suit with a confident expression and warm office lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzUOjB6In5zwOSSm9nQMZBseEtmThGsoMBH9Tlihb86Y1wHOTZ3XH74p6blbRFwhBCEGYeeWIQn0kxG3GecTAZ3SwKi8kXp0nLqK6wuXAGvU7CHdR-bocQ01E0_GDwFts031TV9s4VhqGFN-2i4zWEyR4DhX2IUkqx4HR51u_LQsbPhSZ3wNqtrI5S3b_2x2ee8ZzNaiVGPBeLRUypr8lxvDjFxE9i1vZPfRtSIW5hWKBwE5tjkmyK3gu0519dTewb1L4e7lz7xB85"/>
+</div>
+</div>
+</nav>
+<!-- Shell: SideNavBar (Landlord Context) -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-16 bg-slate-50 dark:bg-slate-950 p-4 gap-2 tonal layering Level 1 surface-container-low border-r border-transparent">
+<div class="mb-6 px-2">
+<h2 class="text-lg font-black text-slate-900 dark:text-white">Landlord Portal</h2>
+<p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest font-semibold">Portfolio Manager</p>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-700 hover:bg-slate-200/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-700 hover:bg-slate-200/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-medium">Portfolio</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-700 hover:bg-slate-200/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-medium">Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg shadow-sm font-bold" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-medium">Finance</span>
+</a>
+</div>
+<div class="mt-auto flex flex-col gap-1 border-t border-slate-200 dark:border-slate-800 pt-4">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-700 hover:bg-slate-200/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium text-sm">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-slate-700 hover:bg-slate-200/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-medium text-sm">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area (Background for Modal) -->
+<main class="md:ml-64 pt-16 min-h-screen bg-surface">
+<div class="p-8 max-w-6xl mx-auto">
+<header class="mb-12">
+<h1 class="text-4xl font-extrabold text-on-surface tracking-tight mb-2">Finance Overview</h1>
+<p class="text-on-surface-variant max-w-2xl">Manage your rental income, security deposits, and operational expenses with architectural precision.</p>
+</header>
+<!-- Bento-style Dashboard Preview -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 p-6 bg-surface-container-lowest rounded-xl shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-lg font-bold text-on-surface">Recent Transactions</h3>
+<span class="text-primary text-sm font-semibold cursor-pointer hover:underline">View All</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<div>
+<p class="font-semibold text-on-surface">Rent - Unit 4B</p>
+<p class="text-xs text-on-surface-variant">Tenant: Alex Rivera</p>
+</div>
+</div>
+<span class="font-bold text-tertiary">+$2,450.00</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+<div>
+<p class="font-semibold text-on-surface">Utilities - Unit 12A</p>
+<p class="text-xs text-on-surface-variant">Tenant: Sarah Chen</p>
+</div>
+</div>
+<span class="font-bold text-secondary">+$145.20</span>
+</div>
+</div>
+</div>
+<div class="p-6 bg-primary text-on-primary rounded-xl flex flex-col justify-between">
+<div>
+<span class="text-sm font-medium opacity-80">Total Outstanding</span>
+<h2 class="text-3xl font-extrabold mt-1">$12,840.00</h2>
+</div>
+<button class="mt-8 bg-surface-container-lowest text-primary py-3 rounded-lg font-bold text-sm shadow-lg hover:scale-95 transition-transform">
+                        Initiate Bulk Request
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- MODAL OVERLAY: Payment Link Generation -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+<!-- Backdrop -->
+<div class="absolute inset-0 bg-slate-900/40 backdrop-blur-md"></div>
+<!-- Modal Content -->
+<div class="relative w-full max-w-md bg-surface-container-lowest rounded-xl shadow-2xl overflow-hidden">
+<!-- Modal Header -->
+<div class="px-6 py-5 bg-surface-container flex items-center justify-between">
+<div>
+<h3 class="text-xl font-extrabold text-on-surface tracking-tight">Request Funds</h3>
+<p class="text-xs text-on-surface-variant font-medium">Create a secure payment link for your tenant.</p>
+</div>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-highest rounded-full transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Modal Body -->
+<form class="p-6 space-y-6">
+<!-- Tenant Selection -->
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-primary uppercase tracking-wider ml-1">Select Tenant &amp; Lease</label>
+<div class="relative group">
+<select class="w-full bg-surface-container-low border-0 rounded-lg py-3 px-4 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer transition-all">
+<option>Sarah Chen — Unit 12A (Executive Studio)</option>
+<option>Alex Rivera — Unit 4B (Luxury Loft)</option>
+<option>Jordan Miller — Unit 22C (Penthouse)</option>
+<option>Marcus Thorne — Commercial Space B</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<!-- Amount & Purpose Grid -->
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-primary uppercase tracking-wider ml-1">Amount</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-semibold">$</span>
+<input class="w-full bg-surface-container-low border-0 rounded-lg py-3 pl-8 pr-4 text-on-surface focus:ring-2 focus:ring-primary transition-all font-mono font-bold" placeholder="0.00" type="number"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-primary uppercase tracking-wider ml-1">Purpose</label>
+<select class="w-full bg-surface-container-low border-0 rounded-lg py-3 px-4 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer transition-all">
+<option>Rent</option>
+<option>Security Deposit</option>
+<option>Utilities</option>
+<option>Maintenance Fee</option>
+<option>Other</option>
+</select>
+</div>
+</div>
+<!-- Expiry Date -->
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-primary uppercase tracking-wider ml-1">Link Expiry Date</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-0 rounded-lg py-3 px-4 text-on-surface focus:ring-2 focus:ring-primary transition-all" type="date" value="2024-12-31"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">calendar_today</span>
+</div>
+<p class="text-[10px] text-on-surface-variant px-1 italic">Link will automatically deactivate after this date for security.</p>
+</div>
+<!-- Action Cluster -->
+<div class="pt-4 space-y-3">
+<button class="w-full bg-primary text-on-primary py-4 rounded-lg font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:scale-[0.98] active:scale-95 transition-all" type="submit">
+<span class="material-symbols-outlined text-[20px]">content_copy</span>
+                        Generate and Copy Link
+                    </button>
+<div class="flex items-center gap-3">
+<button class="flex-1 bg-surface-container-high text-on-primary-container py-3 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">mail</span>
+                            Email
+                        </button>
+<button class="flex-1 bg-surface-container-high text-on-primary-container py-3 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">sms</span>
+                            SMS
+                        </button>
+</div>
+</div>
+</form>
+<!-- Bottom Tonal Shift Footer -->
+<div class="px-6 py-4 bg-surface-container-low flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<p class="text-[10px] text-on-surface-variant leading-tight">Payments are processed through a secure architectural gateway. Funds are typically available within 24-48 business hours.</p>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,54 @@
+# Product Requirements Document: Premium B2B Property Management Platform
+
+## 1. Executive Summary
+A modern, API-first, role-aware property management web app designed for Landlords and Tenants. The platform prioritizes high-trust, simple-to-use workflows over generic CRUD, focusing on status-driven actions and professional aesthetics.
+
+## 2. User Roles
+- **Landlord:** Manages portfolios, properties, units, tenants, and financial performance.
+- **Tenant:** Manages their own bookings, leases, and payments via phone + OTP login.
+
+## 3. Core Domain Model
+- **Property:** A physical asset owned by a landlord.
+- **Unit:** A specific space within a property (room, apartment, etc.).
+- **Booking:** A request/reservation for a unit.
+- **Lease:** A formal agreement connecting a unit to a tenant (distinct from a booking).
+- **Payment:** Financial transactions tied to leases/bookings.
+- **Pricing Rules:** Highly configurable (day/week/month/custom) with deposits and advance payment requirements.
+
+## 4. Visual & UX Direction
+- **Style:** Premium, simple, B2B back-office feel.
+- **Palette:** Soft neutrals, high-quality typography, accessible contrast.
+- **Layout:** Modern card/table hybrid, rounded but restrained components.
+- **Principles:** Clarity over density, status-driven actions, guided flows.
+
+## 5. Screen Map
+
+### Landlord Experience
+1. **Sign In / Sign Up:** Professional entry point.
+2. **Dashboard:** Portfolio overview, revenue, occupancy, and "Needs Attention" widgets.
+3. **Property List:** Card/Table hybrid showing occupancy and health.
+4. **Property Detail:** Deep dive into units, history, and property-level stats.
+5. **Unit Detail/Config:** Pricing rules (cadence, deposit, advance), status management.
+6. **Tenant List:** Database of all current and past tenants.
+7. **Tenant Detail:** Lease history, payment reliability, and contact info.
+8. **Booking Requests:** Inbox-style list for approval/rejection.
+9. **Booking Review (Drawer):** Contextual review of applicant and terms.
+10. **Lease List:** Overview of all active and pending agreements.
+11. **Lease Detail:** Timeline, documents, and specific financial terms.
+12. **Payments List:** Ledger of all transactions across the portfolio.
+13. **Payment Link Modal:** Quick action to generate secure payment URLs.
+14. **Reminder Modal:** Status-driven communication for overdue amounts.
+15. **Reports/Stats:** Lightweight charts for revenue and occupancy trends.
+
+### Tenant Experience
+16. **Tenant Login:** Clean phone + OTP interface.
+17. **Tenant Dashboard:** Upcoming payments, active lease status, quick support.
+18. **My Bookings:** History and status of requested stays.
+19. **My Leases:** Active and historical legal agreements.
+20. **My Payments:** Billing history and "Pay Now" actions.
+21. **Property Booking Flow:** Multi-step guided flow to select unit and request stay.
+
+## 6. Key UX Decisions
+- **Status Badges:** Color-coded (e.g., Green: Paid/Occupied, Yellow: Pending/Reserved, Red: Overdue/Vacant).
+- **Contextual Actions:** Buttons change based on the 'Status' (e.g., a "Pending" booking shows "Approve/Reject", while an "Approved" one shows "Generate Lease").
+- **Empty States:** Instructive guidance for new users (e.g., "Add your first property to get started").
