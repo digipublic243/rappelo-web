@@ -1,9 +1,10 @@
 import { LandlordPageFrame } from "@/features/landlord/LandlordPageFrame";
 import { PageIntro } from "@/components/ui/PageIntro";
-import { SurfaceCard, ActionButton } from "@/components/shared/StitchPrimitives";
+import { SurfaceCard } from "@/components/shared/StitchPrimitives";
 import { DataStateNotice } from "@/components/ui/DataStateNotice";
 import { getLandlordPaymentWorkflowData } from "@/features/landlord/api";
 import { formatMoney } from "@/lib/format";
+import { SendPaymentReminderForm } from "@/features/landlord/SendPaymentReminderForm";
 
 export default async function SendReminderPage() {
   const { payments, tenants, meta } = await getLandlordPaymentWorkflowData();
@@ -22,25 +23,7 @@ export default async function SendReminderPage() {
             <p className="font-semibold text-[#2a3439]">{relatedTenant?.fullName ?? "Tenant unavailable"}</p>
             <p className="text-xs text-[#566166]">{overduePayment?.unitId || "Unit unavailable"} • Payment context</p>
           </div>
-          <div className="mt-5 space-y-4">
-            <label className="block text-sm font-medium text-[#566166]">
-              Reminder Style
-              <select className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3">
-                <option>Soft Reminder</option>
-                <option>Firm Reminder</option>
-                <option>Final Notice</option>
-              </select>
-            </label>
-            <label className="block text-sm font-medium text-[#566166]">
-              Message
-              <textarea
-                className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3"
-                defaultValue={`We're reaching out as we haven't yet received the rent payment of ${overduePayment ? formatMoney(overduePayment.amount) : "$0.00"} for ${overduePayment?.unitId || "the selected unit"}.`}
-                rows={6}
-              />
-            </label>
-            <ActionButton>Send Reminder</ActionButton>
-          </div>
+          <SendPaymentReminderForm payments={payments} tenants={tenants} />
         </SurfaceCard>
 
         <SurfaceCard className="rounded-[28px] bg-[linear-gradient(145deg,#2a3439,#556170)] p-8 text-white">

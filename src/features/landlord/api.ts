@@ -1,10 +1,11 @@
 import { getCurrentUser, getUserById } from "@/lib/api/accounts";
 import { getBookingById, listBookings } from "@/lib/api/bookings";
 import { getLeaseById, listLeases } from "@/lib/api/leases";
-import { listPayments } from "@/lib/api/payments";
-import { getPropertyById, getPropertyFinancials, getUnitById, listProperties, listUnits } from "@/lib/api/properties";
+import { getPaymentSummary, listPayments } from "@/lib/api/payments";
+import { getEnrichedPropertyById, getPropertyById, getPropertyFinancials, getUnitById, listProperties, listUnits } from "@/lib/api/properties";
 import { getSessionTokens } from "@/lib/api/session";
 import { getTenantProfileById, listTenantProfiles } from "@/lib/api/tenants";
+import type { ApiEnrichedProperty } from "@/types/api";
 import type {
   BookingDetailVm,
   LandlordDashboardVm,
@@ -183,7 +184,8 @@ export async function getLandlordPropertyDetailVm(propertyId: string): Promise<P
   }
 
   const [property, units] = await Promise.all([
-    getPropertyById(propertyId, accessToken).catch(() => null),
+    getEnrichedPropertyById(propertyId, accessToken)
+      .catch(() => getPropertyById(propertyId, accessToken).catch(() => null)),
     listUnits(accessToken).catch(() => null),
   ]);
 
@@ -194,6 +196,7 @@ export async function getLandlordPropertyDetailVm(propertyId: string): Promise<P
   const financials = await getPropertyFinancials(propertyId, accessToken).catch(() => null);
   const propertyDomain = mapApiPropertyToDomain(property, units, financials);
   const unitDomains = units.filter((unit) => String(unit.property) === String(property.id)).map((unit) => mapApiUnitToDomain(unit));
+  const enrichedProperty = property as ApiEnrichedProperty;
 
   return {
     property: propertyDomain,
@@ -212,6 +215,12 @@ export async function getLandlordPropertyDetailVm(propertyId: string): Promise<P
       currentValue: property.current_value ?? financials?.current_value ?? null,
       occupancyRate: financials?.occupancy_rate ?? null,
       vacantUnits: financials?.vacant_units ?? null,
+      amenities: (enrichedProperty.amenities ?? []).map((item) => item.label ?? item.name ?? "").filter(Boolean),
+      facilities: (enrichedProperty.facilities ?? []).map((item) => item.label ?? item.name ?? "").filter(Boolean),
+      mediaGallery: (enrichedProperty.media_gallery ?? [])
+        .map((item) => item.image_url ?? item.url ?? item.file ?? "")
+        .filter(Boolean),
+      brandTier: enrichedProperty.branding?.tier ?? enrichedProperty.branding?.brand_tier ?? null,
     },
     meta: { source: "api" },
   };
@@ -297,10 +306,22 @@ export async function getLandlordLeaseDetailVm(leaseId: string): Promise<LeaseDe
 
 export async function getLandlordPaymentsVm(): Promise<PaymentsPageVm> {
   const domainData = await buildLandlordDomainData();
+  const accessToken = await getAccessTokenForServer();
+  const summary = accessToken ? await getPaymentSummary(accessToken).catch(() => null) : null;
   return {
     payments: domainData.payments,
     tenants: domainData.tenants,
     leases: domainData.leases,
+    summary: summary
+      ? {
+          totalPaid: summary.total_paid,
+          totalPending: summary.total_pending,
+          totalOverdue: summary.total_overdue,
+          countPaid: summary.count_paid,
+          countPending: summary.count_pending,
+          countOverdue: summary.count_overdue,
+        }
+      : undefined,
     meta: domainData.meta,
   };
 }
@@ -316,15 +337,13 @@ export async function getLandlordReportsData() {
 }
 
 export async function getLandlordPaymentWorkflowData() {
-  const domainData = await buildLandlordDomainData();
-  const warning = "warning" in domainData.meta ? domainData.meta.warning : undefined;
+  const [domainData, paymentsVm] = await Promise.all([buildLandlordDomainData(), getLandlordPaymentsVm()]);
   return {
     payments: domainData.payments,
     leases: domainData.leases,
     tenants: domainData.tenants,
-    meta: warning
-      ? { ...domainData.meta, warning: `${warning} Link generation and reminders are still not backed by dedicated endpoints.` }
-      : { source: "api" as const, warning: "Link generation and reminders still have no dedicated mutation endpoints in the current backend contract." },
+    summary: paymentsVm.summary,
+    meta: domainData.meta,
   };
 }
 

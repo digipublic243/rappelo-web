@@ -57,6 +57,15 @@ Response:
 }
 ```
 
+### 3.b Etat OTP actuel (important)
+
+Statut actuel backend:
+
+- Le flow OTP existe bien (`/api/auth/otp/request/` + `/api/auth/otp/verify/`).
+- L'integration provider SMS n'est pas encore branchée en production.
+- En attendant, le code OTP est affiche dans la console du serveur en environnement dev (`DEBUG=True`).
+- Les tenants peuvent aussi se connecter par mot de passe via `/api/auth/login/`.
+
 ### 3. Login OTP
 
 Endpoints canoniques:
@@ -124,12 +133,14 @@ Le frontend doit donc traiter les IDs metier comme des chaines.
 ## Recuperer le profil courant
 
 - `GET /api/accounts/users/me/`
+- `GET /api/accounts/users/shell_profile/`
 
 Usage frontend:
 
 - recuperer le role apres login
 - router vers dashboard bailleur ou locataire
 - afficher le profil courant
+- alimenter le header/shell (nom, role, unread notifications)
 
 ## Flows frontend par domaine
 
@@ -140,11 +151,19 @@ Usage frontend:
 - `GET /api/properties/properties/`
 - `POST /api/properties/properties/`
 - `GET /api/properties/properties/{id}/`
+- `GET /api/properties/properties/{id}/enriched/`
 - `PATCH /api/properties/properties/{id}/`
 - `POST /api/properties/properties/{id}/activate/`
 - `POST /api/properties/properties/{id}/deactivate/`
 - `GET /api/properties/properties/{id}/financials/`
 - `GET /api/properties/properties/{id}/statistics/`
+
+`enriched` renvoie en plus:
+
+- amenities
+- facilities
+- media_gallery
+- branding (tier, brand assets)
 
 #### Managers de propriete
 
@@ -173,8 +192,44 @@ Champs frontend importants sur `Unit`:
 - `security_deposit`
 - `booking_deposit`
 - `allowed_payment_methods`: liste ex. `['cash', 'easypay']`
+- `advance_payment_policy_text`
+
+#### Metadonnees propriete (amenities/facilities/media/branding)
+
+- `GET|POST /api/properties/amenities/`
+- `GET|PATCH|DELETE /api/properties/amenities/{id}/`
+- `GET|POST /api/properties/facilities/`
+- `GET|PATCH|DELETE /api/properties/facilities/{id}/`
+- `GET|POST /api/properties/media-assets/`
+- `GET|PATCH|DELETE /api/properties/media-assets/{id}/`
+- `GET|POST /api/properties/branding/`
+- `GET|PATCH|DELETE /api/properties/branding/{id}/`
 
 ### B. Tenant management
+
+#### Dashboard tenant
+
+- `GET /api/tenants/dashboard/`
+- `PATCH /api/tenants/dashboard/config/`
+
+Le dashboard expose notamment:
+
+- `residence_image`
+- `hero_banner`
+- `automatic_payments_enabled`
+- `next_due_payment`
+- `quick_stats`
+
+#### Notifications tenant
+
+- `GET /api/tenants/notifications/`
+- `GET /api/tenants/notifications/{id}/`
+- `POST /api/tenants/notifications/{id}/mark_read/`
+- `POST /api/tenants/notifications/mark_all_read/`
+
+Filtre utile:
+
+- `GET /api/tenants/notifications/?unread=true`
 
 #### Comptes utilisateurs
 
@@ -214,6 +269,21 @@ Payload type:
   "unit": "<unit_uuid>",
   "check_in": "2026-04-10",
   "check_out": "2026-05-10",
+  "preferred_move_in_time": "morning",
+  "occupants_count": 2,
+  "adults_count": 2,
+  "children_count": 0,
+  "has_pets": false,
+  "pet_details": "",
+  "monthly_income_estimate": "1200.00",
+  "employment_status_snapshot": "employed",
+  "emergency_contact_name": "John Doe",
+  "emergency_contact_phone": "+2507XXXXXXXX",
+  "id_document_url": "https://...",
+  "selfie_url": "https://...",
+  "stay_purpose": "Long term rental",
+  "special_requests": "Near entrance",
+  "source_channel": "mobile_app",
   "booking_deposit": "50.00",
   "notes": "Je souhaite reserver cette unite"
 }
@@ -236,6 +306,7 @@ Comportement:
 - `POST /api/leases/bookings/{id}/confirm/`
 - `POST /api/leases/bookings/{id}/reject/`
 - `POST /api/leases/bookings/{id}/cancel/`
+- `POST /api/leases/bookings/{id}/assess/` (landlord/property manager)
 
 Notes frontend:
 
@@ -252,6 +323,13 @@ Notes frontend:
 - `POST /api/leases/leases/{id}/activate/`
 - `POST /api/leases/leases/{id}/terminate/`
 - `POST /api/leases/leases/{id}/renew/`
+- `GET /api/leases/leases/{id}/payment_schedule/`
+- `POST /api/leases/leases/{id}/regenerate_schedule/`
+
+#### Documents de bail
+
+- `GET|POST /api/leases/documents/`
+- `GET|PATCH|DELETE /api/leases/documents/{id}/`
 
 Statuts:
 
@@ -304,6 +382,12 @@ Payload type:
 - `GET /api/payments/payments/overdue/`
 - `GET /api/payments/payments/summary/`
 - `POST /api/payments/payments/{id}/generate_link/`
+- `POST /api/payments/payments/send_reminders/`
+
+#### Templates de reminder
+
+- `GET|POST /api/payments/reminder-templates/`
+- `GET|PATCH|DELETE /api/payments/reminder-templates/{id}/`
 
 #### Generer un lien de paiement
 
@@ -388,6 +472,8 @@ Response:
 
 - Login OTP
 - Profil courant
+- Dashboard tenant
+- Notifications
 - Liste des reservations
 - Liste des baux
 - Liste des paiements
@@ -428,7 +514,7 @@ Le frontend doit donc tolerer les deux formes: `detail` et `error`.
 ### Landlord
 
 1. Login
-2. `GET /api/accounts/users/me/`
+2. `GET /api/accounts/users/shell_profile/`
 3. `GET /api/properties/properties/`
 4. `GET /api/payments/payments/summary/`
 5. `GET /api/leases/bookings/` pour les reservations en attente
@@ -437,10 +523,12 @@ Le frontend doit donc tolerer les deux formes: `detail` et `error`.
 
 1. OTP request
 2. OTP verify
-3. `GET /api/accounts/users/me/`
-4. `GET /api/leases/bookings/`
-5. `GET /api/leases/leases/`
-6. `GET /api/payments/payments/`
+3. `GET /api/accounts/users/shell_profile/`
+4. `GET /api/tenants/dashboard/`
+5. `GET /api/tenants/notifications/?unread=true`
+6. `GET /api/leases/bookings/`
+7. `GET /api/leases/leases/`
+8. `GET /api/payments/payments/`
 
 ## Etat actuel de la documentation technique
 

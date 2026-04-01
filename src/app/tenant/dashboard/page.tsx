@@ -8,7 +8,7 @@ import { DataStateNotice } from "@/components/ui/DataStateNotice";
 
 export default async function TenantDashboardPage() {
   const dashboard = await getTenantDashboardVm();
-  const nextPayment = dashboard.payments.find((payment) => payment.status === "pending");
+  const nextPayment = dashboard.nextDuePayment ?? dashboard.payments.find((payment) => payment.status === "pending");
   const currentLeaseLabel =
     dashboard.currentLease ? `${formatDate(dashboard.currentLease.startDate)} - ${formatDate(dashboard.currentLease.endDate)}` : "No active lease";
   const dashboardFacts = [
@@ -29,9 +29,9 @@ export default async function TenantDashboardPage() {
     },
   ];
   const accountSummary = [
-    ["Leases", String(dashboard.leases.length)],
-    ["Payments", String(dashboard.payments.length)],
-    ["Pending", String(dashboard.payments.filter((payment) => payment.status === "pending").length)],
+    ["Leases", String(dashboard.quickStats?.leases ?? dashboard.leases.length)],
+    ["Payments", String(dashboard.quickStats?.payments ?? dashboard.payments.length)],
+    ["Pending", String(dashboard.quickStats?.pending_payments ?? dashboard.payments.filter((payment) => payment.status === "pending").length)],
   ];
 
   return (
@@ -55,7 +55,11 @@ export default async function TenantDashboardPage() {
             <img
               alt="Current stay"
               className="h-full w-full object-cover"
-              src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1600&q=80"
+              src={
+                dashboard.residenceImage ??
+                dashboard.heroBanner ??
+                "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1600&q=80"
+              }
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             <div className="absolute bottom-6 left-8 text-white">
@@ -102,7 +106,9 @@ export default async function TenantDashboardPage() {
             {nextPayment ? `Due by ${formatDate(nextPayment.dueDate)}` : "No pending payment cycle"}
           </p>
           <ActionButton className="mt-8 w-full">Pay Now</ActionButton>
-          <p className="mt-3 text-center text-[11px] text-[#475266]">Automatic payments are enabled for this unit.</p>
+          <p className="mt-3 text-center text-[11px] text-[#475266]">
+            {dashboard.automaticPaymentsEnabled ? "Automatic payments are enabled for this unit." : "Automatic payments are not enabled yet."}
+          </p>
         </SurfaceCard>
 
         <SurfaceCard className="bg-[#f0f4f7] p-8 md:col-span-6">
@@ -141,6 +147,32 @@ export default async function TenantDashboardPage() {
               ))}
             </div>
           </div>
+        </SurfaceCard>
+
+        <SurfaceCard className="p-8 md:col-span-12">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-bold text-[#2a3439]">Unread Notifications</h3>
+            <span className="rounded-full bg-[#f0f4f7] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#566166]">
+              {dashboard.notifications.length} pending
+            </span>
+          </div>
+          {dashboard.notifications.length === 0 ? (
+            <p className="mt-4 text-sm text-[#566166]">No unread tenant notifications from the backend right now.</p>
+          ) : (
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              {dashboard.notifications.slice(0, 4).map((notification) => (
+                <div key={notification.id} className="rounded-2xl bg-[#f0f4f7] p-4">
+                  <p className="text-sm font-bold text-[#2a3439]">{notification.title}</p>
+                  <p className="mt-2 text-sm text-[#566166]">{notification.message}</p>
+                  {notification.createdAt ? (
+                    <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#717c82]">
+                      {formatDate(notification.createdAt)}
+                    </p>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          )}
         </SurfaceCard>
       </section>
     </TenantPageFrame>

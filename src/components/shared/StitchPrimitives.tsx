@@ -13,6 +13,8 @@ interface ActionButtonProps {
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "ghost";
   className?: string;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 export function actionButtonClassName({
@@ -31,11 +33,12 @@ export function actionButtonClassName({
   );
 }
 
-export function ActionButton({ children, variant = "primary", className }: ActionButtonProps) {
+export function ActionButton({ children, variant = "primary", className, type = "button", disabled }: ActionButtonProps) {
   return (
     <button
       className={actionButtonClassName({ variant, className })}
-      type="button"
+      disabled={disabled}
+      type={type}
     >
       {children}
     </button>

@@ -122,6 +122,13 @@ const icons: Record<string, (props: SvgIconProps) => React.ReactNode> = {
       <path d="M12 17h.01" />
     </SvgBase>
   ),
+  logout: ({ filled }) => (
+    <SvgBase filled={filled}>
+      <path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4" />
+      <path d="M14 8l4 4-4 4" />
+      <path d="M9 12h9" />
+    </SvgBase>
+  ),
   notifications: ({ filled }) => (
     <SvgBase filled={filled}>
       <path d="M6 16V11a6 6 0 1 1 12 0v5" />

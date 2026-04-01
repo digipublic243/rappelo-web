@@ -14,7 +14,7 @@ const SESSION_COOKIE_NAMES = {
 type UserRole = "landlord" | "tenant" | "property_manager" | "admin";
 
 async function fetchCurrentUser(accessToken: string) {
-  const response = await fetch(`${API_BASE_URL}${API_PREFIX}/accounts/users/me/`, {
+  const response = await fetch(`${API_BASE_URL}${API_PREFIX}/accounts/users/shell_profile/`, {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${accessToken}`,

@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/api/accounts";
+import { getCurrentUser, getShellProfile } from "@/lib/api/accounts";
 import { getSessionTokens } from "@/lib/api/session";
 import { listTenantProfiles } from "@/lib/api/tenants";
 import { getLandlordDashboardVm } from "@/features/landlord/api";
@@ -16,17 +16,23 @@ export async function getCurrentAuthenticatedUser(): Promise<AuthenticatedUser |
     return null;
   }
 
-  const user = await getCurrentUser(tokens.accessToken).catch(() => null);
+  const [user, shellProfile] = await Promise.all([
+    getCurrentUser(tokens.accessToken).catch(() => null),
+    getShellProfile(tokens.accessToken).catch(() => null),
+  ]);
+
   if (!user) {
     return null;
   }
 
   return {
-    id: String(user.id),
-    role: user.role,
-    fullName: user.full_name || [user.first_name, user.last_name].filter(Boolean).join(" ").trim() || "User",
-    phoneNumber: user.phone_number,
-    email: user.email,
+    id: String(shellProfile?.id ?? shellProfile?.user_id ?? user.id),
+    role: shellProfile?.role ?? user.role,
+    fullName: shellProfile?.full_name || user.full_name || [user.first_name, user.last_name].filter(Boolean).join(" ").trim() || "User",
+    phoneNumber: shellProfile?.phone_number || user.phone_number,
+    email: shellProfile?.email ?? user.email,
+    unreadNotifications:
+      typeof shellProfile?.unread_notifications === "number" ? shellProfile.unread_notifications : undefined,
   };
 }
 
@@ -56,7 +62,7 @@ export async function getCurrentAccountProfileVm(role: Role) {
       getTenantDashboardVm(),
       listTenantProfiles(tokens.accessToken).catch(() => null),
     ]);
-    const tenantProfile = profiles?.find((profile) => profile.user === user.id) ?? null;
+    const tenantProfile = profiles?.find?.((profile) => profile.user === user.id) ?? null;
 
     return {
       user,

@@ -42,6 +42,10 @@ export interface PropertyDetailVm {
     currentValue?: number | null;
     occupancyRate?: number | null;
     vacantUnits?: number | null;
+    amenities?: string[];
+    facilities?: string[];
+    mediaGallery?: string[];
+    brandTier?: string | null;
   };
   meta: DataMeta;
 }
@@ -78,6 +82,14 @@ export interface PaymentsPageVm {
   payments: Payment[];
   tenants: Tenant[];
   leases: Lease[];
+  summary?: {
+    totalPaid: number;
+    totalPending: number;
+    totalOverdue: number;
+    countPaid: number;
+    countPending: number;
+    countOverdue: number;
+  };
   meta: DataMeta;
 }
 
@@ -88,5 +100,17 @@ export interface TenantDashboardVm {
   currentProperty?: Property;
   payments: Payment[];
   leases: Lease[];
+  notifications: Array<{
+    id: string;
+    title: string;
+    message: string;
+    createdAt?: string;
+    isRead: boolean;
+  }>;
+  residenceImage?: string;
+  heroBanner?: string;
+  automaticPaymentsEnabled?: boolean;
+  nextDuePayment?: Payment;
+  quickStats?: Record<string, number | string | null>;
   meta: DataMeta;
 }

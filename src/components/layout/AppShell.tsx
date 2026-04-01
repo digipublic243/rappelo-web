@@ -5,6 +5,7 @@ import type { Role } from "@/types/domain";
 import { cn } from "@/lib/cn";
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
 import { getCurrentAuthenticatedUser } from "@/features/account/api";
+import { logoutAction } from "@/features/auth/actions";
 
 interface AppShellProps {
   role: Role;
@@ -46,6 +47,7 @@ async function AsyncAppShell({
   const sessionUser = await sessionUserPromise;
   const profileName = sessionUser?.fullName || ROUTE_GROUP_LABELS[role];
   const profileCaption = isTenant ? "Resident Account" : "Workspace Account";
+  const unreadNotifications = sessionUser?.unreadNotifications ?? 0;
   const profileInitials = profileName
     .split(" ")
     .filter(Boolean)
@@ -79,8 +81,13 @@ async function AsyncAppShell({
             </nav>
           </div>
           <div className="flex items-center gap-3">
-            <button className="rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-100" type="button">
+            <button className="relative rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-100" type="button">
               <MaterialIcon name="notifications" className="text-[20px]" />
+              {unreadNotifications > 0 ? (
+                <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#9f403d] px-1 text-[10px] font-bold text-white">
+                  {unreadNotifications > 9 ? "9+" : unreadNotifications}
+                </span>
+              ) : null}
             </button>
             <button className="rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-100" type="button">
               <MaterialIcon name="apps" className="text-[20px]" />
@@ -129,6 +136,13 @@ async function AsyncAppShell({
             <MaterialIcon name={isTenant ? "account_circle" : "settings"} className="text-[20px]" />
             {isTenant ? "Account" : "Profile"}
           </Link>
+          <form action={logoutAction}>
+            <input name="role" type="hidden" value={role} />
+            <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-500 transition-all hover:bg-slate-200/50 hover:text-slate-700" type="submit">
+              <MaterialIcon name="logout" className="text-[20px]" />
+              Log out
+            </button>
+          </form>
           {!isTenant ? (
             <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-500 transition-all hover:bg-slate-200/50 hover:text-slate-700" type="button">
               <MaterialIcon name="help" className="text-[20px]" />
@@ -162,7 +176,11 @@ async function AsyncAppShell({
             <div className="ml-auto flex items-center gap-4 text-slate-500">
               <button className="relative rounded-full p-2 hover:bg-slate-100" type="button">
                 <MaterialIcon name="notifications" className="text-[20px]" />
-                <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#9f403d]" />
+                {unreadNotifications > 0 ? (
+                  <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#9f403d] px-1 text-[10px] font-bold text-white">
+                    {unreadNotifications > 9 ? "9+" : unreadNotifications}
+                  </span>
+                ) : null}
               </button>
               <button className="rounded-full p-2 hover:bg-slate-100" type="button">
                 <MaterialIcon name="apps" className="text-[20px]" />

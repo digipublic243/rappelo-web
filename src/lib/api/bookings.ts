@@ -21,6 +21,21 @@ export interface ApiCreateBookingRequest {
   unit: string | number;
   check_in: string;
   check_out: string;
+  preferred_move_in_time?: string;
+  occupants_count?: number;
+  adults_count?: number;
+  children_count?: number;
+  has_pets?: boolean;
+  pet_details?: string;
+  monthly_income_estimate?: string;
+  employment_status_snapshot?: string;
+  emergency_contact_name?: string;
+  emergency_contact_phone?: string;
+  id_document_url?: string;
+  selfie_url?: string;
+  stay_purpose?: string;
+  special_requests?: string;
+  source_channel?: string;
   booking_deposit?: number | string;
   notes?: string;
 }

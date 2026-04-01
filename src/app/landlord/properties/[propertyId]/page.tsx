@@ -21,6 +21,10 @@ export default async function PropertyDetailPage({ params }: PageProps) {
     notFound();
   }
   const { property, units, details, meta } = detail;
+  const heroImage =
+    details.mediaGallery?.[0] ??
+    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80";
+  const featureTags = [...(details.amenities ?? []), ...(details.facilities ?? [])].slice(0, 6);
   const facts = [
     ["Property Type", details.propertyType],
     ["Location", [property.city, details.state, details.country].filter(Boolean).join(", ")],
@@ -28,6 +32,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
     ["Postal Code", details.postalCode],
     ["Year Built", details.yearBuilt ? String(details.yearBuilt) : "Not provided"],
     ["Square Footage", details.squareFootage ? `${details.squareFootage.toLocaleString()} sq ft` : "Not provided"],
+    ["Brand Tier", details.brandTier ?? "Not provided"],
   ];
   const financialFacts = [
     ["Current Value", details.currentValue != null ? formatMoney(details.currentValue) : "Not provided"],
@@ -66,7 +71,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               <img
                 alt={property.name}
                 className="h-full w-full object-cover"
-                src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80"
+                src={heroImage}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
               <div className="absolute bottom-4 left-4">
@@ -98,6 +103,18 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                   </div>
                 </div>
               </div>
+              {featureTags.length > 0 ? (
+                <div className="mt-6">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#717c82]">Amenities & Facilities</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {featureTags.map((tag) => (
+                      <span key={tag} className="rounded-full bg-[#f0f4f7] px-3 py-2 text-xs font-semibold text-[#566166]">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </div>
           </SurfaceCard>
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { LandlordPageFrame } from "@/features/landlord/LandlordPageFrame";
 import { PageIntro } from "@/components/ui/PageIntro";
-import { SurfaceCard, ActionButton } from "@/components/shared/StitchPrimitives";
+import { SurfaceCard, actionButtonClassName } from "@/components/shared/StitchPrimitives";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { formatDate, formatMoney, paymentStatusLabel } from "@/lib/format";
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
@@ -9,11 +9,11 @@ import { getLandlordPaymentsVm } from "@/features/landlord/api";
 import { DataStateNotice } from "@/components/ui/DataStateNotice";
 
 export default async function PaymentsPage() {
-  const { payments, meta } = await getLandlordPaymentsVm();
-  const collected = payments.filter((payment) => payment.status === "paid").reduce((sum, payment) => sum + payment.amount, 0);
-  const outstanding = payments.filter((payment) => payment.status === "pending").reduce((sum, payment) => sum + payment.amount, 0);
+  const { payments, summary, meta } = await getLandlordPaymentsVm();
+  const collected = summary?.totalPaid ?? payments.filter((payment) => payment.status === "paid").reduce((sum, payment) => sum + payment.amount, 0);
+  const outstanding = summary?.totalPending ?? payments.filter((payment) => payment.status === "pending").reduce((sum, payment) => sum + payment.amount, 0);
   const refunds = payments.filter((payment) => payment.status === "refunded").reduce((sum, payment) => sum + payment.amount, 0);
-  const successRate = payments.length > 0 ? ((payments.filter((payment) => payment.status === "paid").length / payments.length) * 100).toFixed(1) : "0.0";
+  const successRate = payments.length > 0 ? ((summary?.countPaid ?? payments.filter((payment) => payment.status === "paid").length) / payments.length * 100).toFixed(1) : "0.0";
 
   return (
     <LandlordPageFrame currentPath="/landlord/payments">
@@ -23,14 +23,12 @@ export default async function PaymentsPage() {
         description="Ledger-style payment history with summary cards, reminders, and link generation flows."
         action={
           <div className="flex flex-wrap gap-3">
-            <Link href="/landlord/payments/generate-link">
-              <ActionButton>
-                <MaterialIcon name="add" className="text-[18px]" />
-                New Payment
-              </ActionButton>
+            <Link className={actionButtonClassName({})} href="/landlord/payments/generate-link">
+              <MaterialIcon name="add" className="text-[18px]" />
+              New Payment
             </Link>
-            <Link href="/landlord/payments/send-reminder">
-              <ActionButton variant="secondary">Send Reminder</ActionButton>
+            <Link className={actionButtonClassName({ variant: "secondary" })} href="/landlord/payments/send-reminder">
+              Send Reminder
             </Link>
           </div>
         }

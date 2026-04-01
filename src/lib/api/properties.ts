@@ -1,6 +1,6 @@
 import { API_PREFIX } from "@/config/api";
 import { apiRequest } from "@/lib/http/client";
-import type { ApiProperty, ApiPropertyFinancials, ApiPropertyUpsertRequest, ApiUnit, ApiUnitStatus } from "@/types/api";
+import type { ApiEnrichedProperty, ApiProperty, ApiPropertyFinancials, ApiPropertyUpsertRequest, ApiUnit, ApiUnitStatus } from "@/types/api";
 
 export function listProperties(token: string) {
   return apiRequest<ApiProperty[]>(`${API_PREFIX}/properties/properties/`, { token });
@@ -8,6 +8,10 @@ export function listProperties(token: string) {
 
 export function getPropertyById(id: string | number, token: string) {
   return apiRequest<ApiProperty>(`${API_PREFIX}/properties/properties/${id}/`, { token });
+}
+
+export function getEnrichedPropertyById(id: string | number, token: string) {
+  return apiRequest<ApiEnrichedProperty>(`${API_PREFIX}/properties/properties/${id}/enriched/`, { token });
 }
 
 export function createProperty(payload: ApiPropertyUpsertRequest, token: string) {

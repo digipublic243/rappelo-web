@@ -27,6 +27,15 @@ export interface ApiLoginRequest {
   password: string;
 }
 
+export interface ApiOtpRequest {
+  phone_number: string;
+}
+
+export interface ApiOtpVerifyRequest {
+  phone_number: string;
+  code: string;
+}
+
 export interface ApiUserCreateRequest {
   phone_number: string;
   password: string;
@@ -58,6 +67,17 @@ export interface ApiUserDetail {
   is_active: boolean;
   date_joined: string;
   last_login: string | null;
+}
+
+export interface ApiShellProfile {
+  id?: number | string;
+  user_id?: number | string;
+  full_name?: string;
+  role?: ApiUserRole;
+  phone_number?: string;
+  email?: string | null;
+  unread_notifications?: number;
+  [key: string]: unknown;
 }
 
 export interface ApiProperty {
@@ -100,6 +120,42 @@ export interface ApiPropertyUpsertRequest {
   purchase_price?: number | null;
   current_value?: number | null;
   is_active: boolean;
+}
+
+export interface ApiPropertyAmenity {
+  id?: string | number;
+  name?: string;
+  label?: string;
+  [key: string]: unknown;
+}
+
+export interface ApiPropertyFacility {
+  id?: string | number;
+  name?: string;
+  label?: string;
+  [key: string]: unknown;
+}
+
+export interface ApiPropertyMediaAsset {
+  id?: string | number;
+  image_url?: string;
+  url?: string;
+  file?: string;
+  title?: string;
+  [key: string]: unknown;
+}
+
+export interface ApiPropertyBranding {
+  tier?: string;
+  brand_tier?: string;
+  [key: string]: unknown;
+}
+
+export interface ApiEnrichedProperty extends ApiProperty {
+  amenities?: ApiPropertyAmenity[];
+  facilities?: ApiPropertyFacility[];
+  media_gallery?: ApiPropertyMediaAsset[];
+  branding?: ApiPropertyBranding | null;
 }
 
 export interface ApiPropertyFinancials {
@@ -186,6 +242,34 @@ export interface ApiPayment {
   updated_at?: string;
 }
 
+export interface ApiPaymentSummary {
+  total_paid: number;
+  total_pending: number;
+  total_overdue: number;
+  count_paid: number;
+  count_pending: number;
+  count_overdue: number;
+}
+
+export interface ApiPaymentLinkRequest {
+  gateway: "cash" | "bank_transfer" | "easypay";
+  expires_in_hours: number;
+}
+
+export interface ApiPaymentLink {
+  id: string | number;
+  payment: string | number;
+  token: string;
+  amount: string | number;
+  gateway: string;
+  status: string;
+  expires_at: string;
+  gateway_url?: string;
+  gateway_reference?: string;
+  link_url: string;
+  created_at: string;
+}
+
 export interface ApiPaymentCreateRequest {
   lease: number | string;
   tenant: number | string;
@@ -198,10 +282,31 @@ export interface ApiPaymentCreateRequest {
   is_active?: boolean;
 }
 
+export interface ApiTenantDashboard {
+  residence_image?: string;
+  hero_banner?: string;
+  automatic_payments_enabled?: boolean;
+  next_due_payment?: ApiPayment | null;
+  quick_stats?: Record<string, number | string | null>;
+  [key: string]: unknown;
+}
+
+export interface ApiTenantNotification {
+  id: string | number;
+  title?: string;
+  message?: string;
+  body?: string;
+  is_read?: boolean;
+  created_at?: string;
+  type?: string;
+  [key: string]: unknown;
+}
+
 export interface AuthenticatedUser {
   id: string;
   role: ApiUserRole;
   fullName: string;
   phoneNumber: string;
   email?: string | null;
+  unreadNotifications?: number;
 }

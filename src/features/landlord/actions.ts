@@ -5,9 +5,11 @@ import { redirect } from "next/navigation";
 import { confirmBooking, rejectBooking } from "@/lib/api/bookings";
 import { activateLease, renewLease, terminateLease } from "@/lib/api/leases";
 import { createProperty, updateProperty, updateUnitStatus } from "@/lib/api/properties";
+import { createPayment, generatePaymentLink, sendPaymentReminders } from "@/lib/api/payments";
 import { getSessionTokens } from "@/lib/api/session";
 import type { ApiPropertyStatus, ApiPropertyUpsertRequest, ApiUnitStatus } from "@/types/api";
 import type { PropertyEditorActionState } from "@/features/landlord/property-editor-state";
+import type { PaymentWorkflowActionState } from "@/features/landlord/payment-workflow-state";
 
 async function requireAccessToken() {
   const tokens = await getSessionTokens();
@@ -234,4 +236,97 @@ export async function rejectBookingAction(formData: FormData) {
   revalidatePath("/landlord/bookings");
   revalidatePath(`/landlord/bookings/${bookingId}`);
   revalidatePath("/landlord/dashboard");
+}
+
+export async function generatePaymentLinkAction(
+  _: PaymentWorkflowActionState,
+  formData: FormData,
+): Promise<PaymentWorkflowActionState> {
+  const accessToken = await requireAccessToken();
+  if (!accessToken) {
+    return { error: "No authenticated landlord session found." };
+  }
+
+  const leaseId = String(formData.get("leaseId") ?? "").trim();
+  const tenantId = String(formData.get("tenantId") ?? "").trim();
+  const existingPaymentId = String(formData.get("paymentId") ?? "").trim();
+  const amount = Number(String(formData.get("amount") ?? "").trim() || "0");
+  const gateway = String(formData.get("gateway") ?? "cash").trim() as "cash" | "bank_transfer" | "easypay";
+  const expiresInHours = Number(String(formData.get("expires_in_hours") ?? "48").trim() || "48");
+  const dueDate = String(formData.get("due_date") ?? "").trim();
+  const notes = String(formData.get("notes") ?? "").trim();
+
+  if (!leaseId || !tenantId || !amount || !dueDate) {
+    return { error: "Lease, tenant, amount, and due date are required." };
+  }
+
+  try {
+    const payment =
+      existingPaymentId ||
+      (
+        await createPayment(
+          {
+            lease: leaseId,
+            tenant: tenantId,
+            amount,
+            due_date: dueDate,
+            payment_method: gateway === "easypay" ? "mobile_money" : gateway,
+            notes: notes || undefined,
+          },
+          accessToken,
+        )
+      ).id;
+
+    const link = await generatePaymentLink(payment, { gateway, expires_in_hours: expiresInHours }, accessToken);
+
+    revalidatePath("/landlord/payments");
+
+    return {
+      message: "Payment link generated successfully.",
+      linkUrl: link.link_url,
+    };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : "Unable to generate payment link right now.",
+    };
+  }
+}
+
+export async function sendPaymentReminderAction(
+  _: PaymentWorkflowActionState,
+  formData: FormData,
+): Promise<PaymentWorkflowActionState> {
+  const accessToken = await requireAccessToken();
+  if (!accessToken) {
+    return { error: "No authenticated landlord session found." };
+  }
+
+  const paymentId = String(formData.get("paymentId") ?? "").trim();
+  const reminderStyle = String(formData.get("reminder_style") ?? "soft").trim();
+  const message = String(formData.get("message") ?? "").trim();
+
+  if (!paymentId) {
+    return { error: "A payment must be selected before sending a reminder." };
+  }
+
+  try {
+    const response = await sendPaymentReminders(
+      {
+        payment_ids: [paymentId],
+        reminder_style: reminderStyle,
+        message,
+      },
+      accessToken,
+    );
+
+    revalidatePath("/landlord/payments");
+
+    return {
+      message: response.message ?? response.detail ?? "Reminder sent successfully.",
+    };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : "Unable to send reminder right now.",
+    };
+  }
 }

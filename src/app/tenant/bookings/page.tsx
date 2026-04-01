@@ -27,14 +27,14 @@ export default async function TenantBookingsPage() {
         ))}
       </div>
 
-      {bookings.length === 0 ? (
+      {bookings?.length === 0 ? (
         <EmptyState
           title="No stays found"
           description="Your booking requests will appear here once they are created in the live booking API."
         />
       ) : (
         <div className="grid gap-6 md:grid-cols-2">
-          {bookings.map((booking) => (
+          {bookings?.map?.((booking) => (
             <SurfaceCard key={booking.id} className="overflow-hidden">
               <div className="h-56 bg-[#d9e4ea]" />
               <div className="p-6">
