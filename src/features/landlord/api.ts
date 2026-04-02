@@ -1,7 +1,15 @@
-import { getCurrentUser, getUserById } from "@/lib/api/accounts";
+import { getCurrentUser } from "@/lib/api/accounts";
 import { getBookingById, listBookings } from "@/lib/api/bookings";
-import { getLeaseById, listLeases } from "@/lib/api/leases";
-import { getPaymentSummary, listPayments } from "@/lib/api/payments";
+import {
+  getLeaseById,
+  getLeasePaymentSchedule,
+  listLeases,
+} from "@/lib/api/leases";
+import {
+  getPaymentSummary,
+  listOverduePayments,
+  listPayments,
+} from "@/lib/api/payments";
 import {
   getEnrichedPropertyById,
   getPropertyById,
@@ -13,12 +21,20 @@ import {
 import { getSessionTokens } from "@/lib/api/session";
 import { getTenantProfileById, listTenantProfiles } from "@/lib/api/tenants";
 import type { ApiEnrichedProperty } from "@/types/api";
-import type { Booking, Lease, Payment, Property, Tenant, Unit } from "@/types/domain";
+import type {
+  Booking,
+  Lease,
+  Payment,
+  Property,
+  Tenant,
+  Unit,
+} from "@/types/domain";
 import type {
   BookingDetailVm,
   DataMeta,
   LandlordDashboardVm,
   LeaseDetailVm,
+  PaymentDetailVm,
   PaymentsPageVm,
   PropertyDetailVm,
   TenantDetailVm,
@@ -131,34 +147,48 @@ async function buildLandlordDomainData(): Promise<LandlordDomainData> {
   const leaseDomains = leases.map(mapApiLeaseToDomain);
   const paymentDomains = payments.map(mapApiPaymentToDomain);
   const bookingDomains = bookings.map(mapApiBookingToDomain);
-  const usersById = new Map<
-    string | number,
-    Awaited<ReturnType<typeof getUserById>> | null
+  const tenantProfileDetails = new Map<
+    string,
+    Awaited<ReturnType<typeof getTenantProfileById>> | null
   >();
 
   await Promise.all(
     tenantProfiles.map(async (profile) => {
-      const tenantUser = await getUserById(profile.user, accessToken).catch(
-        () => null,
-      );
-      usersById.set(profile.user, tenantUser);
+      const tenantProfile = await getTenantProfileById(
+        profile.id,
+        accessToken,
+      ).catch(() => null);
+      tenantProfileDetails.set(String(profile.id), tenantProfile);
     }),
   );
 
   const unitTenantNames = new Map<string, string>();
+  const tenantNamesByActorId = new Map<string, string>();
   const tenantDomains = tenantProfiles.map((profile) => {
+    const detailedProfile =
+      tenantProfileDetails.get(String(profile.id)) ?? profile;
+    const tenantUserId =
+      detailedProfile?.user?.id != null
+        ? String(detailedProfile.user.id)
+        : null;
     const tenantLeases = leaseDomains
-      .filter((lease) => lease.tenantId === String(profile.id))
+      .filter((lease) =>
+        tenantUserId
+          ? lease.tenantId === tenantUserId
+          : lease.tenantId === String(profile.id),
+      )
       .map((lease) => {
         const unit = units.find((item) => String(item.id) === lease.unitId);
         return unit ? { ...lease, propertyId: String(unit.property) } : lease;
       });
-    const tenantPayments = paymentDomains.filter(
-      (payment) => payment.tenantId === String(profile.id),
+    const tenantPayments = paymentDomains.filter((payment) =>
+      tenantUserId
+        ? payment.tenantId === tenantUserId
+        : payment.tenantId === String(profile.id),
     );
     const tenant = mapTenantAggregateToDomain({
-      profile,
-      user: usersById.get(profile.user) ?? null,
+      profile: detailedProfile ?? profile,
+      user: null,
       leases: tenantLeases,
       payments: tenantPayments,
     });
@@ -166,6 +196,11 @@ async function buildLandlordDomainData(): Promise<LandlordDomainData> {
     if (tenant.unitId) {
       unitTenantNames.set(tenant.unitId, tenant.fullName);
     }
+
+    if (tenantUserId) {
+      tenantNamesByActorId.set(tenantUserId, tenant.fullName);
+    }
+    tenantNamesByActorId.set(String(profile.id), tenant.fullName);
 
     return tenant;
   });
@@ -177,6 +212,7 @@ async function buildLandlordDomainData(): Promise<LandlordDomainData> {
     const lease = leaseDomains.find((item) => item.id === payment.leaseId);
     return {
       ...payment,
+      tenantName: tenantNamesByActorId.get(payment.tenantId),
       unitId: lease?.unitId ?? "",
     };
   });
@@ -314,7 +350,9 @@ export async function getLandlordUnitDetailVm(
 
   const unit = mapApiUnitToDomain(apiUnit);
   const domainData = await buildLandlordDomainData();
-  const payments = domainData.payments.filter((payment) => payment.unitId === unitId);
+  const payments = domainData.payments.filter(
+    (payment) => payment.unitId === unitId,
+  );
 
   return {
     unit,
@@ -331,12 +369,15 @@ export async function getLandlordUnitDetailVm(
       bookingDeposit: apiUnit.booking_deposit ?? null,
       allowedPaymentMethods: apiUnit.allowed_payment_methods ?? [],
       advancePaymentPolicyText: apiUnit.advance_payment_policy_text ?? null,
-      currentTenant: apiUnit.current_tenant != null ? String(apiUnit.current_tenant) : null,
-      currentLease: apiUnit.current_lease != null ? String(apiUnit.current_lease) : null,
+      currentTenant:
+        apiUnit.current_tenant != null ? String(apiUnit.current_tenant) : null,
+      currentLease:
+        apiUnit.current_lease != null ? String(apiUnit.current_lease) : null,
       isFurnished: apiUnit.is_furnished,
       isActive: apiUnit.is_active,
     },
-    meta: domainData.meta.source === "api" ? domainData.meta : { source: "api" },
+    meta:
+      domainData.meta.source === "api" ? domainData.meta : { source: "api" },
   };
 }
 
@@ -391,13 +432,13 @@ export async function getLandlordLeaseDetailVm(
 
   const lease = mapApiLeaseToDomain(apiLease);
   const unit = await getUnitById(apiLease.unit, accessToken).catch(() => null);
+  const schedule = await getLeasePaymentSchedule(leaseId, accessToken).catch(
+    () => [],
+  );
   const tenantProfile = await getTenantProfileById(
     apiLease.tenant,
     accessToken,
   ).catch(() => null);
-  const tenantUser = tenantProfile
-    ? await getUserById(tenantProfile.user, accessToken).catch(() => null)
-    : null;
 
   return {
     lease: {
@@ -408,11 +449,18 @@ export async function getLandlordLeaseDetailVm(
     tenant: tenantProfile
       ? mapTenantAggregateToDomain({
           profile: tenantProfile,
-          user: tenantUser,
+          user: null,
           leases: [lease],
           payments: [],
         })
       : undefined,
+    paymentSchedule: schedule.map((item, index) => ({
+      id: String(item.id ?? `${leaseId}-${index}`),
+      dueDate: String(item.due_date ?? lease.startDate),
+      amount: Number(item.amount ?? lease.rentAmount) || lease.rentAmount,
+      status: item.status,
+      label: item.label ?? item.name ?? `Échéance ${index + 1}`,
+    })),
     meta: { source: "api" },
   };
 }
@@ -420,11 +468,25 @@ export async function getLandlordLeaseDetailVm(
 export async function getLandlordPaymentsVm(): Promise<PaymentsPageVm> {
   const domainData = await buildLandlordDomainData();
   const accessToken = await getAccessTokenForServer();
-  const summary = accessToken
-    ? await getPaymentSummary(accessToken).catch(() => null)
-    : null;
+  const [summary, overduePayments] = accessToken
+    ? await Promise.all([
+        getPaymentSummary(accessToken).catch(() => null),
+        listOverduePayments(accessToken).catch(() => []),
+      ])
+    : [null, []];
   return {
     payments: domainData.payments,
+    overduePayments: overduePayments
+      .map(mapApiPaymentToDomain)
+      .map((payment) => {
+        const lease = domainData.leases.find(
+          (item) => item.id === payment.leaseId,
+        );
+        return {
+          ...payment,
+          unitId: lease?.unitId ?? "",
+        };
+      }),
     tenants: domainData.tenants,
     leases: domainData.leases,
     summary: summary
@@ -458,9 +520,39 @@ export async function getLandlordPaymentWorkflowData() {
   ]);
   return {
     payments: domainData.payments,
+    overduePayments: paymentsVm.overduePayments,
     leases: domainData.leases,
     tenants: domainData.tenants,
     summary: paymentsVm.summary,
+    meta: domainData.meta,
+  };
+}
+
+export async function getLandlordPaymentDetailVm(
+  paymentId: string,
+): Promise<PaymentDetailVm | null> {
+  const domainData = await buildLandlordDomainData();
+  const payment = domainData.payments.find((item) => item.id === paymentId);
+
+  if (!payment) {
+    return null;
+  }
+
+  const lease = domainData.leases.find((item) => item.id === payment.leaseId);
+  const tenant =
+    domainData.tenants.find((item) => item.id === payment.tenantId) ??
+    domainData.tenants.find((item) => item.fullName === payment.tenantName);
+  const unit = domainData.units.find((item) => item.id === payment.unitId);
+  const property = domainData.properties.find(
+    (item) => item.id === (lease?.propertyId ?? unit?.propertyId),
+  );
+
+  return {
+    payment,
+    tenant,
+    lease,
+    property,
+    unit,
     meta: domainData.meta,
   };
 }

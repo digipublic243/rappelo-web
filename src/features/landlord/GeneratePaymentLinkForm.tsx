@@ -7,6 +7,7 @@ import { generatePaymentLinkAction } from "@/features/landlord/actions";
 import { initialPaymentWorkflowActionState } from "@/features/landlord/payment-workflow-state";
 import type { Lease, Payment, Tenant } from "@/types/domain";
 import { useSyncGlobalApiError } from "@/components/providers/ApiErrorProvider";
+import { formatDate, formatMoney } from "@/lib/format";
 
 interface GeneratePaymentLinkFormProps {
   leases: Lease[];
@@ -16,19 +17,19 @@ interface GeneratePaymentLinkFormProps {
 
 export function GeneratePaymentLinkForm({ leases, tenants, payments }: GeneratePaymentLinkFormProps) {
   const [state, formAction, pending] = useActionState(generatePaymentLinkAction, initialPaymentWorkflowActionState);
-  useSyncGlobalApiError(state.error, { title: "Payment Link Error", scope: "payments" });
+  useSyncGlobalApiError(state.error, { title: "Erreur de lien de paiement", scope: "payments" });
   const pendingPayments = payments.filter((payment) => payment.status === "pending");
 
   return (
     <AppForm action={formAction} className="mt-6 space-y-4">
       <FormField
         defaultValue={leases[0]?.id}
-        label="Select Lease"
+        label="Bail concerné"
         name="leaseId"
         options={leases.map((lease) => {
           const tenant = tenants.find((item) => item.id === lease.tenantId);
           return {
-            label: `${tenant?.fullName ?? lease.tenantId} — ${lease.unitId}`,
+            label: `${tenant?.fullName ?? lease.tenantId} — ${lease.lease_number}`,
             value: lease.id,
           };
         })}
@@ -36,53 +37,45 @@ export function GeneratePaymentLinkForm({ leases, tenants, payments }: GenerateP
       />
 
       <FormField
-        defaultValue={tenants[0]?.id}
-        label="Tenant"
-        name="tenantId"
-        options={tenants.map((tenant) => ({
-          label: tenant.fullName,
-          value: tenant.id,
-        }))}
-        type="select"
-      />
-
-      <FormField
         defaultValue=""
-        label="Existing Pending Payment"
+        label="Paiement existant"
         name="paymentId"
         options={[
-          { label: "Create a fresh payment first", value: "" },
+          { label: "Créer un nouveau paiement", value: "" },
           ...pendingPayments.map((payment) => ({
-            label: `${payment.tenantId} — ${payment.unitId} — ${payment.amount}`,
+            label: `${payment.tenantName ?? tenants.find((tenant) => tenant.id === payment.tenantId)?.fullName ?? payment.tenantId} — ${payment.unitId} — ${formatMoney(payment.amount)}`,
             value: payment.id,
           })),
         ]}
         type="select"
       />
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <FormField defaultValue="2450" label="Amount" name="amount" required type="number" />
-        <FormField label="Due Date" name="due_date" required type="date" />
-      </div>
+      <FormField
+        helperText="Le locataire et le montant seront déterminés automatiquement à partir du bail sélectionné."
+        label="Date d’échéance"
+        name="due_date"
+        required
+        type="date"
+      />
 
       <div className="grid gap-4 md:grid-cols-2">
         <FormField
           defaultValue="cash"
-          label="Gateway"
+          label="Passerelle"
           name="gateway"
           options={[
-            { label: "Cash", value: "cash" },
-            { label: "Bank Transfer", value: "bank_transfer" },
+            { label: "Espèces", value: "cash" },
+            { label: "Virement bancaire", value: "bank_transfer" },
             { label: "EasyPay", value: "easypay" },
           ]}
           type="select"
         />
-        <FormField defaultValue="48" label="Expires In" name="expires_in_hours" required type="number" />
+        <FormField defaultValue="48" label="Expiration (heures)" name="expires_in_hours" required type="number" />
       </div>
 
       <FormField
-        defaultValue="Secure payment request for the current cycle. Please complete settlement through the generated link."
-        label="Message"
+        defaultValue="Demande de paiement sécurisée pour l’échéance en cours. Merci d’utiliser le lien généré pour finaliser le règlement."
+        label="Note interne"
         name="notes"
         rows={5}
         type="textarea"
@@ -102,13 +95,32 @@ export function GeneratePaymentLinkForm({ leases, tenants, payments }: GenerateP
       <FormInlineSuccess message={state.message} />
       {state.linkUrl ? (
         <div className="rounded-xl bg-[#f0f4f7] px-4 py-3">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">Generated Link</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">Lien généré</p>
           <p className="mt-2 break-all text-sm font-semibold text-[#2a3439]">{state.linkUrl}</p>
+          {state.expiresAt ? (
+            <p className="mt-2 text-xs text-[#566166]">
+              Expire le {formatDate(state.expiresAt)}
+            </p>
+          ) : null}
+          {state.gatewayReference ? (
+            <p className="mt-2 text-xs text-[#566166]">
+              Référence passerelle : {state.gatewayReference}
+            </p>
+          ) : null}
+          {state.gatewayUrl ? (
+            <p className="mt-2 break-all text-xs text-[#566166]">
+              URL passerelle : {state.gatewayUrl}
+            </p>
+          ) : (
+            <p className="mt-2 text-xs text-[#566166]">
+              L’URL de passerelle restera vide tant que l’intégration EasyPay n’est pas câblée côté backend.
+            </p>
+          )}
         </div>
       ) : null}
 
       <FormSubmitButton className="w-full rounded-lg px-6 text-sm" disabled={pending}>
-        {pending ? "Generating..." : "Generate and Copy Link"}
+        {pending ? "Génération..." : "Générer le lien"}
       </FormSubmitButton>
     </AppForm>
   );

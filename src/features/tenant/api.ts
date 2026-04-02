@@ -1,6 +1,6 @@
 import { createBooking, listBookings } from "@/lib/api/bookings";
 import { getCurrentUser, getShellProfile } from "@/lib/api/accounts";
-import { listLeases } from "@/lib/api/leases";
+import { getLeasePaymentSchedule, listLeases } from "@/lib/api/leases";
 import { listPayments } from "@/lib/api/payments";
 import {
   listAvailableUnits,
@@ -13,7 +13,8 @@ import {
   listTenantNotifications,
   listTenantProfiles,
 } from "@/lib/api/tenants";
-import type { TenantDashboardVm } from "@/types/view-models";
+import { formatFormApiError } from "@/lib/api/errors";
+import type { PaymentDetailVm, TenantDashboardVm } from "@/types/view-models";
 import {
   mapApiBookingToDomain,
   mapApiLeaseToDomain,
@@ -45,8 +46,11 @@ async function buildTenantDomainData() {
       meta: errorMeta(
         "No authenticated tenant session found. Sign in to load live data.",
       ),
+      units: [],
+      properties: [],
       accessToken: null,
       profileId: null,
+      tenantActorId: null,
     };
   }
 
@@ -93,12 +97,24 @@ async function buildTenantDomainData() {
       meta: errorMeta(
         "Some tenant endpoints failed to load. The UI is showing no data instead of static fallback.",
       ),
+      units: [],
+      properties: [],
       accessToken: tokens.accessToken,
       profileId: null,
+      tenantActorId: user ? String(user.id) : null,
     };
   }
 
-  const currentProfile = profiles.find((profile) => profile.user === user.id);
+  const currentProfile =
+    profiles.find((profile) => profile.user?.id === user.id) ??
+    profiles.find(
+      (profile) =>
+        (profile.user_phone_number &&
+          profile.user_phone_number === user.phone_number) ||
+        (profile.alternate_phone &&
+          profile.alternate_phone === user.phone_number),
+    ) ??
+    (profiles.length === 1 ? profiles[0] : undefined);
   if (!currentProfile) {
     return {
       profileName: shellProfile?.full_name || user.full_name || "Tenant",
@@ -123,13 +139,21 @@ async function buildTenantDomainData() {
         : undefined,
       quickStats: tenantDashboard?.quick_stats,
       meta: errorMeta("No tenant profile is linked to the current user."),
+      units: units.map((unit) => mapApiUnitToDomain(unit)),
+      properties: properties.map((property) => mapApiPropertyToDomain(property)),
       accessToken: tokens.accessToken,
       profileId: null,
+      tenantActorId: String(user.id),
     };
   }
 
+  const tenantActorId =
+    currentProfile.user?.id != null
+      ? String(currentProfile.user.id)
+      : String(user.id);
+
   const tenantLeasesApi = leases
-    .filter((lease) => String(lease.tenant) === String(currentProfile.id))
+    .filter((lease) => String(lease.tenant) === tenantActorId)
     .map(mapApiLeaseToDomain)
     .map((lease) => {
       const unit = units.find((item) => String(item.id) === lease.unitId);
@@ -137,7 +161,9 @@ async function buildTenantDomainData() {
     });
 
   const tenantPaymentsApi = payments
-    .filter((payment) => String(payment.tenant) === String(currentProfile.id))
+    .filter(
+      (payment) => String(payment.tenant_id ?? payment.tenant) === tenantActorId,
+    )
     .map(mapApiPaymentToDomain)
     .map((payment) => {
       const lease = tenantLeasesApi.find((item) => item.id === payment.leaseId);
@@ -183,8 +209,11 @@ async function buildTenantDomainData() {
       : undefined,
     quickStats: tenantDashboard?.quick_stats,
     meta: { source: "api" as const },
+    units: units.map((unit) => mapApiUnitToDomain(unit, user.full_name)),
+    properties: properties.map((property) => mapApiPropertyToDomain(property)),
     accessToken: tokens.accessToken,
     profileId: String(currentProfile.id),
+    tenantActorId,
   };
 }
 
@@ -215,6 +244,31 @@ export async function getTenantLeasesData() {
 export async function getTenantPaymentsData() {
   const domainData = await buildTenantDomainData();
   return { payments: domainData.payments, meta: domainData.meta };
+}
+
+export async function getTenantPaymentDetailVm(
+  paymentId: string,
+): Promise<PaymentDetailVm | null> {
+  const domainData = await buildTenantDomainData();
+  const payment = domainData.payments.find((item) => item.id === paymentId);
+
+  if (!payment) {
+    return null;
+  }
+
+  const lease = domainData.leases.find((item) => item.id === payment.leaseId);
+  const unit = domainData.units.find((item) => item.id === payment.unitId);
+  const property = domainData.properties.find(
+    (item) => item.id === (lease?.propertyId ?? unit?.propertyId),
+  );
+
+  return {
+    payment,
+    lease,
+    unit: unit ?? domainData.currentUnit,
+    property: property ?? domainData.currentProperty,
+    meta: domainData.meta,
+  };
 }
 
 export async function getTenantBookStayData() {
@@ -255,9 +309,10 @@ export async function getTenantBookingsData() {
     };
   }
 
-  const filteredBookings = domainData.profileId
+  const filteredBookings = domainData.tenantActorId
     ? bookings.filter(
-        (booking) => String(booking.tenant ?? "") === domainData.profileId,
+        (booking) =>
+          String(booking.tenant ?? "") === domainData.tenantActorId,
       )
     : bookings;
 
@@ -267,6 +322,40 @@ export async function getTenantBookingsData() {
         mapApiBookingToDomain,
       ) || [],
     meta: { source: "api" as const },
+  };
+}
+
+export async function getTenantLeaseDetailVm(leaseId: string) {
+  const domainData = await buildTenantDomainData();
+  const lease = domainData.leases.find((item) => item.id === leaseId);
+
+  if (!lease) {
+    return null;
+  }
+
+  const paymentSchedule =
+    domainData.accessToken != null
+      ? await getLeasePaymentSchedule(leaseId, domainData.accessToken).catch(
+          () => [],
+        )
+      : [];
+
+  return {
+    lease,
+    unit:
+      domainData.units.find((item) => item.id === lease.unitId) ??
+      domainData.currentUnit,
+    property:
+      domainData.properties.find((item) => item.id === lease.propertyId) ??
+      domainData.currentProperty,
+    paymentSchedule: paymentSchedule.map((item, index) => ({
+      id: String(item.id ?? `${leaseId}-${index}`),
+      dueDate: String(item.due_date ?? lease.startDate),
+      amount: Number(item.amount ?? lease.rentAmount) || lease.rentAmount,
+      status: item.status,
+      label: item.label ?? item.name ?? `Échéance ${index + 1}`,
+    })),
+    meta: domainData.meta,
   };
 }
 
@@ -329,10 +418,14 @@ export async function submitTenantBooking(input: {
 
     return { ok: true as const };
   } catch (error) {
+    const formattedError = formatFormApiError(
+      error,
+      "Unable to submit booking.",
+    );
     return {
       ok: false as const,
-      error:
-        error instanceof Error ? error.message : "Unable to submit booking.",
+      error: formattedError.message,
+      errorDetails: formattedError.details,
     };
   }
 }

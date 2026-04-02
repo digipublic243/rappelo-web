@@ -45,6 +45,7 @@ export const tenantBookings: Booking[] = [
 export const tenantLeases: Lease[] = [
   {
     id: "TL-200",
+    lease_number: "LEASE-TL-200",
     tenantId: "TEN-001",
     propertyId: "P-100",
     unitId: "U-402",
@@ -56,6 +57,7 @@ export const tenantLeases: Lease[] = [
   },
   {
     id: "TL-180",
+    lease_number: "LEASE-TL-180",
     tenantId: "TEN-001",
     propertyId: "P-330",
     unitId: "U-109",

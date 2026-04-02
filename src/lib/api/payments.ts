@@ -1,6 +1,16 @@
 import { API_PREFIX } from "@/config/api";
 import { apiRequest } from "@/lib/http/client";
-import type { ApiPaginatedResponse, ApiPayment, ApiPaymentCreateRequest, ApiPaymentLink, ApiPaymentLinkRequest, ApiPaymentSummary } from "@/types/api";
+import type {
+  ApiEasyPayInitiateRequest,
+  ApiEasyPayMutationResponse,
+  ApiEasyPayStatusResponse,
+  ApiPaginatedResponse,
+  ApiPayment,
+  ApiPaymentCreateRequest,
+  ApiPaymentLink,
+  ApiPaymentLinkRequest,
+  ApiPaymentSummary,
+} from "@/types/api";
 
 function unwrapListResponse<T>(response: ApiPaginatedResponse<T> | T[]) {
   return Array.isArray(response) ? response : response.results;
@@ -57,4 +67,28 @@ export function sendPaymentReminders(payload: Record<string, unknown>, token: st
     token,
     body: payload,
   });
+}
+
+export function initiateEasyPay(
+  id: string | number,
+  payload: ApiEasyPayInitiateRequest,
+  token: string,
+) {
+  return apiRequest<ApiEasyPayMutationResponse>(
+    `${API_PREFIX}/payments/payments/${id}/initiate_easypay/`,
+    {
+      method: "POST",
+      token,
+      body: payload,
+    },
+  );
+}
+
+export function checkEasyPayStatus(id: string | number, token: string) {
+  return apiRequest<ApiEasyPayStatusResponse>(
+    `${API_PREFIX}/payments/payments/${id}/check_easypay_status/`,
+    {
+      token,
+    },
+  );
 }

@@ -6,6 +6,7 @@ import { confirmBooking, rejectBooking } from "@/lib/api/bookings";
 import {
   activateLease,
   createLease,
+  getLeaseById,
   renewLease,
   terminateLease,
 } from "@/lib/api/leases";
@@ -16,6 +17,7 @@ import {
   updateUnitStatus,
 } from "@/lib/api/properties";
 import {
+  confirmPayment,
   createPayment,
   generatePaymentLink,
   sendPaymentReminders,
@@ -98,7 +100,7 @@ function buildUnitPayload(formData: FormData): ApiUnitCreateRequest {
   const rent = Number(String(formData.get("rent") ?? "").trim() || "0");
 
   return {
-    property,
+    property_id: property,
     unit_number: String(formData.get("unit_number") ?? "").trim(),
     unit_type:
       String(formData.get("unit_type") ?? "studio").trim() || undefined,
@@ -113,7 +115,7 @@ function buildUnitPayload(formData: FormData): ApiUnitCreateRequest {
 }
 
 function validateUnitPayload(payload: ApiUnitCreateRequest) {
-  if (!payload.property || !payload.unit_number || !payload.unit_type) {
+  if (!payload.property_id || !payload.unit_number || !payload.unit_type) {
     return "Le bien, le numéro d’unité et le type d’unité sont requis.";
   }
 
@@ -145,6 +147,12 @@ function buildLeasePayload(formData: FormData): ApiLeaseCreateRequest {
       String(formData.get("monthly_rent") ?? "").trim() || "0",
     ),
     security_deposit: toOptionalDecimal(formData.get("security_deposit")),
+    security_deposit_months_taken:
+      Number(String(formData.get("security_deposit_months_taken") ?? "").trim()) ||
+      undefined,
+    payment_frequency:
+      (String(formData.get("payment_frequency") ?? "monthly").trim() ||
+        "monthly") as ApiLeaseCreateRequest["payment_frequency"],
     notes: String(formData.get("notes") ?? "").trim() || null,
     status: "draft",
   };
@@ -193,6 +201,15 @@ function validateLeasePayload(payload: ApiLeaseCreateRequest) {
 
   if (payload.security_deposit != null && payload.security_deposit < 0) {
     errors.push("Le dépôt de garantie ne peut pas être négatif.");
+  }
+
+  if (
+    payload.security_deposit_months_taken != null &&
+    payload.security_deposit_months_taken < 0
+  ) {
+    errors.push(
+      "Le nombre de mois de garantie prélevés ne peut pas être négatif.",
+    );
   }
 
   return errors;
@@ -306,7 +323,7 @@ export async function updatePropertyAction(
 ): Promise<PropertyEditorActionState> {
   const accessToken = await requireAccessToken();
   if (!accessToken) {
-    return { error: "No authenticated landlord session found." };
+    return { error: "Aucune session bailleur authentifiée n’a été trouvée." };
   }
 
   const propertyId = String(formData.get("propertyId") ?? "").trim();
@@ -445,7 +462,7 @@ export async function createLeaseAction(
 
   const payload = buildLeasePayload(formData);
 
-  console.log(payload)
+  // console.log(payload)
 
   const validationErrors = validateLeasePayload(payload);
   if (validationErrors.length > 0) {
@@ -555,6 +572,23 @@ export async function renewLeaseAction(formData: FormData) {
   revalidatePath("/landlord/dashboard");
 }
 
+export async function confirmPaymentAction(formData: FormData) {
+  const accessToken = await requireAccessToken();
+  if (!accessToken) {
+    return;
+  }
+
+  const paymentId = String(formData.get("paymentId") ?? "");
+  if (!paymentId) {
+    return;
+  }
+
+  await confirmPayment(paymentId, accessToken).catch(() => null);
+  revalidatePath("/landlord/payments");
+  revalidatePath(`/landlord/payments/${paymentId}`);
+  revalidatePath("/landlord/dashboard");
+}
+
 export async function confirmBookingAction(formData: FormData) {
   const accessToken = await requireAccessToken();
   if (!accessToken) {
@@ -602,9 +636,7 @@ export async function generatePaymentLinkAction(
   }
 
   const leaseId = String(formData.get("leaseId") ?? "").trim();
-  const tenantId = String(formData.get("tenantId") ?? "").trim();
   const existingPaymentId = String(formData.get("paymentId") ?? "").trim();
-  const amount = Number(String(formData.get("amount") ?? "").trim() || "0");
   const gateway = String(formData.get("gateway") ?? "cash").trim() as
     | "cash"
     | "bank_transfer"
@@ -615,24 +647,44 @@ export async function generatePaymentLinkAction(
   const dueDate = String(formData.get("due_date") ?? "").trim();
   const notes = String(formData.get("notes") ?? "").trim();
 
-  if (!leaseId || !tenantId || !amount || !dueDate) {
+  if (!leaseId || !dueDate) {
     return {
-      error: "Lease, tenant, amount, and due date are required.",
-      errorDetails: ["lease: required", "tenant: required", "amount: required", "due date: required"],
+      error: "Le bail et l’échéance sont requis.",
+      errorDetails: [
+        "bail : requis",
+        "date d’échéance : requise",
+      ],
     };
   }
 
   try {
+    const lease = await getLeaseById(leaseId, accessToken);
+    const tenantId = String(lease.tenant ?? "").trim();
+
+    if (!tenantId) {
+      return {
+        error: "Le bail sélectionné n’est lié à aucun locataire.",
+        errorDetails: ["tenant_id : introuvable depuis le bail sélectionné"],
+      };
+    }
+
+    console.log("payment payload ::::", {
+      lease: leaseId,
+      tenant_id: tenantId,
+      due_date: dueDate,
+      payment_method: gateway,
+      notes: notes || undefined,
+    });
+
     const payment =
       existingPaymentId ||
       (
         await createPayment(
           {
             lease: leaseId,
-            tenant: tenantId,
-            amount,
+            tenant_id: tenantId,
             due_date: dueDate,
-            payment_method: gateway === "easypay" ? "mobile_money" : gateway,
+            payment_method: gateway,
             notes: notes || undefined,
           },
           accessToken,
@@ -648,13 +700,16 @@ export async function generatePaymentLinkAction(
     revalidatePath("/landlord/payments");
 
     return {
-      message: "Payment link generated successfully.",
+      message: "Le lien de paiement a été généré avec succès.",
       linkUrl: link.link_url,
+      gatewayUrl: link.gateway_url,
+      gatewayReference: link.gateway_reference,
+      expiresAt: link.expires_at,
     };
   } catch (error) {
     const formattedError = formatFormApiError(
       error,
-      "Unable to generate payment link right now.",
+      "Impossible de générer le lien de paiement pour le moment.",
     );
     return {
       error: formattedError.message,
@@ -669,7 +724,7 @@ export async function sendPaymentReminderAction(
 ): Promise<PaymentWorkflowActionState> {
   const accessToken = await requireAccessToken();
   if (!accessToken) {
-    return { error: "No authenticated landlord session found." };
+    return { error: "Aucune session bailleur authentifiée n’a été trouvée." };
   }
 
   const paymentId = String(formData.get("paymentId") ?? "").trim();
@@ -678,8 +733,8 @@ export async function sendPaymentReminderAction(
 
   if (!paymentId) {
     return {
-      error: "A payment must be selected before sending a reminder.",
-      errorDetails: ["payment: required"],
+      error: "Un paiement doit être sélectionné avant l’envoi du rappel.",
+      errorDetails: ["paiement : requis"],
     };
   }
 
@@ -697,12 +752,14 @@ export async function sendPaymentReminderAction(
 
     return {
       message:
-        response.message ?? response.detail ?? "Reminder sent successfully.",
+        response.message ??
+        response.detail ??
+        "Le rappel a été envoyé avec succès.",
     };
   } catch (error) {
     const formattedError = formatFormApiError(
       error,
-      "Unable to send reminder right now.",
+      "Impossible d’envoyer le rappel pour le moment.",
     );
     return {
       error: formattedError.message,

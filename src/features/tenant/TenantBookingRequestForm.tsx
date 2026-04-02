@@ -111,6 +111,16 @@ export function TenantBookingRequestForm({ units }: TenantBookingRequestFormProp
           ))}
         </div>
         <FormInlineError className="mt-4" message={state.error} />
+        {state.errorDetails?.length ? (
+          <div className="mt-4 rounded-xl border border-[#f2b7b3] bg-white px-4 py-4">
+            <p className="text-sm font-bold text-[#752121]">Détails de l’erreur :</p>
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[#5d3b39]">
+              {state.errorDetails.map((detail) => (
+                <li key={detail}>{detail}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
         <FormSubmitButton className={actionButtonClassName({ className: "mt-6 w-full" })} disabled={pending}>
           {pending ? "Submitting..." : "Submit booking request"}
         </FormSubmitButton>

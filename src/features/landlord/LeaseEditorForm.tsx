@@ -20,6 +20,8 @@ interface LeaseEditorDefaults {
   moveInDate: string;
   monthlyRent: string;
   securityDeposit: string;
+  securityDepositMonthsTaken: string;
+  paymentFrequency: string;
   notes: string;
 }
 
@@ -105,8 +107,21 @@ export function LeaseEditorForm({
               type="date"
             />
             <FormFieldMuted
+              defaultValue={defaults.paymentFrequency}
+              label="Périodicité de facturation"
+              name="payment_frequency"
+              options={[
+                { label: "Mensuelle", value: "monthly" },
+                { label: "Trimestrielle", value: "quarterly" },
+                { label: "Semestrielle", value: "semi_annual" },
+                { label: "Annuelle", value: "annual" },
+              ]}
+              required
+              type="select"
+            />
+            <FormFieldMuted
               defaultValue={defaults.monthlyRent}
-              label="Loyer contractuel"
+              label="Loyer mensuel contractuel"
               min={1}
               name="monthly_rent"
               required
@@ -119,6 +134,15 @@ export function LeaseEditorForm({
               min={0}
               name="security_deposit"
               step="0.01"
+              type="number"
+            />
+            <FormFieldMuted
+              defaultValue={defaults.securityDepositMonthsTaken}
+              helperText="Si laissé vide, le backend reprendra automatiquement la configuration de l’unité."
+              label="Mois de garantie prélevés"
+              min={0}
+              name="security_deposit_months_taken"
+              step="1"
               type="number"
             />
             <FormField name="status" type="hidden" value="draft" />
@@ -151,6 +175,10 @@ export function LeaseEditorForm({
               3. L’activation du bail changera aussi l’état de l’unité en
               occupée.
             </p>
+            <p>
+              4. La périodicité de facturation pilote ensuite le calcul des
+              paiements backend.
+            </p>
           </div>
         </section>
 
@@ -162,8 +190,8 @@ export function LeaseEditorForm({
             <p>Choisissez de préférence une unité vacante ou réservée.</p>
             <p>La date de fin doit être postérieure à la date de début.</p>
             <p>
-              Le loyer envoyé ici devient la base du schedule et des paiements à
-              venir.
+              Le loyer mensuel et la périodicité servent de base au calcul des
+              paiements à venir.
             </p>
           </div>
         </section>

@@ -143,6 +143,7 @@ export const landlordBookings: Booking[] = [
 export const landlordLeases: Lease[] = [
   {
     id: "L-8842",
+    lease_number: "LEASE-L-8842",
     tenantId: "T-901",
     propertyId: "P-100",
     unitId: "U-402",
@@ -154,6 +155,7 @@ export const landlordLeases: Lease[] = [
   },
   {
     id: "L-9010",
+    lease_number: "LEASE-L-9010",
     tenantId: "T-902",
     propertyId: "P-220",
     unitId: "U-12A",
@@ -165,6 +167,7 @@ export const landlordLeases: Lease[] = [
   },
   {
     id: "L-7711",
+    lease_number: "LEASE-L-7711",
     tenantId: "T-903",
     propertyId: "P-330",
     unitId: "U-109",

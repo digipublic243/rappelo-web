@@ -39,11 +39,13 @@ export default async function NewLeasePage() {
           startDate,
           endDate: addOneYear(startDate),
           moveInDate: startDate,
+          paymentFrequency: "monthly",
           monthlyRent:
             firstUnit != null && Number.isFinite(firstUnit.price)
               ? String(firstUnit.price)
               : "",
           securityDeposit: "",
+          securityDepositMonthsTaken: "",
           notes: "",
         }}
         initialState={initialLeaseEditorActionState}

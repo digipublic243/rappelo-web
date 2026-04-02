@@ -4,7 +4,13 @@ export type ApiUnitStatus = "vacant" | "occupied" | "maintenance" | "reserved";
 export type ApiRentalPeriodicity = "journ" | "hebdo" | "mensuel" | "autre";
 export type ApiLeaseStatus = "draft" | "active" | "terminated" | "expired";
 export type ApiPaymentStatus = "pending" | "paid" | "failed" | "refunded";
-export type ApiPaymentMethod = "cash" | "bank_transfer" | "card" | "mobile_money" | "other";
+export type ApiPaymentMethod =
+  | "cash"
+  | "bank_transfer"
+  | "easypay"
+  | "mobile_money"
+  | "card"
+  | "other";
 export type ApiEmploymentStatus = "employed" | "self_employed" | "unemployed" | "student" | "retired" | "military" | "officer";
 export type ApiMaritalStatus = "single" | "married" | "divorced" | "widowed" | "separated";
 
@@ -212,7 +218,7 @@ export interface ApiUnit {
 }
 
 export interface ApiUnitCreateRequest {
-  property: string;
+  property_id: string;
   unit_number: string;
   unit_type?: string;
   rent: number;
@@ -244,7 +250,20 @@ export interface ApiUnitUpdateRequest {
 
 export interface ApiTenantProfile {
   id: number | string;
-  user: number | string;
+  user?: {
+    id: number | string;
+    phone_number?: string;
+    email?: string | null;
+    first_name?: string;
+    last_name?: string;
+    full_name?: string;
+    role?: string;
+    is_active?: boolean;
+    date_joined?: string;
+  } | null;
+  user_full_name?: string | null;
+  user_phone_number?: string | null;
+  user_email?: string | null;
   date_of_birth?: string | null;
   ssn?: string | null;
   ssn_last_four?: string | null;
@@ -277,6 +296,13 @@ export interface ApiLease {
   end_date: string;
   monthly_rent: number;
   security_deposit?: number | null;
+  security_deposit_months_taken?: number | null;
+  payment_frequency?:
+    | "monthly"
+    | "quarterly"
+    | "semi_annual"
+    | "annual"
+    | null;
   status: ApiLeaseStatus;
   move_in_date?: string | null;
   move_out_date?: string | null;
@@ -293,6 +319,8 @@ export interface ApiLeaseCreateRequest {
   end_date: string;
   monthly_rent: number;
   security_deposit?: number | null;
+  security_deposit_months_taken?: number | null;
+  payment_frequency?: "monthly" | "quarterly" | "semi_annual" | "annual";
   move_in_date?: string | null;
   notes?: string | null;
   status?: ApiLeaseStatus;
@@ -309,13 +337,21 @@ export interface ApiLeaseTerminateRequest {
 export interface ApiPayment {
   id: number | string;
   lease?: number | string;
-  tenant: number | string;
+  tenant?: number | string;
+  tenant_id?: number | string;
+  payment_label?: string;
   amount: number;
+  currency?: string | null;
   due_date: string;
   status: ApiPaymentStatus;
   payment_method?: ApiPaymentMethod;
   transaction_reference?: string;
   notes?: string;
+  easypay_reference_id?: string | null;
+  easypay_transaction_id?: string | null;
+  easypay_provider?: string | null;
+  easypay_attempts?: number | null;
+  easypay_last_check?: string | null;
   is_active?: boolean;
   paid_at?: string | null;
   created_at?: string;
@@ -352,14 +388,30 @@ export interface ApiPaymentLink {
 
 export interface ApiPaymentCreateRequest {
   lease: number | string;
-  tenant: number | string;
-  amount: number;
+  tenant_id?: number | string;
+  tenant?: number | string;
+  amount?: number;
   due_date: string;
   status?: ApiPaymentStatus;
   payment_method?: ApiPaymentMethod;
   transaction_reference?: string;
   notes?: string;
   is_active?: boolean;
+}
+
+export interface ApiEasyPayInitiateRequest {
+  phone_number: string;
+}
+
+export interface ApiEasyPayMutationResponse {
+  message?: string;
+  payment: ApiPayment;
+}
+
+export interface ApiEasyPayStatusResponse {
+  status?: string;
+  payment: ApiPayment;
+  easypay_status?: Record<string, unknown>;
 }
 
 export interface ApiTenantDashboard {

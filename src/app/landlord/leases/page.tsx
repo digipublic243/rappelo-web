@@ -18,8 +18,8 @@ export default async function LeaseListPage() {
     <LandlordPageFrame currentPath="/landlord/leases">
       <DataStateNotice meta={meta} />
       <PageIntro
-        title="Lease Agreements"
-        description="Lifecycle-managed contracts that remain separate from booking intake and payment collection."
+        title="Baux"
+        description="Contrats locatifs gérés séparément des réservations, avec leur fréquence de facturation et leur cycle de vie."
         action={
           <Link
             className={actionButtonClassName({})}
@@ -33,9 +33,9 @@ export default async function LeaseListPage() {
 
       <section className="grid gap-4 md:grid-cols-3">
         {[
-          ["Total Active Leases", String(leases.filter((lease) => lease.status === "active").length)],
-          ["Pending Signatures", String(leases.filter((lease) => lease.status === "draft").length)],
-          ["Monthly Contract Value", formatMoney(leases.reduce((total, lease) => total + lease.rentAmount, 0))],
+          ["Baux actifs", String(leases.filter((lease) => lease.status === "active").length)],
+          ["Baux en brouillon", String(leases.filter((lease) => lease.status === "draft").length)],
+          ["Valeur contractuelle", formatMoney(leases.reduce((total, lease) => total + lease.rentAmount, 0))],
         ].map(([label, value]) => (
           <SurfaceCard key={label} className="p-5">
             <p className="text-sm font-medium text-[#566166]">{label}</p>
@@ -48,7 +48,15 @@ export default async function LeaseListPage() {
         <table className="w-full min-w-[860px]">
           <thead className="bg-[#f0f4f7] text-left">
             <tr>
-              {["Lease ID", "Tenant", "Unit", "Rent", "Status", "Action"].map((label) => (
+              {[
+                "Numéro de bail",
+                "Locataire",
+                "Unité",
+                "Période",
+                "Montant contractuel",
+                "Statut",
+                "Action",
+              ].map((label) => (
                 <th key={label} className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#566166]">
                   {label}
                 </th>
@@ -58,13 +66,21 @@ export default async function LeaseListPage() {
           <tbody>
             {leases.map((lease) => (
               <tr key={lease.id} className="border-t border-[#e8eff3]">
-                <td className="px-6 py-5 text-sm font-semibold text-[#2a3439]">{lease.id}</td>
-                <td className="px-6 py-5 text-sm text-[#566166]">{lease.tenantId}</td>
-                <td className="px-6 py-5 text-sm text-[#566166]">{lease.unitId}</td>
+                <td className="px-6 py-5 text-sm font-semibold text-[#2a3439]">{lease.lease_number}</td>
                 <td className="px-6 py-5 text-sm text-[#566166]">
-                  {formatMoney(lease.rentAmount)} / {formatCadence(lease.cadence).replace("Per ", "")}
+                  <span className="font-semibold text-[#2a3439]">{lease.tenantId}</span>
+                </td>
+                <td className="px-6 py-5 text-sm text-[#566166]">
+                  <span className="font-semibold text-[#2a3439]">{lease.unitId}</span>
+                </td>
+                <td className="px-6 py-5 text-sm text-[#566166]">
+                  {formatDate(lease.startDate)}
+                  <div className="text-xs text-[#9a9d9f]">au {formatDate(lease.endDate)}</div>
+                </td>
+                <td className="px-6 py-5 text-sm text-[#566166]">
+                  {formatMoney(lease.rentAmount)}
                   <div className="text-xs text-[#9a9d9f]">
-                    {formatDate(lease.startDate)} - {formatDate(lease.endDate)}
+                    {formatCadence(lease.cadence)}
                   </div>
                 </td>
                 <td className="px-6 py-5">
@@ -72,7 +88,7 @@ export default async function LeaseListPage() {
                 </td>
                 <td className="px-6 py-5">
                   <Link className="text-sm font-semibold text-[#545f73]" href={`/landlord/leases/${lease.id}`}>
-                    View detail
+                    Voir le détail
                   </Link>
                 </td>
               </tr>

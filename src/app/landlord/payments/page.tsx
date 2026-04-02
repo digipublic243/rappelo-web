@@ -1,34 +1,38 @@
 import Link from "next/link";
 import { LandlordPageFrame } from "@/features/landlord/LandlordPageFrame";
+import { AppForm, FormSubmitButton } from "@/components/forms/AppForm";
+import { FormField } from "@/components/forms/FormField";
 import { PageIntro } from "@/components/ui/PageIntro";
 import { SurfaceCard, actionButtonClassName } from "@/components/shared/StitchPrimitives";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { formatDate, formatMoney, paymentStatusLabel } from "@/lib/format";
+import { formatDate, formatMoney, formatPaymentMethod, paymentStatusLabel } from "@/lib/format";
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
 import { getLandlordPaymentsVm } from "@/features/landlord/api";
 import { DataStateNotice } from "@/components/ui/DataStateNotice";
+import { paymentActions } from "@/features/landlord/actionRules";
+import { confirmPaymentAction } from "@/features/landlord/actions";
 
 export default async function PaymentsPage() {
-  const { payments, summary, meta } = await getLandlordPaymentsVm();
+  const { payments, summary, tenants, leases, meta } = await getLandlordPaymentsVm();
   const collected = summary?.totalPaid ?? payments.filter((payment) => payment.status === "paid").reduce((sum, payment) => sum + payment.amount, 0);
   const outstanding = summary?.totalPending ?? payments.filter((payment) => payment.status === "pending").reduce((sum, payment) => sum + payment.amount, 0);
-  const refunds = payments.filter((payment) => payment.status === "refunded").reduce((sum, payment) => sum + payment.amount, 0);
-  const successRate = payments.length > 0 ? ((summary?.countPaid ?? payments.filter((payment) => payment.status === "paid").length) / payments.length * 100).toFixed(1) : "0.0";
+  const overdue = summary?.totalOverdue ?? 0;
+  const pendingCount = summary?.countPending ?? payments.filter((payment) => payment.status === "pending").length;
 
   return (
     <LandlordPageFrame currentPath="/landlord/payments">
       <DataStateNotice meta={meta} />
       <PageIntro
-        title="Financial Ledger"
-        description="Ledger-style payment history with summary cards, reminders, and link generation flows."
+        title="Paiements"
+        description="Suivez les règlements, les échéances en attente et les relances depuis le registre financier du portefeuille."
         action={
           <div className="flex flex-wrap gap-3">
             <Link className={actionButtonClassName({})} href="/landlord/payments/generate-link">
               <MaterialIcon name="add" className="text-[18px]" />
-              New Payment
+              Générer un lien
             </Link>
             <Link className={actionButtonClassName({ variant: "secondary" })} href="/landlord/payments/send-reminder">
-              Send Reminder
+              Envoyer un rappel
             </Link>
           </div>
         }
@@ -36,10 +40,10 @@ export default async function PaymentsPage() {
 
       <section className="grid gap-4 md:grid-cols-4">
         {[
-          ["Collected", formatMoney(collected)],
-          ["Outstanding", formatMoney(outstanding)],
-          ["Success Rate", `${successRate}%`],
-          ["Refunds", formatMoney(refunds)],
+          ["Total encaissé", formatMoney(collected)],
+          ["À encaisser", formatMoney(outstanding)],
+          ["En retard", formatMoney(overdue)],
+          ["Paiements en attente", String(pendingCount)],
         ].map(([label, value]) => (
           <SurfaceCard key={label} className="p-5">
             <p className="text-sm font-medium text-[#566166]">{label}</p>
@@ -52,7 +56,7 @@ export default async function PaymentsPage() {
         <table className="w-full min-w-[920px]">
           <thead className="bg-[#f0f4f7] text-left">
             <tr>
-              {["Tenant / Unit", "Amount", "Due Date", "Method", "Status"].map((label) => (
+              {["Locataire / unité", "Bail", "Montant", "Échéance", "Mode", "Statut", "Action"].map((label) => (
                 <th key={label} className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#566166]">
                   {label}
                 </th>
@@ -63,14 +67,42 @@ export default async function PaymentsPage() {
             {payments.map((payment) => (
               <tr key={payment.id} className="border-t border-[#e8eff3]">
                 <td className="px-6 py-5">
-                  <p className="font-semibold text-[#2a3439]">{payment.tenantId}</p>
-                  <p className="text-xs text-[#566166]">{payment.unitId}</p>
+                  <p className="font-semibold text-[#2a3439]">
+                    {payment.tenantName ??
+                      tenants.find((tenant) => tenant.id === payment.tenantId)
+                        ?.fullName ??
+                      payment.tenantId}
+                  </p>
+                  <p className="text-xs text-[#566166]">{payment.unitId || "Unité non liée"}</p>
+                </td>
+                <td className="px-6 py-5 text-sm text-[#566166]">
+                  {leases.find((lease) => lease.id === payment.leaseId)?.lease_number ?? payment.leaseId ?? "Aucun bail"}
                 </td>
                 <td className="px-6 py-5 text-sm font-semibold text-[#2a3439]">{formatMoney(payment.amount)}</td>
-                <td className="px-6 py-5 text-sm text-[#566166]">{formatDate(payment.dueDate)}</td>
-                <td className="px-6 py-5 text-sm uppercase text-[#566166]">{payment.method}</td>
+                <td className="px-6 py-5 text-sm text-[#566166]">
+                  <p>{formatDate(payment.dueDate)}</p>
+                  <p className="mt-1 text-xs text-[#9a9d9f]">
+                    {payment.paymentLabel ?? `Paiement à partir du ${payment.dueDate}`}
+                  </p>
+                </td>
+                <td className="px-6 py-5 text-sm text-[#566166]">{formatPaymentMethod(payment.method)}</td>
                 <td className="px-6 py-5">
                   <StatusBadge status={payment.status} label={paymentStatusLabel(payment.status)} />
+                </td>
+                <td className="px-6 py-5">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Link className="text-sm font-semibold text-[#545f73]" href={`/landlord/payments/${payment.id}`}>
+                      Voir le détail
+                    </Link>
+                    {paymentActions(payment.status).canConfirm ? (
+                      <AppForm action={confirmPaymentAction}>
+                        <FormField name="paymentId" type="hidden" value={payment.id} />
+                        <FormSubmitButton className="rounded-lg px-3 py-2 text-xs">
+                          Marquer payé
+                        </FormSubmitButton>
+                      </AppForm>
+                    ) : null}
+                  </div>
                 </td>
               </tr>
             ))}

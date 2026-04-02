@@ -115,6 +115,45 @@ Response:
 Authorization: Bearer <access-token>
 ```
 
+### 6. Introspection HEAD (metadonnees des routes)
+
+Le backend supporte `HEAD` sur les routes API exposees par les viewsets (accounts, properties, tenants, leases, payments).
+
+But:
+
+- Recuperer la definition des champs de `create` et `update`
+- Recuperer les colonnes de `list`
+- Recuperer les champs de `detail`
+
+Exemple:
+
+- `HEAD /api/tenants/profiles/`
+
+Headers retournes:
+
+- `X-Route-Action`: action resolue (`list`, `retrieve`, etc.)
+- `X-Create-Fields`: JSON array des champs de creation
+- `X-Update-Fields`: JSON array des champs de mise a jour
+- `X-List-Columns`: JSON array des colonnes de liste
+- `X-Detail-Fields`: JSON array des champs detail
+
+Format d'un item `X-Create-Fields` / `X-Update-Fields`:
+
+```json
+{
+  "name": "alternate_phone",
+  "type": "CharField",
+  "required": false,
+  "read_only": false
+}
+```
+
+Notes frontend:
+
+- Les valeurs sont des JSON strings dans les headers HTTP: faire `JSON.parse(...)`
+- Ces headers sont exposes en CORS via `Access-Control-Expose-Headers`
+- Un `401` peut arriver sans token, mais les headers d'introspection restent disponibles
+
 ## Convention importante sur les IDs
 
 - `User.id`: entier
@@ -208,16 +247,16 @@ Filtres disponibles sur la liste:
 
 Champs modele `Property` (create/update):
 
-| Champ | Type | Requis | Notes |
-|---|---|---|---|
-| `name` | string | oui | |
-| `property_type` | enum | non | `apartment \| house \| condo \| townhouse \| commercial \| other` |
-| `status` | enum | non | `active \| inactive \| maintenance \| sold` |
-| `address_content` | string | oui | remplace les anciens champs `address_line_1/state/postal_code` |
-| `city` | enum | non | actuellement `kinshasa` uniquement |
-| `country` | string | non | defaut `RD CONGO` |
-| `description` | string | non | |
-| `total_units` | integer | non | defaut 1 |
+| Champ             | Type    | Requis | Notes                                                             |
+| ----------------- | ------- | ------ | ----------------------------------------------------------------- |
+| `name`            | string  | oui    |                                                                   |
+| `property_type`   | enum    | non    | `apartment \| house \| condo \| townhouse \| commercial \| other` |
+| `status`          | enum    | non    | `active \| inactive \| maintenance \| sold`                       |
+| `address_content` | string  | oui    | remplace les anciens champs `address_line_1/state/postal_code`    |
+| `city`            | enum    | non    | actuellement `kinshasa` uniquement                                |
+| `country`         | string  | non    | defaut `RD CONGO`                                                 |
+| `description`     | string  | non    |                                                                   |
+| `total_units`     | integer | non    | defaut 1                                                          |
 
 `enriched` renvoie en plus:
 
@@ -268,15 +307,17 @@ Champs modele `Property` (create/update):
 
 Champs pour `POST /api/properties/units/` (creation simple):
 
-| Champ | Type | Requis | Notes |
-|---|---|---|---|
-| `unit_number` | string | oui | unique par propriete |
-| `unit_type` | enum | non | `studio \| 1br \| 2br \| 3br \| 4br \| commercial \| other` |
-| `rent` | decimal | oui | montant du loyer |
-| `currency` | string | non | defaut `USD` |
-| `rental_periodicity` | enum | non | `journ \| hebdo \| mensuel \| autre` — defaut `mensuel` |
-| `description` | string | non | |
-| `is_furnished` | boolean | non | defaut `false` |
+| Champ                              | Type    | Requis | Notes                                                       |
+| ---------------------------------- | ------- | ------ | ----------------------------------------------------------- |
+| `unit_number`                      | string  | oui    | unique par propriete                                        |
+| `unit_type`                        | enum    | non    | `studio \| 1br \| 2br \| 3br \| 4br \| commercial \| other` |
+| `rent`                             | decimal | oui    | montant du loyer                                            |
+| `currency`                         | string  | non    | defaut `USD`                                                |
+| `rental_periodicity`               | enum    | non    | `journ \| hebdo \| mensuel \| autre` — defaut `mensuel`     |
+| `security_deposit`                 | decimal | non    | montant de garantie demande                                 |
+| `security_deposit_months_required` | integer | non    | nombre de mois de garantie requis (defaut `0`)              |
+| `description`                      | string  | non    |                                                             |
+| `is_furnished`                     | boolean | non    | defaut `false`                                              |
 
 Filtres disponibles sur la liste:
 
@@ -287,7 +328,7 @@ Filtres disponibles sur la liste:
 **Detail (`GET /api/properties/units/{id}/`)** — inclut en plus les champs physiques et financiers:
 
 - `bedrooms`, `bathrooms`, `square_footage`, `floor_number`
-- `security_deposit`, `booking_deposit`
+- `security_deposit`, `security_deposit_months_required`, `booking_deposit`
 - `allowed_payment_methods`
 - `advance_payment_policy_text`
 - `current_tenant`, `current_lease`
@@ -350,15 +391,15 @@ Filtre utile:
 > `phone_number` est la valeur de `alternate_phone`. Le locataire peut ensuite se connecter
 > via OTP avec ce numéro. Aucun appel préalable à `POST /api/accounts/users/` n'est nécessaire.
 
-| Champ | Type | POST | PATCH | Description |
-|---|---|---|---|---|
-| `alternate_phone` | string | **obligatoire** | optionnel | Numéro du locataire — devient `User.phone_number` à la création (max 15 chars) |
-| `id_card` | file | optionnel | optionnel | Pièce d'identité (multipart/form-data) |
-| `alternate_email` | email | optionnel | optionnel | Adresse e-mail alternative |
-| `marital_status` | enum | optionnel | optionnel | `single` \| `married` \| `divorced` \| `widowed` \| `separated` |
-| `employment_status` | enum | optionnel | optionnel | `employed` \| `self_employed` \| `unemployed` \| `student` \| `retired` \| `military` \| `officer` |
-| `notes` | string | optionnel | optionnel | Notes libres |
-| `is_active` | boolean | — | optionnel | Actif / inactif (PATCH seulement) |
+| Champ               | Type    | POST            | PATCH     | Description                                                                                        |
+| ------------------- | ------- | --------------- | --------- | -------------------------------------------------------------------------------------------------- |
+| `alternate_phone`   | string  | **obligatoire** | optionnel | Numéro du locataire — devient `User.phone_number` à la création (max 15 chars)                     |
+| `id_card`           | file    | optionnel       | optionnel | Pièce d'identité (multipart/form-data)                                                             |
+| `alternate_email`   | email   | optionnel       | optionnel | Adresse e-mail alternative                                                                         |
+| `marital_status`    | enum    | optionnel       | optionnel | `single` \| `married` \| `divorced` \| `widowed` \| `separated`                                    |
+| `employment_status` | enum    | optionnel       | optionnel | `employed` \| `self_employed` \| `unemployed` \| `student` \| `retired` \| `military` \| `officer` |
+| `notes`             | string  | optionnel       | optionnel | Notes libres                                                                                       |
+| `is_active`         | boolean | —               | optionnel | Actif / inactif (PATCH seulement)                                                                  |
 
 #### Contacts / emploi / references
 
@@ -443,6 +484,18 @@ Notes frontend:
 - `GET /api/leases/leases/{id}/payment_schedule/`
 - `POST /api/leases/leases/{id}/regenerate_schedule/`
 
+Champs garantie a retenir:
+
+- `security_deposit`: montant de garantie pour le bail
+- `security_deposit_months_taken`: nombre de mois effectivement pris au locataire pour ce bail
+- si `security_deposit_months_taken` n'est pas fourni a la creation, le backend reprend automatiquement `unit.security_deposit_months_required`
+
+Champs de periodicite de paiement (contrat):
+
+- `payment_frequency`: periodicite de facturation du bail
+- valeurs supportees: `monthly`, `quarterly`, `semi_annual`, `annual`
+- valeur par defaut: `monthly`
+
 #### Documents de bail
 
 - `GET|POST /api/leases/documents/`
@@ -500,6 +553,29 @@ Payload type:
 - `GET /api/payments/payments/summary/`
 - `POST /api/payments/payments/{id}/generate_link/`
 - `POST /api/payments/payments/send_reminders/`
+
+**Note importante:** L'API expose le champ tenant comme `tenant_id` (UUID du locataire).
+Lors de la creation d'un paiement, **ne pas envoyer `tenant_id`**: le backend le deduit automatiquement a partir du `lease` (locataire du bail).
+Si `tenant_id` est envoye et ne correspond pas au locataire du bail, la requete est rejetee.
+
+Regle metier montant/contrat:
+
+- le montant du paiement est calcule automatiquement a partir du bail (`lease`)
+- formule: `amount = lease.monthly_rent * nombre_de_mois(payment_frequency)`
+- mapping periodicite -> mois:
+  - `monthly` -> `1`
+  - `quarterly` -> `3`
+  - `semi_annual` -> `6`
+  - `annual` -> `12`
+- si un `amount` est envoye par le frontend, le backend applique quand meme le montant calcule
+
+Libelle de periode du paiement:
+
+- champ `payment_label`: auto-genere au format "Paiement du YYYY-MM-DD au YYYY-MM-DD"
+- date de debut = `due_date`
+- date de fin = `due_date` + periodicite du bail - 1 jour
+- exemple: si `payment_frequency="quarterly"` et `due_date="2026-04-01"`, alors `payment_label="Paiement du 2026-04-01 au 2026-06-30"`
+- le champ est en lecture seule (auto-genere a chaque save)
 
 #### Templates de reminder
 
@@ -565,6 +641,54 @@ Response:
   "count_paid": 8,
   "count_pending": 2,
   "count_overdue": 1
+}
+```
+
+#### Lancer un paiement via EasyPay (Tenant)
+
+Flux complet pour un tenant:
+
+1. Obtenir la liste des paiements en attente:
+   - `GET /api/payments/payments/` -> filtre sur tenant courant automatiquement
+
+2. Initier la collection EasyPay sur un paiement:
+   - `POST /api/payments/payments/{id}/initiate_easypay/`
+   - Payload: `{"phone_number": "+243899090907"}` (numéro du tenant)
+   - Response: Payment avec `easypay_reference_id`, `easypay_transaction_id`, status=pending, payment_method=mobile_money
+   - Le backend appelle l'API EasyPay qui contacte le tenant sur son téléphone
+
+3. EasyPay envoie une requête au tenant (SMS/USSD) pour valider/rejeter:
+   - Le tenant répond via son opérateur mobile
+   - EasyPay envoie un callback au serveur (webhook)
+
+4. Vérifier le statut du paiement:
+   - `GET /api/payments/payments/{id}/check_easypay_status/`
+   - Response: Payment avec `status=paid` ou `status=failed` (selon la validation du tenant)
+   - Le backend sync avec EasyPay et met à jour le paiement
+   - Champ `easypay_attempts` augmente à chaque check
+
+Reponse exemple apres initiate_easypay:
+
+```json
+{
+  "payment": {
+    "id": "<uuid>",
+    "lease": "<lease_uuid>",
+    "tenant_id": "<user_id>",
+    "amount": "100.00",
+    "currency": "CDF",
+    "due_date": "2026-04-05",
+    "payment_label": "Paiement du 2026-04-01 au 2026-04-30",
+    "status": "pending",
+    "payment_method": "mobile_money",
+    "paid_at": null,
+    "easypay_reference_id": "REF123456789",
+    "easypay_transaction_id": "TXN987654321",
+    "easypay_provider": "Orange Money",
+    "easypay_attempts": 1,
+    "easypay_last_check": "2026-04-02T10:00:00Z"
+  },
+  "message": "Payment initiated successfully"
 }
 ```
 
@@ -736,11 +860,11 @@ EASYPAY_CALLBACK_URL=https://your-domain.com/api/payments/easypay/callback/
 
 **Status de paiement avec Easypay:**
 
-| Statut | Signification |
-|---|---|
+| Statut    | Signification                               |
+| --------- | ------------------------------------------- |
 | `pending` | Paiement initie, en attente de confirmation |
-| `paid` | Paiement reussi via callback ou verifi |
-| `failed` | Paiement echoue (communique via callback) |
+| `paid`    | Paiement reussi via callback ou verifi      |
+| `failed`  | Paiement echoue (communique via callback)   |
 
 **Tache automatique:**
 

@@ -17,6 +17,7 @@ export function leaseActions(status: LeaseStatus) {
 
 export function paymentActions(status: PaymentStatus) {
   return {
+    canConfirm: status === "pending",
     canRetry: status === "failed",
     canRefund: status === "paid",
     canSendReminder: status === "pending",

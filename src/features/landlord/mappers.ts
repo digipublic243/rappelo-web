@@ -79,16 +79,33 @@ export function mapApiUnitToDomain(unit: ApiUnit, tenantName?: string): Unit {
 }
 
 export function mapApiLeaseToDomain(lease: ApiLease): Lease {
+  const rentAmount = Number(lease.monthly_rent ?? 0);
+  const cadence =
+    lease.payment_frequency === "quarterly"
+      ? "quarter"
+      : lease.payment_frequency === "semi_annual"
+        ? "semiAnnual"
+        : lease.payment_frequency === "annual"
+          ? "year"
+          : "month";
+
   return {
     id: stringifyId(lease.id),
+    lease_number: lease.lease_number ?? stringifyId(lease.id),
     tenantId: stringifyId(lease.tenant),
     propertyId: "",
     unitId: stringifyId(lease.unit),
     startDate: lease.start_date,
     endDate: lease.end_date,
     status: lease.status,
-    rentAmount: lease.monthly_rent,
-    cadence: "month",
+    rentAmount: Number.isFinite(rentAmount) ? rentAmount : 0,
+    cadence,
+    securityDeposit:
+      lease.security_deposit != null ? Number(lease.security_deposit) : undefined,
+    securityDepositMonthsTaken:
+      lease.security_deposit_months_taken != null
+        ? Number(lease.security_deposit_months_taken)
+        : undefined,
   };
 }
 
@@ -122,7 +139,7 @@ export function mapApiBookingToDomain(booking: ApiBooking): Booking {
 }
 
 function mapPaymentMethod(method?: ApiPaymentMethod): Payment["method"] {
-  if (method === "mobile_money") {
+  if (method === "mobile_money" || method === "easypay") {
     return "easypay";
   }
 
@@ -130,14 +147,29 @@ function mapPaymentMethod(method?: ApiPaymentMethod): Payment["method"] {
 }
 
 export function mapApiPaymentToDomain(payment: ApiPayment): Payment {
+  const resolvedTenantId = payment.tenant_id ?? payment.tenant;
+
   return {
     id: stringifyId(payment.id),
-    tenantId: stringifyId(payment.tenant),
+    tenantId: stringifyId(resolvedTenantId),
     leaseId: stringifyId(payment.lease),
+    paymentLabel: payment.payment_label ?? undefined,
     unitId: "",
     amount: payment.amount,
+    currency: payment.currency ?? undefined,
     dueDate: payment.due_date,
     paidAt: payment.paid_at ?? undefined,
+    createdAt: payment.created_at ?? undefined,
+    transactionReference: payment.transaction_reference ?? undefined,
+    notes: payment.notes ?? undefined,
+    easypayReferenceId: payment.easypay_reference_id ?? undefined,
+    easypayTransactionId: payment.easypay_transaction_id ?? undefined,
+    easypayProvider: payment.easypay_provider ?? undefined,
+    easypayAttempts:
+      payment.easypay_attempts != null
+        ? Number(payment.easypay_attempts)
+        : undefined,
+    easypayLastCheck: payment.easypay_last_check ?? undefined,
     method: mapPaymentMethod(payment.payment_method),
     status: payment.status,
   };
@@ -149,6 +181,9 @@ export function mapTenantAggregateToDomain(args: {
   leases: Lease[];
   payments: Payment[];
 }): Tenant {
+  const firstDefinedText = (...values: Array<string | null | undefined>) =>
+    values.find((value) => typeof value === "string" && value.trim().length > 0);
+
   const latestLease =
     [...args.leases].sort((left, right) => right.endDate.localeCompare(left.endDate))[0];
   const latestPayment =
@@ -156,9 +191,26 @@ export function mapTenantAggregateToDomain(args: {
 
   return {
     id: stringifyId(args.profile.id),
-    fullName: args.user?.full_name ?? "Tenant Profile",
-    email: args.user?.email ?? "No email on file",
-    phone: args.user?.phone_number ?? "N/A",
+    fullName:
+      firstDefinedText(
+        args.user?.full_name,
+        args.profile.user?.full_name,
+        args.profile.user_full_name,
+      ) ?? "Profil locataire",
+    email:
+      firstDefinedText(
+        args.user?.email ?? undefined,
+        args.profile.user?.email ?? undefined,
+        args.profile.user_email ?? undefined,
+        args.profile.alternate_email ?? undefined,
+      ) ?? "Aucun email renseigné",
+    phone:
+      firstDefinedText(
+        args.user?.phone_number,
+        args.profile.user?.phone_number,
+        args.profile.user_phone_number,
+        args.profile.alternate_phone,
+      ) ?? "N/A",
     propertyId: latestLease?.propertyId ?? "",
     unitId: latestLease?.unitId ?? "",
     leaseStatus: latestLease?.status ?? "draft",

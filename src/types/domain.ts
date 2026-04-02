@@ -3,8 +3,20 @@ export type Role = "landlord" | "tenant";
 export type UnitStatus = "vacant" | "occupied" | "reserved" | "maintenance";
 export type PaymentStatus = "pending" | "paid" | "failed" | "refunded";
 export type LeaseStatus = "draft" | "active" | "terminated" | "expired";
-export type BookingStatus = "new" | "in_review" | "approved" | "rejected" | "waitlisted";
-export type PricingCadence = "day" | "week" | "month" | "custom";
+export type BookingStatus =
+  | "new"
+  | "in_review"
+  | "approved"
+  | "rejected"
+  | "waitlisted";
+export type PricingCadence =
+  | "day"
+  | "week"
+  | "month"
+  | "quarter"
+  | "semiAnnual"
+  | "year"
+  | "custom";
 export type PaymentMethod = "cash" | "easypay";
 
 export interface Property {
@@ -54,6 +66,7 @@ export interface Booking {
 
 export interface Lease {
   id: string;
+  lease_number: string;
   tenantId: string;
   propertyId: string;
   unitId: string;
@@ -62,16 +75,29 @@ export interface Lease {
   status: LeaseStatus;
   rentAmount: number;
   cadence: PricingCadence;
+  securityDeposit?: number;
+  securityDepositMonthsTaken?: number;
 }
 
 export interface Payment {
   id: string;
   tenantId: string;
+  tenantName?: string;
   leaseId?: string;
+  paymentLabel?: string;
   unitId: string;
   amount: number;
+  currency?: string;
   dueDate: string;
   paidAt?: string;
+  createdAt?: string;
+  transactionReference?: string;
+  notes?: string;
+  easypayReferenceId?: string;
+  easypayTransactionId?: string;
+  easypayProvider?: string;
+  easypayAttempts?: number;
+  easypayLastCheck?: string;
   method: PaymentMethod;
   status: PaymentStatus;
 }

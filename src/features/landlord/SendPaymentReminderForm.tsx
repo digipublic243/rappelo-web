@@ -16,14 +16,14 @@ interface SendPaymentReminderFormProps {
 
 export function SendPaymentReminderForm({ payments, tenants }: SendPaymentReminderFormProps) {
   const [state, formAction, pending] = useActionState(sendPaymentReminderAction, initialPaymentWorkflowActionState);
-  useSyncGlobalApiError(state.error, { title: "Reminder Dispatch Error", scope: "payments" });
+  useSyncGlobalApiError(state.error, { title: "Erreur de rappel de paiement", scope: "payments" });
   const remindablePayments = payments.filter((payment) => payment.status === "pending");
 
   return (
     <AppForm action={formAction} className="mt-5 space-y-4">
       <FormField
         defaultValue={remindablePayments[0]?.id}
-        label="Payment"
+        label="Paiement"
         name="paymentId"
         options={remindablePayments.map((payment) => {
           const tenant = tenants.find((item) => item.id === payment.tenantId);
@@ -35,17 +35,17 @@ export function SendPaymentReminderForm({ payments, tenants }: SendPaymentRemind
         type="select"
       />
       <FormField
-        label="Reminder Style"
+        label="Ton du rappel"
         name="reminder_style"
         options={[
-          { label: "Soft Reminder", value: "soft" },
-          { label: "Firm Reminder", value: "firm" },
-          { label: "Final Notice", value: "final" },
+          { label: "Relance douce", value: "soft" },
+          { label: "Relance ferme", value: "firm" },
+          { label: "Dernier avis", value: "final" },
         ]}
         type="select"
       />
       <FormField
-        defaultValue="We're reaching out because we have not yet received your scheduled payment. Please review your balance and settle it as soon as possible."
+        defaultValue="Nous vous contactons car votre paiement prévu n’a pas encore été enregistré. Merci de régulariser votre situation dans les meilleurs délais."
         label="Message"
         name="message"
         rows={6}
@@ -66,7 +66,7 @@ export function SendPaymentReminderForm({ payments, tenants }: SendPaymentRemind
       <FormInlineSuccess message={state.message} />
 
       <FormSubmitButton className="rounded-lg px-6 text-sm" disabled={pending}>
-        {pending ? "Sending..." : "Send Reminder"}
+        {pending ? "Envoi..." : "Envoyer le rappel"}
       </FormSubmitButton>
     </AppForm>
   );

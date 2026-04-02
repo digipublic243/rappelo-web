@@ -1,28 +1,39 @@
+import Link from "next/link";
 import { TenantPageFrame } from "@/features/tenant/TenantPageFrame";
 import { PageIntro } from "@/components/ui/PageIntro";
 import { SurfaceCard } from "@/components/shared/StitchPrimitives";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { formatDate, formatMoney, paymentStatusLabel } from "@/lib/format";
+import { formatDate, formatMoney, formatPaymentMethod, paymentStatusLabel } from "@/lib/format";
 import { getTenantPaymentsData } from "@/features/tenant/api";
 import { DataStateNotice } from "@/components/ui/DataStateNotice";
 
 export default async function TenantPaymentsPage() {
   const { payments, meta } = await getTenantPaymentsData();
+  const upcoming = payments
+    .filter((payment) => payment.status === "pending")
+    .reduce((sum, payment) => sum + payment.amount, 0);
+  const paidYtd = payments
+    .filter((payment) => payment.status === "paid")
+    .reduce((sum, payment) => sum + payment.amount, 0);
+  const refunds = payments
+    .filter((payment) => payment.status === "refunded")
+    .reduce((sum, payment) => sum + payment.amount, 0);
+  const methods = Array.from(new Set(payments.map((payment) => payment.method)));
 
   return (
     <TenantPageFrame currentPath="/tenant/payments">
       <DataStateNotice meta={meta} />
       <PageIntro
-        title="Financial Ledger"
-        description="Tenant-facing billing summary and payment history with the same tonal hierarchy as Stitch."
+        title="Paiements"
+        description="Consultez vos échéances, les libellés de période générés par le backend et l’historique de règlement."
       />
 
       <section className="grid gap-4 md:grid-cols-4">
         {[
-          ["Upcoming", "0$"],
-          ["Paid YTD", "0$"],
-          ["Refunds", "0$"],
-          ["Methods", "Cash + EasyPay"],
+          ["À venir", formatMoney(upcoming)],
+          ["Payé", formatMoney(paidYtd)],
+          ["Remboursé", formatMoney(refunds)],
+          ["Méthodes", methods.length > 0 ? methods.join(" + ").toUpperCase() : "N/A"],
         ].map(([label, value]) => (
           <SurfaceCard key={label} className="p-5">
             <p className="text-sm font-medium text-[#566166]">{label}</p>
@@ -33,12 +44,12 @@ export default async function TenantPaymentsPage() {
 
       <SurfaceCard className="overflow-hidden">
         <div className="border-b border-[#e8eff3] px-6 py-5">
-          <h2 className="text-xl font-bold text-[#2a3439]">Payment History</h2>
+          <h2 className="text-xl font-bold text-[#2a3439]">Historique des paiements</h2>
         </div>
         <table className="w-full min-w-[860px]">
           <thead className="bg-[#f0f4f7] text-left">
             <tr>
-              {["Payment Date", "Amount", "Method", "Status", "Lease"].map(
+              {["Période / date", "Montant", "Mode", "Statut", "Bail", "Action"].map(
                 (label) => (
                   <th
                     key={label}
@@ -54,13 +65,16 @@ export default async function TenantPaymentsPage() {
             {payments.map((payment) => (
               <tr key={payment.id} className="border-t border-[#e8eff3]">
                 <td className="px-8 py-5 text-sm text-[#566166]">
-                  {formatDate(payment.paidAt ?? payment.dueDate)}
+                  <p>{formatDate(payment.paidAt ?? payment.dueDate)}</p>
+                  <p className="mt-1 text-xs text-[#9a9d9f]">
+                    {payment.paymentLabel ?? `Paiement à partir du ${payment.dueDate}`}
+                  </p>
                 </td>
                 <td className="px-8 py-5 text-sm font-semibold text-[#2a3439]">
                   {formatMoney(payment.amount)}
                 </td>
-                <td className="px-8 py-5 text-sm uppercase text-[#566166]">
-                  {payment.method}
+                <td className="px-8 py-5 text-sm text-[#566166]">
+                  {formatPaymentMethod(payment.method)}
                 </td>
                 <td className="px-8 py-5">
                   <StatusBadge
@@ -69,7 +83,25 @@ export default async function TenantPaymentsPage() {
                   />
                 </td>
                 <td className="px-8 py-5 text-sm text-[#566166]">
-                  {payment.leaseId ?? "N/A"}
+                  {payment.leaseId ?? "Aucun bail"}
+                </td>
+                <td className="px-8 py-5 text-sm text-[#545f73]">
+                  <div className="flex flex-col gap-2">
+                    {payment.status === "pending" ? (
+                      <Link
+                        className="font-semibold text-[#2f5bd3]"
+                        href={`/tenant/payments/${payment.id}`}
+                      >
+                        Payer via EasyPay
+                      </Link>
+                    ) : null}
+                    <Link
+                      className="font-semibold"
+                      href={`/tenant/payments/${payment.id}`}
+                    >
+                      Voir le détail
+                    </Link>
+                  </div>
                 </td>
               </tr>
             ))}

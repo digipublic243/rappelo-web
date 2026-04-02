@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { TenantPageFrame } from "@/features/tenant/TenantPageFrame";
 import { PageIntro } from "@/components/ui/PageIntro";
-import { SurfaceCard, ActionButton } from "@/components/shared/StitchPrimitives";
+import { SurfaceCard, actionButtonClassName } from "@/components/shared/StitchPrimitives";
 import { formatDate, formatMoney, paymentStatusLabel } from "@/lib/format";
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
 import { getTenantDashboardVm } from "@/features/tenant/api";
@@ -42,10 +43,10 @@ export default async function TenantDashboardPage() {
         title={`Bon retour, ${dashboard.profileName.split(" ")[0]}`}
         description={`Voici l’essentiel de votre situation pour ${dashboard.currentProperty?.name ?? "votre résidence actuelle"}.`}
         action={
-          <ActionButton>
+          <Link className={actionButtonClassName({})} href="/tenant/book-stay">
             <MaterialIcon name="add" className="text-[18px]" />
             Réserver un autre séjour
-          </ActionButton>
+          </Link>
         }
       />
 
@@ -84,9 +85,9 @@ export default async function TenantDashboardPage() {
               </div>
             ))}
             <div className="flex items-center justify-end">
-              <button className="text-sm font-bold text-[#545f73]" type="button">
+              <Link className="text-sm font-bold text-[#545f73]" href="/tenant/leases">
                 Détails
-              </button>
+              </Link>
             </div>
           </div>
         </SurfaceCard>
@@ -105,7 +106,12 @@ export default async function TenantDashboardPage() {
           <p className="mt-4 text-sm font-medium text-[#475266]">
             {nextPayment ? `À régler avant le ${formatDate(nextPayment.dueDate)}` : "Aucun paiement à venir"}
           </p>
-          <ActionButton className="mt-8 w-full">Payer maintenant</ActionButton>
+          <Link
+            className={actionButtonClassName({ className: "mt-8 w-full" })}
+            href="/tenant/payments"
+          >
+            Payer maintenant
+          </Link>
           <p className="mt-3 text-center text-[11px] text-[#475266]">
             {dashboard.automaticPaymentsEnabled ? "Les paiements automatiques sont activés pour cette unité." : "Les paiements automatiques ne sont pas encore activés."}
           </p>

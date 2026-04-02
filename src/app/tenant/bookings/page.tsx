@@ -1,11 +1,13 @@
+import Link from "next/link";
 import { TenantPageFrame } from "@/features/tenant/TenantPageFrame";
 import { PageIntro } from "@/components/ui/PageIntro";
-import { SurfaceCard } from "@/components/shared/StitchPrimitives";
+import { SurfaceCard, actionButtonClassName } from "@/components/shared/StitchPrimitives";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { bookingStatusLabel, formatDate, formatMoney } from "@/lib/format";
 import { getTenantBookingsData } from "@/features/tenant/api";
 import { DataStateNotice } from "@/components/ui/DataStateNotice";
+import { MaterialIcon } from "@/components/ui/MaterialIcon";
 
 export default async function TenantBookingsPage() {
   const { bookings, meta } = await getTenantBookingsData();
@@ -13,7 +15,16 @@ export default async function TenantBookingsPage() {
   return (
     <TenantPageFrame currentPath="/tenant/bookings">
       <DataStateNotice meta={meta} />
-      <PageIntro title="My Stays" description="Booking requests stay separated from leases and remain filterable by status." />
+      <PageIntro
+        title="Mes réservations"
+        description="Les réservations restent séparées des baux et restent suivies par statut."
+        action={
+          <Link className={actionButtonClassName({})} href="/tenant/book-stay">
+            <MaterialIcon name="add" className="text-[18px]" />
+            Nouvelle réservation
+          </Link>
+        }
+      />
 
       <div className="flex gap-3 overflow-auto pb-2">
         {["All Bookings", "Upcoming", "In Review", "Archived"].map((label, index) => (
@@ -29,8 +40,8 @@ export default async function TenantBookingsPage() {
 
       {bookings?.length === 0 ? (
         <EmptyState
-          title="No stays found"
-          description="Your booking requests will appear here once they are created in the live booking API."
+          title="Aucune réservation"
+          description="Vos demandes de réservation apparaîtront ici dès qu’elles seront créées via le flow connecté au backend."
         />
       ) : (
         <div className="grid gap-6 md:grid-cols-2">

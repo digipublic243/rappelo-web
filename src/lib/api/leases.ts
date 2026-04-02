@@ -8,6 +8,15 @@ import type {
   ApiPaginatedResponse,
 } from "@/types/api";
 
+export interface ApiLeasePaymentScheduleItem {
+  id?: string | number;
+  due_date?: string;
+  amount?: number | string;
+  status?: string;
+  label?: string;
+  name?: string;
+}
+
 function unwrapListResponse<T>(response: ApiPaginatedResponse<T> | T[]) {
   return Array.isArray(response) ? response : response.results;
 }
@@ -52,4 +61,11 @@ export function renewLease(id: string | number, payload: ApiLeaseRenewRequest, t
     token,
     body: payload,
   });
+}
+
+export function getLeasePaymentSchedule(id: string | number, token: string) {
+  return apiRequest<ApiLeasePaymentScheduleItem[]>(
+    `${API_PREFIX}/leases/leases/${id}/payment_schedule/`,
+    { token },
+  );
 }

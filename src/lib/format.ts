@@ -4,7 +4,7 @@ import {
   PAYMENT_STATUS_LABELS,
   UNIT_STATUS_LABELS,
 } from "@/constants/statuses";
-import type { BookingStatus, LeaseStatus, PaymentStatus, PricingCadence, UnitStatus } from "@/types/domain";
+import type { BookingStatus, LeaseStatus, PaymentMethod, PaymentStatus, PricingCadence, UnitStatus } from "@/types/domain";
 
 export function formatMoney(amount: number): string {
   return new Intl.NumberFormat("fr-CD", {
@@ -27,6 +27,9 @@ export function formatCadence(cadence: PricingCadence): string {
     day: "Par jour",
     week: "Par semaine",
     month: "Par mois",
+    quarter: "Par trimestre",
+    semiAnnual: "Par semestre",
+    year: "Par an",
     custom: "Cadence personnalisée",
   };
 
@@ -43,6 +46,15 @@ export function unitStatusLabel(status: UnitStatus): string {
 
 export function paymentStatusLabel(status: PaymentStatus): string {
   return PAYMENT_STATUS_LABELS[status];
+}
+
+export function formatPaymentMethod(method: PaymentMethod): string {
+  const labels: Record<PaymentMethod, string> = {
+    cash: "Espèces / virement",
+    easypay: "EasyPay",
+  };
+
+  return labels[method];
 }
 
 export function leaseStatusLabel(status: LeaseStatus): string {

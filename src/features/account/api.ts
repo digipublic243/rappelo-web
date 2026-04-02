@@ -62,7 +62,8 @@ export async function getCurrentAccountProfileVm(role: Role) {
       getTenantDashboardVm(),
       listTenantProfiles(tokens.accessToken).catch(() => null),
     ]);
-    const tenantProfile = profiles?.find?.((profile) => profile.user === user.id) ?? null;
+    const tenantProfile =
+      profiles?.find?.((profile) => profile.user?.id === user.id) ?? null;
 
     return {
       user,

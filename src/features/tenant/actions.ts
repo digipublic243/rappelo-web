@@ -2,8 +2,19 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/api/accounts";
+import { formatFormApiError } from "@/lib/api/errors";
+import { initiateEasyPay, checkEasyPayStatus } from "@/lib/api/payments";
+import { getSessionTokens } from "@/lib/api/session";
 import { submitTenantBooking } from "@/features/tenant/api";
 import type { BookingRequestActionState } from "@/features/tenant/booking-state";
+import type { TenantEasyPayActionState } from "@/features/tenant/payment-easypay-state";
+import { toBackendPhoneNumber } from "@/features/auth/phone";
+
+async function requireAccessToken() {
+  const tokens = await getSessionTokens();
+  return tokens?.accessToken ?? null;
+}
 
 export async function submitTenantBookingAction(
   _: BookingRequestActionState,
@@ -14,7 +25,10 @@ export async function submitTenantBookingAction(
   const checkOut = String(formData.get("check_out") ?? "").trim();
 
   if (!unitId || !checkIn || !checkOut) {
-    return { error: "Unit, check-in, and check-out are required." };
+    return {
+      error: "Unit, check-in, and check-out are required.",
+      errorDetails: ["unit: required", "check in: required", "check out: required"],
+    };
   }
 
   const adultsCount = Number(String(formData.get("adults_count") ?? "1").trim() || "1");
@@ -44,10 +58,114 @@ export async function submitTenantBookingAction(
   });
 
   if (!result.ok) {
-    return { error: result.error };
+    return { error: result.error, errorDetails: result.errorDetails };
   }
 
   revalidatePath("/tenant/bookings");
   revalidatePath("/tenant/dashboard");
   redirect("/tenant/bookings");
+}
+
+export async function initiateTenantEasyPayAction(
+  _: TenantEasyPayActionState,
+  formData: FormData,
+): Promise<TenantEasyPayActionState> {
+  const accessToken = await requireAccessToken();
+  if (!accessToken) {
+    return {
+      error: "Votre session a expiré. Reconnectez-vous pour lancer le paiement.",
+    };
+  }
+
+  const paymentId = String(formData.get("paymentId") ?? "").trim();
+  if (!paymentId) {
+    return {
+      error: "Aucun paiement n’a été sélectionné.",
+      errorDetails: ["payment: requis"],
+    };
+  }
+
+  const user = await getCurrentUser(accessToken).catch(() => null);
+  const phoneNumber = toBackendPhoneNumber(user?.phone_number ?? "");
+
+  if (!phoneNumber) {
+    return {
+      error: "Aucun numéro de téléphone valide n’est associé à votre compte.",
+      errorDetails: ["phone number: un numéro congolais valide est requis"],
+    };
+  }
+
+  try {
+    const response = await initiateEasyPay(
+      paymentId,
+      {
+        phone_number: phoneNumber,
+      },
+      accessToken,
+    );
+
+    revalidatePath("/tenant/payments");
+    revalidatePath(`/tenant/payments/${paymentId}`);
+    revalidatePath("/tenant/dashboard");
+
+    return {
+      message:
+        response.message ??
+        "La demande EasyPay a été envoyée. Confirmez-la depuis votre téléphone.",
+    };
+  } catch (error) {
+    const formatted = formatFormApiError(
+      error,
+      "Impossible de lancer la collecte EasyPay pour ce paiement.",
+    );
+
+    return {
+      error: formatted.message,
+      errorDetails: formatted.details,
+    };
+  }
+}
+
+export async function checkTenantEasyPayStatusAction(
+  _: TenantEasyPayActionState,
+  formData: FormData,
+): Promise<TenantEasyPayActionState> {
+  const accessToken = await requireAccessToken();
+  if (!accessToken) {
+    return {
+      error: "Votre session a expiré. Reconnectez-vous pour vérifier le paiement.",
+    };
+  }
+
+  const paymentId = String(formData.get("paymentId") ?? "").trim();
+  if (!paymentId) {
+    return {
+      error: "Aucun paiement n’a été sélectionné.",
+      errorDetails: ["payment: requis"],
+    };
+  }
+
+  try {
+    const response = await checkEasyPayStatus(paymentId, accessToken);
+
+    revalidatePath("/tenant/payments");
+    revalidatePath(`/tenant/payments/${paymentId}`);
+    revalidatePath("/tenant/dashboard");
+
+    return {
+      message: response.status
+        ? `Statut EasyPay synchronisé : ${response.status}.`
+        : "Le statut EasyPay a été synchronisé avec le serveur.",
+    };
+  } catch (error) {
+    const formatted = formatFormApiError(
+      error,
+      "Impossible de vérifier le statut EasyPay pour ce paiement.",
+    );
+
+    return {
+      error: formatted.message,
+      errorDetails: formatted.details,
+    };
+  }
 }

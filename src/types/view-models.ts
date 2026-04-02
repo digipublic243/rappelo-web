@@ -83,6 +83,13 @@ export interface LeaseDetailVm {
   lease: Lease;
   tenant?: Tenant;
   unit?: Unit;
+  paymentSchedule?: Array<{
+    id: string;
+    dueDate: string;
+    amount: number;
+    status?: string;
+    label: string;
+  }>;
   meta: DataMeta;
 }
 
@@ -96,6 +103,7 @@ export interface BookingDetailVm {
 
 export interface PaymentsPageVm {
   payments: Payment[];
+  overduePayments: Payment[];
   tenants: Tenant[];
   leases: Lease[];
   summary?: {
@@ -106,6 +114,15 @@ export interface PaymentsPageVm {
     countPending: number;
     countOverdue: number;
   };
+  meta: DataMeta;
+}
+
+export interface PaymentDetailVm {
+  payment: Payment;
+  tenant?: Tenant;
+  lease?: Lease;
+  property?: Property;
+  unit?: Unit;
   meta: DataMeta;
 }
 
