@@ -4,34 +4,51 @@ import { redirect } from "next/navigation";
 import { clearSessionTokens, setSessionTokens } from "@/lib/api/session";
 import { createUser, login, requestOtp, verifyOtp } from "@/lib/api/auth";
 import { getCurrentUser, getShellProfile } from "@/lib/api/accounts";
+import { formatFormApiError } from "@/lib/api/errors";
 import type { AuthActionState } from "@/features/auth/state";
 import { toBackendPhoneNumber } from "@/features/auth/phone";
 
 async function resolveRedirectPath(accessToken: string) {
   const shellProfile = await getShellProfile(accessToken).catch(() => null);
-  const role = shellProfile?.role ?? (await getCurrentUser(accessToken).catch(() => null))?.role;
+  const role =
+    shellProfile?.role ??
+    (await getCurrentUser(accessToken).catch(() => null))?.role;
   return role === "tenant" ? "/tenant/dashboard" : "/landlord/dashboard";
 }
 
-export async function loginAction(_: AuthActionState, formData: FormData): Promise<AuthActionState> {
+export async function loginAction(
+  _: AuthActionState,
+  formData: FormData,
+): Promise<AuthActionState> {
   const rawPhoneNumber = String(formData.get("phone_number") ?? "").trim();
   const password = String(formData.get("password") ?? "").trim();
   const phoneNumber = toBackendPhoneNumber(rawPhoneNumber);
 
   if (!phoneNumber || !password) {
-    return { error: "Phone number must contain the last 9 digits and password is required." };
+    return {
+      error:
+        "Le numéro doit contenir les 9 derniers chiffres et le mot de passe est requis.",
+    };
   }
 
   let redirectPath: string | null = null;
 
   try {
     const tokenPair = await login({ phone_number: phoneNumber, password });
-    await setSessionTokens({ accessToken: tokenPair.access, refreshToken: tokenPair.refresh });
+    await setSessionTokens({
+      accessToken: tokenPair.access,
+      refreshToken: tokenPair.refresh,
+    });
     redirectPath = await resolveRedirectPath(tokenPair.access);
   } catch (error) {
     await clearSessionTokens();
+    const formattedError = formatFormApiError(
+      error,
+      "Impossible de se connecter pour le moment.",
+    );
     return {
-      error: error instanceof Error ? error.message : "Unable to sign in right now.",
+      error: formattedError.message,
+      errorDetails: formattedError.details,
     };
   }
 
@@ -46,7 +63,11 @@ export async function requestTenantOtpAction(
   const phoneNumber = toBackendPhoneNumber(rawPhoneNumber);
 
   if (!phoneNumber) {
-    return { error: "Phone number must contain the last 9 digits.", step: "request", phoneNumber: rawPhoneNumber };
+    return {
+      error: "Le numéro doit contenir les 9 derniers chiffres.",
+      step: "request",
+      phoneNumber: rawPhoneNumber,
+    };
   }
 
   try {
@@ -57,11 +78,16 @@ export async function requestTenantOtpAction(
       message:
         response.message ??
         response.detail ??
-        "OTP requested successfully. In development, the backend prints the code in the server console.",
+        "Code OTP demandé avec succès. En développement, le serveur l’affiche dans sa console.",
     };
   } catch (error) {
+    const formattedError = formatFormApiError(
+      error,
+      "Impossible de demander un code OTP pour le moment.",
+    );
     return {
-      error: error instanceof Error ? error.message : "Unable to request OTP right now.",
+      error: formattedError.message,
+      errorDetails: formattedError.details,
       step: "request",
       phoneNumber: rawPhoneNumber,
     };
@@ -77,19 +103,29 @@ export async function verifyTenantOtpAction(
   const phoneNumber = toBackendPhoneNumber(rawPhoneNumber);
 
   if (!phoneNumber || !code) {
-    return { error: "Phone number must contain the last 9 digits and OTP code is required.", step: "verify", phoneNumber: rawPhoneNumber };
+    return {
+      error:
+        "Le numéro doit contenir les 9 derniers chiffres et le code OTP est requis.",
+      step: "verify",
+      phoneNumber: rawPhoneNumber,
+    };
   }
 
   let redirectPath: string | null = null;
 
   try {
     const tokenPair = await verifyOtp({ phone_number: phoneNumber, code });
-    await setSessionTokens({ accessToken: tokenPair.access, refreshToken: tokenPair.refresh });
+    await setSessionTokens({
+      accessToken: tokenPair.access,
+      refreshToken: tokenPair.refresh,
+    });
     redirectPath = await resolveRedirectPath(tokenPair.access);
   } catch (error) {
     await clearSessionTokens();
+    const formattedError = formatFormApiError(error, "Code OTP invalide.");
     return {
-      error: error instanceof Error ? error.message : "Invalid OTP code.",
+      error: formattedError.message,
+      errorDetails: formattedError.details,
       step: "verify",
       phoneNumber: rawPhoneNumber,
     };
@@ -98,7 +134,10 @@ export async function verifyTenantOtpAction(
   redirect(redirectPath);
 }
 
-export async function landlordSignUpAction(_: AuthActionState, formData: FormData): Promise<AuthActionState> {
+export async function landlordSignUpAction(
+  _: AuthActionState,
+  formData: FormData,
+): Promise<AuthActionState> {
   const rawPhoneNumber = String(formData.get("phone_number") ?? "").trim();
   const password = String(formData.get("password") ?? "").trim();
   const passwordConfirm = String(formData.get("password2") ?? "").trim();
@@ -107,11 +146,14 @@ export async function landlordSignUpAction(_: AuthActionState, formData: FormDat
   const phoneNumber = toBackendPhoneNumber(rawPhoneNumber);
 
   if (!phoneNumber || !password || !passwordConfirm) {
-    return { error: "Phone number must contain the last 9 digits and both password fields are required." };
+    return {
+      error:
+        "Le numéro doit contenir les 9 derniers chiffres et les deux champs mot de passe sont requis.",
+    };
   }
 
   if (password !== passwordConfirm) {
-    return { error: "Passwords do not match." };
+    return { error: "Les mots de passe ne correspondent pas." };
   }
 
   let redirectPath: string | null = null;
@@ -127,11 +169,19 @@ export async function landlordSignUpAction(_: AuthActionState, formData: FormDat
     });
 
     const tokenPair = await login({ phone_number: phoneNumber, password });
-    await setSessionTokens({ accessToken: tokenPair.access, refreshToken: tokenPair.refresh });
+    await setSessionTokens({
+      accessToken: tokenPair.access,
+      refreshToken: tokenPair.refresh,
+    });
     redirectPath = "/landlord/dashboard";
   } catch (error) {
+    const formattedError = formatFormApiError(
+      error,
+      "Impossible de créer le compte pour le moment.",
+    );
     return {
-      error: error instanceof Error ? error.message : "Unable to create the account right now.",
+      error: formattedError.message,
+      errorDetails: formattedError.details,
     };
   }
 

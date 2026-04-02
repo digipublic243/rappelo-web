@@ -3,20 +3,128 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { confirmBooking, rejectBooking } from "@/lib/api/bookings";
-import { activateLease, renewLease, terminateLease } from "@/lib/api/leases";
-import { createProperty, updateProperty, updateUnitStatus } from "@/lib/api/properties";
-import { createPayment, generatePaymentLink, sendPaymentReminders } from "@/lib/api/payments";
+import {
+  activateLease,
+  createLease,
+  renewLease,
+  terminateLease,
+} from "@/lib/api/leases";
+import {
+  createProperty,
+  createUnit,
+  updateProperty,
+  updateUnitStatus,
+} from "@/lib/api/properties";
+import {
+  createPayment,
+  generatePaymentLink,
+  sendPaymentReminders,
+} from "@/lib/api/payments";
+import { createTenantProfile } from "@/lib/api/tenants";
+import { buildGlobalApiError, formatFormApiError } from "@/lib/api/errors";
 import { getSessionTokens } from "@/lib/api/session";
-import type { ApiPropertyStatus, ApiPropertyUpsertRequest, ApiUnitStatus } from "@/types/api";
+import type {
+  ApiEmploymentStatus,
+  ApiLeaseCreateRequest,
+  ApiPropertyStatus,
+  ApiPropertyUpsertRequest,
+  ApiRentalPeriodicity,
+  ApiUnitCreateRequest,
+  ApiUnitStatus,
+} from "@/types/api";
+import type { LeaseEditorActionState } from "@/features/landlord/lease-editor-state";
 import type { PropertyEditorActionState } from "@/features/landlord/property-editor-state";
 import type { PaymentWorkflowActionState } from "@/features/landlord/payment-workflow-state";
+import type { TenantEditorActionState } from "@/features/landlord/tenant-editor-state";
+import type { UnitEditorActionState } from "@/features/landlord/unit-editor-state";
+import { toBackendPhoneNumber } from "@/features/auth/phone";
 
 async function requireAccessToken() {
   const tokens = await getSessionTokens();
   return tokens?.accessToken ?? null;
 }
 
-function toOptionalNumber(value: FormDataEntryValue | null) {
+function buildPropertyPayload(formData: FormData): ApiPropertyUpsertRequest {
+  const status = String(
+    formData.get("status") ?? "active",
+  ).trim() as ApiPropertyStatus;
+  const totalUnitsRaw = String(formData.get("total_units") ?? "").trim();
+  const totalUnits = Number(totalUnitsRaw);
+  const city = String(formData.get("city") ?? "kinshasa").trim();
+  const country = String(formData.get("country") ?? "RD CONGO").trim();
+  const addressContent = String(formData.get("address_content") ?? "").trim();
+
+  return {
+    name: String(formData.get("name") ?? "").trim(),
+    property_type: String(formData.get("property_type") ?? "apartment").trim(),
+    status,
+    address_content: addressContent,
+    city,
+    country,
+    description: String(formData.get("description") ?? "").trim() || null,
+    total_units: Number.isFinite(totalUnits) ? totalUnits : 0,
+    is_active: status === "active" || status === "maintenance",
+  };
+}
+
+function validatePropertyPayload(payload: ApiPropertyUpsertRequest) {
+  const errors: string[] = [];
+
+  if (!payload.name) {
+    errors.push("Property name is required.");
+  }
+
+  if (!payload.address_content) {
+    errors.push("Address is required.");
+  }
+
+  if (!payload.city) {
+    errors.push("City is required.");
+  }
+
+  if (!payload.country) {
+    errors.push("Country is required.");
+  }
+
+  if (!payload.total_units || payload.total_units < 1) {
+    errors.push("Total units must be at least 1.");
+  }
+
+  return errors;
+}
+
+function buildUnitPayload(formData: FormData): ApiUnitCreateRequest {
+  const property = String(formData.get("property") ?? "").trim();
+  const rent = Number(String(formData.get("rent") ?? "").trim() || "0");
+
+  return {
+    property,
+    unit_number: String(formData.get("unit_number") ?? "").trim(),
+    unit_type:
+      String(formData.get("unit_type") ?? "studio").trim() || undefined,
+    rent: Number.isFinite(rent) ? rent : 0,
+    currency: String(formData.get("currency") ?? "USD").trim() || "USD",
+    rental_periodicity: (String(
+      formData.get("rental_periodicity") ?? "mensuel",
+    ).trim() || "mensuel") as ApiRentalPeriodicity,
+    description: String(formData.get("description") ?? "").trim() || null,
+    is_furnished: String(formData.get("is_furnished") ?? "").trim() === "true",
+  };
+}
+
+function validateUnitPayload(payload: ApiUnitCreateRequest) {
+  if (!payload.property || !payload.unit_number || !payload.unit_type) {
+    return "Le bien, le numéro d’unité et le type d’unité sont requis.";
+  }
+
+  if (payload.rent <= 0) {
+    return "Le loyer doit être supérieur à zéro.";
+  }
+
+  return null;
+}
+
+function toOptionalDecimal(value: FormDataEntryValue | null) {
   const raw = String(value ?? "").trim();
   if (!raw) {
     return null;
@@ -26,41 +134,127 @@ function toOptionalNumber(value: FormDataEntryValue | null) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-function buildPropertyPayload(formData: FormData): ApiPropertyUpsertRequest {
-  const status = String(formData.get("status") ?? "active").trim() as ApiPropertyStatus;
-  const totalUnitsRaw = String(formData.get("total_units") ?? "").trim();
-  const totalUnits = Number(totalUnitsRaw);
-
+function buildLeasePayload(formData: FormData): ApiLeaseCreateRequest {
   return {
-    name: String(formData.get("name") ?? "").trim(),
-    property_type: String(formData.get("property_type") ?? "apartment").trim(),
-    status,
-    address_line_1: String(formData.get("address_line_1") ?? "").trim(),
-    address_line_2: String(formData.get("address_line_2") ?? "").trim() || null,
-    city: String(formData.get("city") ?? "").trim(),
-    state: String(formData.get("state") ?? "").trim(),
-    postal_code: String(formData.get("postal_code") ?? "").trim(),
-    country: String(formData.get("country") ?? "").trim(),
-    description: String(formData.get("description") ?? "").trim() || null,
-    year_built: toOptionalNumber(formData.get("year_built")),
-    total_units: Number.isFinite(totalUnits) ? totalUnits : 0,
-    square_footage: toOptionalNumber(formData.get("square_footage")),
-    purchase_price: toOptionalNumber(formData.get("purchase_price")),
-    current_value: toOptionalNumber(formData.get("current_value")),
-    is_active: status === "active" || status === "maintenance",
+    tenant: String(formData.get("tenant") ?? "").trim(),
+    unit: String(formData.get("unit") ?? "").trim(),
+    start_date: String(formData.get("start_date") ?? "").trim(),
+    end_date: String(formData.get("end_date") ?? "").trim(),
+    move_in_date: String(formData.get("move_in_date") ?? "").trim() || null,
+    monthly_rent: Number(
+      String(formData.get("monthly_rent") ?? "").trim() || "0",
+    ),
+    security_deposit: toOptionalDecimal(formData.get("security_deposit")),
+    notes: String(formData.get("notes") ?? "").trim() || null,
+    status: "draft",
   };
 }
 
-function validatePropertyPayload(payload: ApiPropertyUpsertRequest) {
-  if (!payload.name || !payload.address_line_1 || !payload.city || !payload.state || !payload.postal_code || !payload.country) {
-    return "Name, address, city, state, postal code, and country are required.";
+function validateLeasePayload(payload: ApiLeaseCreateRequest) {
+  const errors: string[] = [];
+
+  if (!payload.tenant) {
+    errors.push("Le locataire est requis.");
   }
 
-  if (!payload.total_units || payload.total_units < 1) {
-    return "Total units must be at least 1.";
+  if (!payload.unit) {
+    errors.push("L’unité est requise.");
   }
 
-  return null;
+  if (!payload.start_date) {
+    errors.push("La date de début est requise.");
+  }
+
+  if (!payload.end_date) {
+    errors.push("La date de fin est requise.");
+  }
+
+  if (payload.monthly_rent <= 0) {
+    errors.push("Le loyer doit être supérieur à zéro.");
+  }
+
+  if (
+    payload.start_date &&
+    payload.end_date &&
+    payload.end_date < payload.start_date
+  ) {
+    errors.push("La date de fin doit être postérieure à la date de début.");
+  }
+
+  if (
+    payload.move_in_date &&
+    payload.start_date &&
+    payload.move_in_date < payload.start_date
+  ) {
+    errors.push(
+      "La date d’entrée ne peut pas être antérieure à la date de début.",
+    );
+  }
+
+  if (payload.security_deposit != null && payload.security_deposit < 0) {
+    errors.push("Le dépôt de garantie ne peut pas être négatif.");
+  }
+
+  return errors;
+}
+
+function buildTenantProfilePayload(formData: FormData): FormData {
+  const alternatePhone = toBackendPhoneNumber(
+    String(formData.get("alternate_phone") ?? "").trim(),
+  );
+  const employmentStatusRaw = String(
+    formData.get("employment_status") ?? "",
+  ).trim();
+  const maritalStatusRaw = String(formData.get("marital_status") ?? "").trim();
+  const alternateEmail = String(formData.get("alternate_email") ?? "").trim();
+  const notes = String(formData.get("notes") ?? "").trim();
+  const idCard = formData.get("id_card");
+  const payload = new FormData();
+
+  if (alternatePhone) {
+    payload.append("alternate_phone", alternatePhone);
+  }
+  if (idCard instanceof File && idCard.size > 0) {
+    payload.append("id_card", idCard);
+  }
+  if (alternateEmail) {
+    payload.append("alternate_email", alternateEmail);
+  }
+  if (maritalStatusRaw) {
+    payload.append("marital_status", maritalStatusRaw);
+  }
+  if (employmentStatusRaw) {
+    payload.append(
+      "employment_status",
+      (employmentStatusRaw as ApiEmploymentStatus) ?? "",
+    );
+  }
+  if (notes) {
+    payload.append("notes", notes);
+  }
+
+  return payload;
+}
+
+function validateTenantPayload(formData: FormData) {
+  const errors: string[] = [];
+  const rawAlternatePhone = String(
+    formData.get("alternate_phone") ?? "",
+  ).trim();
+  const alternatePhone = toBackendPhoneNumber(rawAlternatePhone);
+
+  if (!alternatePhone) {
+    errors.push(
+      "Le numéro du locataire doit contenir les 9 derniers chiffres.",
+    );
+  }
+  if (alternatePhone && alternatePhone.length > 15) {
+    errors.push(
+      "Le téléphone alternatif doit contenir au maximum 15 caractères.",
+    );
+  }
+
+  return { errors };
 }
 
 export async function createPropertyAction(
@@ -69,13 +263,16 @@ export async function createPropertyAction(
 ): Promise<PropertyEditorActionState> {
   const accessToken = await requireAccessToken();
   if (!accessToken) {
-    return { error: "No authenticated landlord session found." };
+    return { error: "Aucune session bailleur authentifiée n’a été trouvée." };
   }
 
   const payload = buildPropertyPayload(formData);
-  const validationError = validatePropertyPayload(payload);
-  if (validationError) {
-    return { error: validationError };
+  const validationErrors = validatePropertyPayload(payload);
+  if (validationErrors.length > 0) {
+    return {
+      error: "Property details are incomplete or invalid.",
+      errorDetails: validationErrors,
+    };
   }
 
   let redirectPath: string | null = null;
@@ -86,8 +283,17 @@ export async function createPropertyAction(
     revalidatePath("/landlord/dashboard");
     redirectPath = `/landlord/properties/${property.id}`;
   } catch (error) {
+    const globalError = buildGlobalApiError(error, {
+      title: "Property Creation Failed",
+      scope: "property-editor",
+    });
+    const formattedError = formatFormApiError(
+      error,
+      "Impossible de créer le bien pour le moment.",
+    );
     return {
-      error: error instanceof Error ? error.message : "Unable to create the property right now.",
+      error: globalError.message,
+      errorDetails: formattedError.details,
     };
   }
 
@@ -109,9 +315,12 @@ export async function updatePropertyAction(
   }
 
   const payload = buildPropertyPayload(formData);
-  const validationError = validatePropertyPayload(payload);
-  if (validationError) {
-    return { error: validationError };
+  const validationErrors = validatePropertyPayload(payload);
+  if (validationErrors.length > 0) {
+    return {
+      error: "Property details are incomplete or invalid.",
+      errorDetails: validationErrors,
+    };
   }
 
   let redirectPath: string | null = null;
@@ -124,8 +333,149 @@ export async function updatePropertyAction(
     revalidatePath("/landlord/dashboard");
     redirectPath = `/landlord/properties/${property.id}`;
   } catch (error) {
+    const globalError = buildGlobalApiError(error, {
+      title: "Property Update Failed",
+      scope: "property-editor",
+    });
+    const formattedError = formatFormApiError(
+      error,
+      "Impossible de mettre à jour le bien pour le moment.",
+    );
     return {
-      error: error instanceof Error ? error.message : "Unable to update the property right now.",
+      error: globalError.message,
+      errorDetails: formattedError.details,
+    };
+  }
+
+  redirect(redirectPath);
+}
+
+export async function createUnitAction(
+  _: UnitEditorActionState,
+  formData: FormData,
+): Promise<UnitEditorActionState> {
+  const accessToken = await requireAccessToken();
+  if (!accessToken) {
+    return { error: "No authenticated landlord session found." };
+  }
+
+  const payload = buildUnitPayload(formData);
+
+  const validationError = validateUnitPayload(payload);
+  if (validationError) {
+    return { error: validationError, errorDetails: [validationError] };
+  }
+
+  let redirectPath: string | null = null;
+
+  try {
+    const unit = await createUnit(payload, accessToken);
+    revalidatePath("/landlord/units");
+    revalidatePath("/landlord/dashboard");
+    revalidatePath("/landlord/properties");
+    redirectPath = `/landlord/units/${unit.id}`;
+  } catch (error) {
+    const formattedError = formatFormApiError(
+      error,
+      "Impossible de créer l’unité pour le moment.",
+    );
+    return {
+      error: formattedError.message,
+      errorDetails: formattedError.details,
+    };
+  }
+
+  redirect(redirectPath);
+}
+
+export async function createTenantAction(
+  _: TenantEditorActionState,
+  formData: FormData,
+): Promise<TenantEditorActionState> {
+  const accessToken = await requireAccessToken();
+  if (!accessToken) {
+    return { error: "Aucune session bailleur authentifiée n’a été trouvée." };
+  }
+
+  const { errors } = validateTenantPayload(formData);
+  if (errors.length > 0) {
+    return {
+      error: "Les informations du locataire sont incomplètes ou invalides.",
+      errorDetails: errors,
+    };
+  }
+
+  let redirectPath: string | null = null;
+
+  try {
+    const profile = await createTenantProfile(
+      buildTenantProfilePayload(formData),
+      accessToken,
+    );
+
+    revalidatePath("/landlord/tenants");
+    revalidatePath("/landlord/dashboard");
+    redirectPath = `/landlord/tenants/${profile.id}`;
+  } catch (error) {
+    const globalError = buildGlobalApiError(error, {
+      title: "Échec de création du locataire",
+      scope: "tenant-editor",
+    });
+    const formattedError = formatFormApiError(
+      error,
+      "Impossible de créer le locataire pour le moment.",
+    );
+    return {
+      error: globalError.message,
+      errorDetails: formattedError.details,
+    };
+  }
+
+  redirect(redirectPath);
+}
+
+export async function createLeaseAction(
+  _: LeaseEditorActionState,
+  formData: FormData,
+): Promise<LeaseEditorActionState> {
+  const accessToken = await requireAccessToken();
+  if (!accessToken) {
+    return { error: "Aucune session bailleur authentifiée n’a été trouvée." };
+  }
+
+  const payload = buildLeasePayload(formData);
+
+  console.log(payload)
+
+  const validationErrors = validateLeasePayload(payload);
+  if (validationErrors.length > 0) {
+    return {
+      error: "Les informations du bail sont incomplètes ou invalides.",
+      errorDetails: validationErrors,
+    };
+  }
+
+  let redirectPath: string | null = null;
+
+  try {
+    const lease = await createLease(payload, accessToken);
+    revalidatePath("/landlord/leases");
+    revalidatePath("/landlord/dashboard");
+    revalidatePath("/landlord/tenants");
+    revalidatePath("/landlord/units");
+    redirectPath = `/landlord/leases/${lease.id}`;
+  } catch (error) {
+    const globalError = buildGlobalApiError(error, {
+      title: "Échec de création du bail",
+      scope: "lease-editor",
+    });
+    const formattedError = formatFormApiError(
+      error,
+      "Impossible de créer le bail pour le moment.",
+    );
+    return {
+      error: globalError.message,
+      errorDetails: formattedError.details,
     };
   }
 
@@ -197,7 +547,9 @@ export async function renewLeaseAction(formData: FormData) {
     return;
   }
 
-  await renewLease(leaseId, { new_end_date: newEndDate }, accessToken).catch(() => null);
+  await renewLease(leaseId, { new_end_date: newEndDate }, accessToken).catch(
+    () => null,
+  );
   revalidatePath("/landlord/leases");
   revalidatePath(`/landlord/leases/${leaseId}`);
   revalidatePath("/landlord/dashboard");
@@ -232,7 +584,9 @@ export async function rejectBookingAction(formData: FormData) {
     return;
   }
 
-  await rejectBooking(bookingId, reason || undefined, accessToken).catch(() => null);
+  await rejectBooking(bookingId, reason || undefined, accessToken).catch(
+    () => null,
+  );
   revalidatePath("/landlord/bookings");
   revalidatePath(`/landlord/bookings/${bookingId}`);
   revalidatePath("/landlord/dashboard");
@@ -251,13 +605,21 @@ export async function generatePaymentLinkAction(
   const tenantId = String(formData.get("tenantId") ?? "").trim();
   const existingPaymentId = String(formData.get("paymentId") ?? "").trim();
   const amount = Number(String(formData.get("amount") ?? "").trim() || "0");
-  const gateway = String(formData.get("gateway") ?? "cash").trim() as "cash" | "bank_transfer" | "easypay";
-  const expiresInHours = Number(String(formData.get("expires_in_hours") ?? "48").trim() || "48");
+  const gateway = String(formData.get("gateway") ?? "cash").trim() as
+    | "cash"
+    | "bank_transfer"
+    | "easypay";
+  const expiresInHours = Number(
+    String(formData.get("expires_in_hours") ?? "48").trim() || "48",
+  );
   const dueDate = String(formData.get("due_date") ?? "").trim();
   const notes = String(formData.get("notes") ?? "").trim();
 
   if (!leaseId || !tenantId || !amount || !dueDate) {
-    return { error: "Lease, tenant, amount, and due date are required." };
+    return {
+      error: "Lease, tenant, amount, and due date are required.",
+      errorDetails: ["lease: required", "tenant: required", "amount: required", "due date: required"],
+    };
   }
 
   try {
@@ -277,7 +639,11 @@ export async function generatePaymentLinkAction(
         )
       ).id;
 
-    const link = await generatePaymentLink(payment, { gateway, expires_in_hours: expiresInHours }, accessToken);
+    const link = await generatePaymentLink(
+      payment,
+      { gateway, expires_in_hours: expiresInHours },
+      accessToken,
+    );
 
     revalidatePath("/landlord/payments");
 
@@ -286,8 +652,13 @@ export async function generatePaymentLinkAction(
       linkUrl: link.link_url,
     };
   } catch (error) {
+    const formattedError = formatFormApiError(
+      error,
+      "Unable to generate payment link right now.",
+    );
     return {
-      error: error instanceof Error ? error.message : "Unable to generate payment link right now.",
+      error: formattedError.message,
+      errorDetails: formattedError.details,
     };
   }
 }
@@ -306,7 +677,10 @@ export async function sendPaymentReminderAction(
   const message = String(formData.get("message") ?? "").trim();
 
   if (!paymentId) {
-    return { error: "A payment must be selected before sending a reminder." };
+    return {
+      error: "A payment must be selected before sending a reminder.",
+      errorDetails: ["payment: required"],
+    };
   }
 
   try {
@@ -322,11 +696,17 @@ export async function sendPaymentReminderAction(
     revalidatePath("/landlord/payments");
 
     return {
-      message: response.message ?? response.detail ?? "Reminder sent successfully.",
+      message:
+        response.message ?? response.detail ?? "Reminder sent successfully.",
     };
   } catch (error) {
+    const formattedError = formatFormApiError(
+      error,
+      "Unable to send reminder right now.",
+    );
     return {
-      error: error instanceof Error ? error.message : "Unable to send reminder right now.",
+      error: formattedError.message,
+      errorDetails: formattedError.details,
     };
   }
 }

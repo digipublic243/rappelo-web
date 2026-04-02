@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
+import { ApiErrorProvider } from "@/components/providers/ApiErrorProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -13,7 +14,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Estate Metric",
+  title: "RAPPELO",
   description: "Static landlord and tenant management views ready for API integration.",
 };
 
@@ -24,7 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${manrope.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ApiErrorProvider>{children}</ApiErrorProvider>
+      </body>
     </html>
   );
 }

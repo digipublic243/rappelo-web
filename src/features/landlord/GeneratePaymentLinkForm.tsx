@@ -1,9 +1,12 @@
 "use client";
 
 import { useActionState } from "react";
+import { AppForm, FormInlineError, FormInlineSuccess, FormSubmitButton } from "@/components/forms/AppForm";
+import { FormField } from "@/components/forms/FormField";
 import { generatePaymentLinkAction } from "@/features/landlord/actions";
 import { initialPaymentWorkflowActionState } from "@/features/landlord/payment-workflow-state";
 import type { Lease, Payment, Tenant } from "@/types/domain";
+import { useSyncGlobalApiError } from "@/components/providers/ApiErrorProvider";
 
 interface GeneratePaymentLinkFormProps {
   leases: Lease[];
@@ -13,85 +16,90 @@ interface GeneratePaymentLinkFormProps {
 
 export function GeneratePaymentLinkForm({ leases, tenants, payments }: GeneratePaymentLinkFormProps) {
   const [state, formAction, pending] = useActionState(generatePaymentLinkAction, initialPaymentWorkflowActionState);
+  useSyncGlobalApiError(state.error, { title: "Payment Link Error", scope: "payments" });
   const pendingPayments = payments.filter((payment) => payment.status === "pending");
 
   return (
-    <form action={formAction} className="mt-6 space-y-4">
-      <label className="block text-sm font-medium text-[#566166]">
-        Select Lease
-        <select className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" defaultValue={leases[0]?.id} name="leaseId">
-          {leases.map((lease) => {
-            const tenant = tenants.find((item) => item.id === lease.tenantId);
-            return (
-              <option key={lease.id} value={lease.id}>
-                {tenant?.fullName ?? lease.tenantId} — {lease.unitId}
-              </option>
-            );
-          })}
-        </select>
-      </label>
+    <AppForm action={formAction} className="mt-6 space-y-4">
+      <FormField
+        defaultValue={leases[0]?.id}
+        label="Select Lease"
+        name="leaseId"
+        options={leases.map((lease) => {
+          const tenant = tenants.find((item) => item.id === lease.tenantId);
+          return {
+            label: `${tenant?.fullName ?? lease.tenantId} — ${lease.unitId}`,
+            value: lease.id,
+          };
+        })}
+        type="select"
+      />
 
-      <label className="block text-sm font-medium text-[#566166]">
-        Tenant
-        <select className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" defaultValue={tenants[0]?.id} name="tenantId">
-          {tenants.map((tenant) => (
-            <option key={tenant.id} value={tenant.id}>
-              {tenant.fullName}
-            </option>
-          ))}
-        </select>
-      </label>
+      <FormField
+        defaultValue={tenants[0]?.id}
+        label="Tenant"
+        name="tenantId"
+        options={tenants.map((tenant) => ({
+          label: tenant.fullName,
+          value: tenant.id,
+        }))}
+        type="select"
+      />
 
-      <label className="block text-sm font-medium text-[#566166]">
-        Existing Pending Payment
-        <select className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" defaultValue="" name="paymentId">
-          <option value="">Create a fresh payment first</option>
-          {pendingPayments.map((payment) => (
-            <option key={payment.id} value={payment.id}>
-              {payment.tenantId} — {payment.unitId} — {payment.amount}
-            </option>
-          ))}
-        </select>
-      </label>
+      <FormField
+        defaultValue=""
+        label="Existing Pending Payment"
+        name="paymentId"
+        options={[
+          { label: "Create a fresh payment first", value: "" },
+          ...pendingPayments.map((payment) => ({
+            label: `${payment.tenantId} — ${payment.unitId} — ${payment.amount}`,
+            value: payment.id,
+          })),
+        ]}
+        type="select"
+      />
 
       <div className="grid gap-4 md:grid-cols-2">
-        <label className="block text-sm font-medium text-[#566166]">
-          Amount
-          <input className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" defaultValue="2450" name="amount" required type="number" />
-        </label>
-        <label className="block text-sm font-medium text-[#566166]">
-          Due Date
-          <input className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" name="due_date" required type="date" />
-        </label>
+        <FormField defaultValue="2450" label="Amount" name="amount" required type="number" />
+        <FormField label="Due Date" name="due_date" required type="date" />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
-        <label className="block text-sm font-medium text-[#566166]">
-          Gateway
-          <select className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" defaultValue="cash" name="gateway">
-            <option value="cash">Cash</option>
-            <option value="bank_transfer">Bank Transfer</option>
-            <option value="easypay">EasyPay</option>
-          </select>
-        </label>
-        <label className="block text-sm font-medium text-[#566166]">
-          Expires In
-          <input className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" defaultValue="48" name="expires_in_hours" required type="number" />
-        </label>
-      </div>
-
-      <label className="block text-sm font-medium text-[#566166]">
-        Message
-        <textarea
-          className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3"
-          defaultValue="Secure payment request for the current cycle. Please complete settlement through the generated link."
-          name="notes"
-          rows={5}
+        <FormField
+          defaultValue="cash"
+          label="Gateway"
+          name="gateway"
+          options={[
+            { label: "Cash", value: "cash" },
+            { label: "Bank Transfer", value: "bank_transfer" },
+            { label: "EasyPay", value: "easypay" },
+          ]}
+          type="select"
         />
-      </label>
+        <FormField defaultValue="48" label="Expires In" name="expires_in_hours" required type="number" />
+      </div>
 
-      {state.error ? <p className="rounded-xl bg-[#fe8983]/20 px-4 py-3 text-sm text-[#752121]">{state.error}</p> : null}
-      {state.message ? <p className="rounded-xl bg-[#d8e3fb]/40 px-4 py-3 text-sm text-[#485367]">{state.message}</p> : null}
+      <FormField
+        defaultValue="Secure payment request for the current cycle. Please complete settlement through the generated link."
+        label="Message"
+        name="notes"
+        rows={5}
+        type="textarea"
+      />
+
+      <FormInlineError message={state.error} />
+      {state.errorDetails?.length ? (
+        <div className="rounded-xl border border-[#f2b7b3] bg-white px-4 py-4">
+          <p className="text-sm font-bold text-[#752121]">Détails de l’erreur :</p>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[#5d3b39]">
+            {state.errorDetails.map((detail) => (
+              <li key={detail}>{detail}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      <FormInlineSuccess message={state.message} />
       {state.linkUrl ? (
         <div className="rounded-xl bg-[#f0f4f7] px-4 py-3">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">Generated Link</p>
@@ -99,9 +107,9 @@ export function GeneratePaymentLinkForm({ leases, tenants, payments }: GenerateP
         </div>
       ) : null}
 
-      <button className="w-full rounded-lg bg-[#545f73] px-6 py-3 text-sm font-semibold text-[#f6f7ff]" disabled={pending} type="submit">
+      <FormSubmitButton className="w-full rounded-lg px-6 text-sm" disabled={pending}>
         {pending ? "Generating..." : "Generate and Copy Link"}
-      </button>
-    </form>
+      </FormSubmitButton>
+    </AppForm>
   );
 }

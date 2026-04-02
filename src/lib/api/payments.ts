@@ -1,9 +1,16 @@
 import { API_PREFIX } from "@/config/api";
 import { apiRequest } from "@/lib/http/client";
-import type { ApiPayment, ApiPaymentCreateRequest, ApiPaymentLink, ApiPaymentLinkRequest, ApiPaymentSummary } from "@/types/api";
+import type { ApiPaginatedResponse, ApiPayment, ApiPaymentCreateRequest, ApiPaymentLink, ApiPaymentLinkRequest, ApiPaymentSummary } from "@/types/api";
+
+function unwrapListResponse<T>(response: ApiPaginatedResponse<T> | T[]) {
+  return Array.isArray(response) ? response : response.results;
+}
 
 export function listPayments(token: string) {
-  return apiRequest<ApiPayment[]>(`${API_PREFIX}/payments/payments/`, { token });
+  return apiRequest<ApiPaginatedResponse<ApiPayment> | ApiPayment[]>(
+    `${API_PREFIX}/payments/payments/`,
+    { token },
+  ).then(unwrapListResponse);
 }
 
 export function getPaymentById(id: string | number, token: string) {
@@ -11,7 +18,10 @@ export function getPaymentById(id: string | number, token: string) {
 }
 
 export function listOverduePayments(token: string) {
-  return apiRequest<ApiPayment[]>(`${API_PREFIX}/payments/payments/overdue/`, { token });
+  return apiRequest<ApiPaginatedResponse<ApiPayment> | ApiPayment[]>(
+    `${API_PREFIX}/payments/payments/overdue/`,
+    { token },
+  ).then(unwrapListResponse);
 }
 
 export function getPaymentSummary(token: string) {

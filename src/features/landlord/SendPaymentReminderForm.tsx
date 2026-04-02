@@ -1,10 +1,13 @@
 "use client";
 
 import { useActionState } from "react";
+import { AppForm, FormInlineError, FormInlineSuccess, FormSubmitButton } from "@/components/forms/AppForm";
+import { FormField } from "@/components/forms/FormField";
 import { sendPaymentReminderAction } from "@/features/landlord/actions";
 import { initialPaymentWorkflowActionState } from "@/features/landlord/payment-workflow-state";
 import type { Payment, Tenant } from "@/types/domain";
 import { formatMoney } from "@/lib/format";
+import { useSyncGlobalApiError } from "@/components/providers/ApiErrorProvider";
 
 interface SendPaymentReminderFormProps {
   payments: Payment[];
@@ -13,47 +16,58 @@ interface SendPaymentReminderFormProps {
 
 export function SendPaymentReminderForm({ payments, tenants }: SendPaymentReminderFormProps) {
   const [state, formAction, pending] = useActionState(sendPaymentReminderAction, initialPaymentWorkflowActionState);
+  useSyncGlobalApiError(state.error, { title: "Reminder Dispatch Error", scope: "payments" });
   const remindablePayments = payments.filter((payment) => payment.status === "pending");
 
   return (
-    <form action={formAction} className="mt-5 space-y-4">
-      <label className="block text-sm font-medium text-[#566166]">
-        Payment
-        <select className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" defaultValue={remindablePayments[0]?.id} name="paymentId">
-          {remindablePayments.map((payment) => {
-            const tenant = tenants.find((item) => item.id === payment.tenantId);
-            return (
-              <option key={payment.id} value={payment.id}>
-                {tenant?.fullName ?? payment.tenantId} — {payment.unitId} — {formatMoney(payment.amount)}
-              </option>
-            );
-          })}
-        </select>
-      </label>
-      <label className="block text-sm font-medium text-[#566166]">
-        Reminder Style
-        <select className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" name="reminder_style">
-          <option value="soft">Soft Reminder</option>
-          <option value="firm">Firm Reminder</option>
-          <option value="final">Final Notice</option>
-        </select>
-      </label>
-      <label className="block text-sm font-medium text-[#566166]">
-        Message
-        <textarea
-          className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3"
-          defaultValue="We're reaching out because we have not yet received your scheduled payment. Please review your balance and settle it as soon as possible."
-          name="message"
-          rows={6}
-        />
-      </label>
+    <AppForm action={formAction} className="mt-5 space-y-4">
+      <FormField
+        defaultValue={remindablePayments[0]?.id}
+        label="Payment"
+        name="paymentId"
+        options={remindablePayments.map((payment) => {
+          const tenant = tenants.find((item) => item.id === payment.tenantId);
+          return {
+            label: `${tenant?.fullName ?? payment.tenantId} — ${payment.unitId} — ${formatMoney(payment.amount)}`,
+            value: payment.id,
+          };
+        })}
+        type="select"
+      />
+      <FormField
+        label="Reminder Style"
+        name="reminder_style"
+        options={[
+          { label: "Soft Reminder", value: "soft" },
+          { label: "Firm Reminder", value: "firm" },
+          { label: "Final Notice", value: "final" },
+        ]}
+        type="select"
+      />
+      <FormField
+        defaultValue="We're reaching out because we have not yet received your scheduled payment. Please review your balance and settle it as soon as possible."
+        label="Message"
+        name="message"
+        rows={6}
+        type="textarea"
+      />
 
-      {state.error ? <p className="rounded-xl bg-[#fe8983]/20 px-4 py-3 text-sm text-[#752121]">{state.error}</p> : null}
-      {state.message ? <p className="rounded-xl bg-[#d8e3fb]/40 px-4 py-3 text-sm text-[#485367]">{state.message}</p> : null}
+      <FormInlineError message={state.error} />
+      {state.errorDetails?.length ? (
+        <div className="rounded-xl border border-[#f2b7b3] bg-white px-4 py-4">
+          <p className="text-sm font-bold text-[#752121]">Détails de l’erreur :</p>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[#5d3b39]">
+            {state.errorDetails.map((detail) => (
+              <li key={detail}>{detail}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      <FormInlineSuccess message={state.message} />
 
-      <button className="rounded-lg bg-[#545f73] px-6 py-3 text-sm font-semibold text-[#f6f7ff]" disabled={pending} type="submit">
+      <FormSubmitButton className="rounded-lg px-6 text-sm" disabled={pending}>
         {pending ? "Sending..." : "Send Reminder"}
-      </button>
-    </form>
+      </FormSubmitButton>
+    </AppForm>
   );
 }

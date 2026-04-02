@@ -10,41 +10,41 @@ export default async function TenantDashboardPage() {
   const dashboard = await getTenantDashboardVm();
   const nextPayment = dashboard.nextDuePayment ?? dashboard.payments.find((payment) => payment.status === "pending");
   const currentLeaseLabel =
-    dashboard.currentLease ? `${formatDate(dashboard.currentLease.startDate)} - ${formatDate(dashboard.currentLease.endDate)}` : "No active lease";
+    dashboard.currentLease ? `${formatDate(dashboard.currentLease.startDate)} - ${formatDate(dashboard.currentLease.endDate)}` : "Aucun bail actif";
   const dashboardFacts = [
     {
       icon: "description",
-      title: "Lease Status",
-      text: dashboard.currentLease ? `${dashboard.currentLease.status} until ${formatDate(dashboard.currentLease.endDate)}.` : "No active lease linked to this account.",
+      title: "Statut du bail",
+      text: dashboard.currentLease ? `${dashboard.currentLease.status} jusqu’au ${formatDate(dashboard.currentLease.endDate)}.` : "Aucun bail actif n’est lié à ce compte.",
     },
     {
       icon: "payments",
-      title: "Payment Health",
-      text: nextPayment ? `${paymentStatusLabel(nextPayment.status)} payment due ${formatDate(nextPayment.dueDate)}.` : "No pending payment cycle at the moment.",
+      title: "Situation des paiements",
+      text: nextPayment ? `Paiement ${paymentStatusLabel(nextPayment.status).toLowerCase()} dû le ${formatDate(nextPayment.dueDate)}.` : "Aucun paiement en attente pour le moment.",
     },
     {
       icon: "home",
-      title: "Residence",
-      text: dashboard.currentProperty ? `${dashboard.currentProperty.name}, ${dashboard.currentProperty.city}.` : "No property currently attached to the active stay.",
+      title: "Résidence",
+      text: dashboard.currentProperty ? `${dashboard.currentProperty.name}, ${dashboard.currentProperty.city}.` : "Aucun bien n’est actuellement rattaché au séjour actif.",
     },
   ];
   const accountSummary = [
-    ["Leases", String(dashboard.quickStats?.leases ?? dashboard.leases.length)],
-    ["Payments", String(dashboard.quickStats?.payments ?? dashboard.payments.length)],
-    ["Pending", String(dashboard.quickStats?.pending_payments ?? dashboard.payments.filter((payment) => payment.status === "pending").length)],
+    ["Baux", String(dashboard.quickStats?.leases ?? dashboard.leases.length)],
+    ["Paiements", String(dashboard.quickStats?.payments ?? dashboard.payments.length)],
+    ["En attente", String(dashboard.quickStats?.pending_payments ?? dashboard.payments.filter((payment) => payment.status === "pending").length)],
   ];
 
   return (
     <TenantPageFrame currentPath="/tenant/dashboard">
       <DataStateNotice meta={dashboard.meta} />
       <PageIntro
-        eyebrow="Overview"
-        title={`Welcome back, ${dashboard.profileName.split(" ")[0]}`}
-        description={`Here is what is happening with your residency at ${dashboard.currentProperty?.name ?? "your current residence"}.`}
+        eyebrow="Aperçu"
+        title={`Bon retour, ${dashboard.profileName.split(" ")[0]}`}
+        description={`Voici l’essentiel de votre situation pour ${dashboard.currentProperty?.name ?? "votre résidence actuelle"}.`}
         action={
           <ActionButton>
             <MaterialIcon name="add" className="text-[18px]" />
-            Book another stay
+            Réserver un autre séjour
           </ActionButton>
         }
       />
@@ -53,30 +53,30 @@ export default async function TenantDashboardPage() {
         <SurfaceCard className="overflow-hidden md:col-span-8">
           <div className="relative h-72">
             <img
-              alt="Current stay"
+              alt="Séjour en cours"
               className="h-full w-full object-cover"
               src={
-                dashboard.residenceImage ??
-                dashboard.heroBanner ??
+                // dashboard.residenceImage ??
+                // dashboard.heroBanner ??
                 "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1600&q=80"
               }
-            />
+              />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             <div className="absolute bottom-6 left-8 text-white">
-              <span className="mb-3 inline-block rounded-full bg-[#2c6a55] px-3 py-1 text-[10px] font-bold uppercase tracking-widest">Current stay</span>
+              <span className="mb-3 inline-block rounded-full bg-[#2c6a55] px-3 py-1 text-[10px] font-bold uppercase tracking-widest">Séjour en cours</span>
               <h2 className="text-2xl font-bold">
-                {dashboard.currentUnit?.label ?? "Unit unavailable"}, {dashboard.currentProperty?.name ?? "Property unavailable"}
+                {dashboard.currentUnit?.label ?? "Unité indisponible"}, {dashboard.currentProperty?.name ?? "Bien indisponible"}
               </h2>
               <p className="text-sm text-white/80">
-                {dashboard.currentProperty ? `${dashboard.currentProperty.address}, ${dashboard.currentProperty.city}` : "Address unavailable"}
+                {dashboard.currentProperty ? `${dashboard.currentProperty.address}, ${dashboard.currentProperty.city}` : "Adresse indisponible"}
               </p>
             </div>
           </div>
           <div className="grid gap-6 p-8 md:grid-cols-4">
             {[
-              ["Lease Term", currentLeaseLabel],
-              ["Expiry Date", dashboard.currentLease ? formatDate(dashboard.currentLease.endDate) : "Not available"],
-              ["Rate", dashboard.currentLease ? formatMoney(dashboard.currentLease.rentAmount) : "$0.00"],
+              ["Période du bail", currentLeaseLabel],
+              ["Date d’expiration", dashboard.currentLease ? formatDate(dashboard.currentLease.endDate) : "Indisponible"],
+              ["Loyer", dashboard.currentLease ? formatMoney(dashboard.currentLease.rentAmount) : formatMoney(0)],
             ].map(([label, value]) => (
               <div key={label}>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-[#717c82]">{label}</p>
@@ -85,7 +85,7 @@ export default async function TenantDashboardPage() {
             ))}
             <div className="flex items-center justify-end">
               <button className="text-sm font-bold text-[#545f73]" type="button">
-                Details
+                Détails
               </button>
             </div>
           </div>
@@ -97,25 +97,25 @@ export default async function TenantDashboardPage() {
               <MaterialIcon name="account_balance_wallet" className="text-[22px] text-[#545f73]" />
             </div>
             <span className="rounded-full bg-[#545f73]/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[#485367]">
-              Next Cycle
+              Prochaine échéance
             </span>
           </div>
-          <h3 className="mt-10 text-lg font-bold text-[#2a3439]">Rent Payment</h3>
-          <p className="mt-1 text-4xl font-black tracking-tight text-[#2a3439]">{nextPayment ? formatMoney(nextPayment.amount) : "$0.00"}</p>
+          <h3 className="mt-10 text-lg font-bold text-[#2a3439]">Paiement du loyer</h3>
+          <p className="mt-1 text-4xl font-black tracking-tight text-[#2a3439]">{nextPayment ? formatMoney(nextPayment.amount) : formatMoney(0)}</p>
           <p className="mt-4 text-sm font-medium text-[#475266]">
-            {nextPayment ? `Due by ${formatDate(nextPayment.dueDate)}` : "No pending payment cycle"}
+            {nextPayment ? `À régler avant le ${formatDate(nextPayment.dueDate)}` : "Aucun paiement à venir"}
           </p>
-          <ActionButton className="mt-8 w-full">Pay Now</ActionButton>
+          <ActionButton className="mt-8 w-full">Payer maintenant</ActionButton>
           <p className="mt-3 text-center text-[11px] text-[#475266]">
-            {dashboard.automaticPaymentsEnabled ? "Automatic payments are enabled for this unit." : "Automatic payments are not enabled yet."}
+            {dashboard.automaticPaymentsEnabled ? "Les paiements automatiques sont activés pour cette unité." : "Les paiements automatiques ne sont pas encore activés."}
           </p>
         </SurfaceCard>
 
         <SurfaceCard className="bg-[#f0f4f7] p-8 md:col-span-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold text-[#2a3439]">Residency Snapshot</h3>
+            <h3 className="text-lg font-bold text-[#2a3439]">Résumé du séjour</h3>
             <span className="rounded-full bg-white px-3 py-1 text-[10px] font-bold text-[#566166]">
-              {dashboard.leases.length} Active Context
+              {dashboard.leases.length} contexte(s) actif(s)
             </span>
           </div>
           <div className="mt-6 space-y-4">
@@ -134,8 +134,8 @@ export default async function TenantDashboardPage() {
         </SurfaceCard>
 
         <SurfaceCard className="p-8 md:col-span-6">
-          <h3 className="text-lg font-bold text-[#2a3439]">Account Overview</h3>
-          <p className="mt-2 text-sm text-[#566166]">Live summary derived from the current tenant profile, lease list and payment ledger.</p>
+          <h3 className="text-lg font-bold text-[#2a3439]">Vue d’ensemble du compte</h3>
+          <p className="mt-2 text-sm text-[#566166]">Résumé en direct dérivé du profil locataire, de vos baux et de vos paiements.</p>
           <div className="mt-6 rounded-2xl bg-[linear-gradient(145deg,#2a3439,#556170)] p-6 text-white">
             <p className="text-sm font-semibold">{dashboard.profileName}</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
@@ -151,13 +151,13 @@ export default async function TenantDashboardPage() {
 
         <SurfaceCard className="p-8 md:col-span-12">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold text-[#2a3439]">Unread Notifications</h3>
+            <h3 className="text-lg font-bold text-[#2a3439]">Notifications non lues</h3>
             <span className="rounded-full bg-[#f0f4f7] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#566166]">
-              {dashboard.notifications.length} pending
+              {dashboard.notifications.length} en attente
             </span>
           </div>
           {dashboard.notifications.length === 0 ? (
-            <p className="mt-4 text-sm text-[#566166]">No unread tenant notifications from the backend right now.</p>
+            <p className="mt-4 text-sm text-[#566166]">Aucune notification non lue côté backend pour le moment.</p>
           ) : (
             <div className="mt-5 grid gap-4 md:grid-cols-2">
               {dashboard.notifications.slice(0, 4).map((notification) => (

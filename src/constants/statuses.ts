@@ -6,32 +6,32 @@ import {
 } from "@/types/domain";
 
 export const UNIT_STATUS_LABELS: Record<UnitStatus, string> = {
-  vacant: "Vacant",
-  occupied: "Occupied",
-  reserved: "Reserved",
+  vacant: "Vacante",
+  occupied: "Occupée",
+  reserved: "Réservée",
   maintenance: "Maintenance",
 };
 
 export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
-  pending: "Pending",
-  paid: "Paid",
-  failed: "Failed",
-  refunded: "Refunded",
+  pending: "En attente",
+  paid: "Payé",
+  failed: "Échoué",
+  refunded: "Remboursé",
 };
 
 export const LEASE_STATUS_LABELS: Record<LeaseStatus, string> = {
-  draft: "Draft",
-  active: "Active",
-  terminated: "Terminated",
-  expired: "Expired",
+  draft: "Brouillon",
+  active: "Actif",
+  terminated: "Résilié",
+  expired: "Expiré",
 };
 
 export const BOOKING_STATUS_LABELS: Record<BookingStatus, string> = {
-  new: "New",
-  in_review: "In Review",
-  approved: "Approved",
-  rejected: "Rejected",
-  waitlisted: "Waitlisted",
+  new: "Nouvelle",
+  in_review: "En revue",
+  approved: "Approuvée",
+  rejected: "Rejetée",
+  waitlisted: "En attente",
 };
 
 export const STATUS_TONE: Record<string, "neutral" | "success" | "warning" | "danger" | "info"> = {

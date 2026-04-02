@@ -12,7 +12,7 @@ export default function Home() {
             <div className="relative">
               <div className="inline-flex items-center gap-2 rounded-full bg-[#f0f4f7] px-4 py-2 text-[11px] font-bold uppercase tracking-[0.24em] text-[#545f73]">
                 <MaterialIcon name="apartment" className="text-[16px]" />
-                Estate Metric
+                RAPPELO
               </div>
               <h1 className="mt-6 max-w-2xl text-4xl font-extrabold tracking-tight text-[#2a3439] md:text-5xl">
                 Property operations with one visual language for landlord and tenant flows.

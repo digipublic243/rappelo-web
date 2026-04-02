@@ -5,6 +5,11 @@ export function extractLocalPhoneDigits(input: string) {
   return input.replace(/\D/g, "").slice(-LOCAL_PHONE_LENGTH);
 }
 
+export function toPrefixedPhoneNumber(input: string, prefix = CONGO_PHONE_PREFIX) {
+  const digits = extractLocalPhoneDigits(input);
+  return digits ? `${prefix}${digits}` : prefix;
+}
+
 export function toBackendPhoneNumber(input: string) {
   const digits = extractLocalPhoneDigits(input);
   if (digits.length !== LOCAL_PHONE_LENGTH) {

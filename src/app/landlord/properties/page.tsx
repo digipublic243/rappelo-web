@@ -20,21 +20,21 @@ export default async function LandlordPropertiesPage() {
     <LandlordPageFrame currentPath="/landlord/properties">
       <DataStateNotice meta={meta} />
       <PageIntro
-        title="Properties"
-        description="Overview of your real estate assets, occupancy rates, and financial performance across regions."
+        title="Biens"
+        description="Vue d’ensemble de vos actifs immobiliers, de leur occupation et de leur performance financière."
         action={
           <Link className={actionButtonClassName({})} href="/landlord/properties/new">
             <MaterialIcon name="add" className="text-[18px]" />
-            Add Property
+            Ajouter un bien
           </Link>
         }
       />
 
       <section className="flex flex-wrap items-center gap-4 rounded-xl bg-[#f0f4f7] p-4">
-        <FilterChip label="Status:" value="All Assets" />
-        <FilterChip label="City:" value="All Cities" />
-        <FilterChip label="Type:" value="Commercial / Residential" />
-        <p className="ml-auto text-sm font-medium text-[#717c82]">Showing {properties.length} of {properties.length} Properties</p>
+        <FilterChip label="Statut :" value="Tous les biens" />
+        <FilterChip label="Ville :" value="Toutes les villes" />
+        <FilterChip label="Type :" value="Commercial / Résidentiel" />
+        <p className="ml-auto text-sm font-medium text-[#717c82]">Affichage de {properties.length} bien(s) sur {properties.length}</p>
       </section>
 
       <div className="grid gap-6">
@@ -56,13 +56,13 @@ export default async function LandlordPropertiesPage() {
                       </p>
                     </div>
                     <div className="space-y-1">
-                      <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#717c82]">Inventory</p>
-                      <p className="text-2xl font-bold text-[#2a3439]">{property.totalUnits} Units</p>
-                      <p className="text-xs font-semibold text-[#22614d]">{property.occupiedUnits} Occupied</p>
+                      <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#717c82]">Inventaire</p>
+                      <p className="text-2xl font-bold text-[#2a3439]">{property.totalUnits} unités</p>
+                      <p className="text-xs font-semibold text-[#22614d]">{property.occupiedUnits} occupées</p>
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between text-xs text-[#717c82]">
-                        <span>Occupancy</span>
+                        <span>Occupation</span>
                         <span className="text-[#2a3439]">{occupancyRate}%</span>
                       </div>
                       <div className="h-2 rounded-full bg-[#e8eff3]">
@@ -70,10 +70,10 @@ export default async function LandlordPropertiesPage() {
                       </div>
                     </div>
                     <div className="space-y-1 text-left lg:text-right">
-                      <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#717c82]">Monthly Revenue</p>
+                      <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#717c82]">Revenu mensuel</p>
                       <p className="text-3xl font-bold tracking-tight text-[#545f73]">{formatMoney(property.monthlyRevenue)}</p>
                       <span className="inline-flex rounded-full bg-[#b8f9de] px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#22614d]">
-                        Paid
+                        Payé
                       </span>
                     </div>
                   </div>
@@ -85,9 +85,9 @@ export default async function LandlordPropertiesPage() {
       </div>
 
       <SurfaceCard className="rounded-[28px] bg-[linear-gradient(135deg,#545f73,#79869b)] p-8 text-white">
-        <h2 className="text-2xl font-bold tracking-tight">Expanding your portfolio?</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Vous agrandissez votre patrimoine ?</h2>
         <p className="mt-2 max-w-2xl text-sm text-white/80">
-          Keep the same Stitch structure for upcoming acquisition and onboarding screens while preserving the current portfolio layout.
+          Conservez la même structure Stitch pour les futurs écrans d’acquisition et d’onboarding tout en gardant la cohérence du portefeuille actuel.
         </p>
       </SurfaceCard>
     </LandlordPageFrame>

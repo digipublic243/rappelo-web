@@ -25,9 +25,9 @@ export default async function EditPropertyPage({ params }: PageProps) {
     <LandlordPageFrame currentPath="/landlord/properties">
       <DataStateNotice meta={meta} />
       <PageIntro
-        eyebrow="Portfolio"
-        title={`${property.name} Configuration`}
-        description="Review property metadata, valuation, and visibility using the same editorial configuration layout."
+        eyebrow="Patrimoine"
+        title={`Configuration de ${property.name}`}
+        description="Revoyez les métadonnées, la valorisation et la visibilité du bien dans la même mise en page éditoriale."
       />
 
       <PropertyEditorForm
@@ -37,18 +37,11 @@ export default async function EditPropertyPage({ params }: PageProps) {
           name: property.name,
           propertyType: details.propertyType,
           status: details.status,
-          addressLine1: property.address,
-          addressLine2: details.addressLine2 ?? "",
+          addressContent: details.addressContent,
           city: property.city,
-          state: details.state,
-          postalCode: details.postalCode,
           country: details.country,
           description: details.description ?? "",
-          yearBuilt: details.yearBuilt != null ? String(details.yearBuilt) : "",
           totalUnits: String(property.totalUnits),
-          squareFootage: details.squareFootage != null ? String(details.squareFootage) : "",
-          purchasePrice: details.purchasePrice != null ? String(details.purchasePrice) : "",
-          currentValue: details.currentValue != null ? String(details.currentValue) : "",
           isActive: details.status === "active",
         }}
         initialState={initialPropertyEditorActionState}

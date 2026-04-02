@@ -1,13 +1,34 @@
 import { API_PREFIX } from "@/config/api";
 import { apiRequest } from "@/lib/http/client";
-import type { ApiLease, ApiLeaseRenewRequest, ApiLeaseTerminateRequest } from "@/types/api";
+import type {
+  ApiLease,
+  ApiLeaseCreateRequest,
+  ApiLeaseRenewRequest,
+  ApiLeaseTerminateRequest,
+  ApiPaginatedResponse,
+} from "@/types/api";
+
+function unwrapListResponse<T>(response: ApiPaginatedResponse<T> | T[]) {
+  return Array.isArray(response) ? response : response.results;
+}
 
 export function listLeases(token: string) {
-  return apiRequest<ApiLease[]>(`${API_PREFIX}/leases/leases/`, { token });
+  return apiRequest<ApiPaginatedResponse<ApiLease> | ApiLease[]>(
+    `${API_PREFIX}/leases/leases/`,
+    { token },
+  ).then(unwrapListResponse);
 }
 
 export function getLeaseById(id: string | number, token: string) {
   return apiRequest<ApiLease>(`${API_PREFIX}/leases/leases/${id}/`, { token });
+}
+
+export function createLease(payload: ApiLeaseCreateRequest, token: string) {
+  return apiRequest<ApiLease>(`${API_PREFIX}/leases/leases/`, {
+    method: "POST",
+    token,
+    body: payload,
+  });
 }
 
 export function activateLease(id: string | number, token: string) {

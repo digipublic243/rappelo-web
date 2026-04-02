@@ -37,9 +37,10 @@ export function verifyToken(token: string) {
   });
 }
 
-export function createUser(payload: ApiUserCreateRequest) {
+export function createUser(payload: ApiUserCreateRequest, token?: string) {
   return apiRequest<ApiUserDetail>(`${API_PREFIX}/accounts/users/`, {
     method: "POST",
+    token,
     body: payload,
   });
 }

@@ -27,7 +27,7 @@ export function mapApiPropertyToDomain(
   return {
     id: propertyId,
     name: property.name,
-    address: property.address_line_1,
+    address: property.address_content ?? property.address_line_1,
     city: property.city,
     totalUnits: property.total_units,
     occupiedUnits,
@@ -36,20 +36,43 @@ export function mapApiPropertyToDomain(
 }
 
 export function mapApiUnitToDomain(unit: ApiUnit, tenantName?: string): Unit {
-  const cadence = unit.rent_period === "daily" ? "day" : unit.rent_period === "weekly" ? "week" : unit.rent_period === "other" ? "custom" : "month";
+  const cadence =
+    unit.rental_periodicity === "journ"
+      ? "day"
+      : unit.rental_periodicity === "hebdo"
+        ? "week"
+        : unit.rental_periodicity === "autre"
+          ? "custom"
+          : unit.rent_period === "daily"
+            ? "day"
+            : unit.rent_period === "weekly"
+              ? "week"
+              : unit.rent_period === "other"
+                ? "custom"
+                : "month";
   const allowedPaymentMethods = (unit.allowed_payment_methods ?? [])
-    .map((method) => (method === "mobile_money" ? "easypay" : method === "cash" ? "cash" : null))
+    .map((method) =>
+      method === "mobile_money" || method === "easypay"
+        ? "easypay"
+        : method === "cash"
+          ? "cash"
+          : null,
+    )
     .filter((method): method is PaymentMethod => Boolean(method));
+  const price = Number(unit.rent ?? unit.monthly_rent ?? 0);
 
   return {
     id: stringifyId(unit.id),
     propertyId: stringifyId(unit.property),
     label: unit.unit_number,
     type: unit.unit_type,
-    price: unit.monthly_rent,
+    price: Number.isFinite(price) ? price : 0,
     pricingCadence: cadence,
     status: unit.status,
-    depositEnabled: Boolean(unit.security_deposit && unit.security_deposit > 0),
+    depositEnabled: Boolean(
+      (unit.security_deposit && unit.security_deposit > 0) ||
+        (unit.booking_deposit && unit.booking_deposit > 0),
+    ),
     allowedPaymentMethods,
     tenantName,
   };

@@ -31,15 +31,14 @@ export interface PropertyDetailVm {
   details: {
     propertyType: string;
     status: ApiPropertyStatus;
-    addressLine2?: string | null;
-    state: string;
-    postalCode: string;
+    addressContent: string;
     country: string;
     description?: string | null;
     yearBuilt?: number | null;
     squareFootage?: number | null;
     purchasePrice?: number | null;
     currentValue?: number | null;
+    monthlyRentTotal?: number | null;
     occupancyRate?: number | null;
     vacantUnits?: number | null;
     amenities?: string[];
@@ -60,6 +59,23 @@ export interface TenantDetailVm {
 export interface UnitDetailVm {
   unit: Unit;
   payments: Payment[];
+  details: {
+    rent?: number | null;
+    currency?: string | null;
+    rentalPeriodicity?: string | null;
+    bedrooms?: number | null;
+    bathrooms?: number | null;
+    squareFootage?: number | null;
+    floorNumber?: number | null;
+    securityDeposit?: number | null;
+    bookingDeposit?: number | null;
+    allowedPaymentMethods?: string[];
+    advancePaymentPolicyText?: string | null;
+    currentTenant?: string | null;
+    currentLease?: string | null;
+    isFurnished: boolean;
+    isActive: boolean;
+  };
   meta: DataMeta;
 }
 

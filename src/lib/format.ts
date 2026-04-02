@@ -7,7 +7,7 @@ import {
 import type { BookingStatus, LeaseStatus, PaymentStatus, PricingCadence, UnitStatus } from "@/types/domain";
 
 export function formatMoney(amount: number): string {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("fr-CD", {
     style: "currency",
     currency: "USD",
     maximumFractionDigits: 0,
@@ -15,7 +15,7 @@ export function formatMoney(amount: number): string {
 }
 
 export function formatDate(isoDate: string): string {
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("fr-CD", {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -24,10 +24,10 @@ export function formatDate(isoDate: string): string {
 
 export function formatCadence(cadence: PricingCadence): string {
   const labels: Record<PricingCadence, string> = {
-    day: "Per day",
-    week: "Per week",
-    month: "Per month",
-    custom: "Custom cadence",
+    day: "Par jour",
+    week: "Par semaine",
+    month: "Par mois",
+    custom: "Cadence personnalisée",
   };
 
   return labels[cadence];

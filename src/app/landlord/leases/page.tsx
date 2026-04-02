@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { LandlordPageFrame } from "@/features/landlord/LandlordPageFrame";
 import { PageIntro } from "@/components/ui/PageIntro";
-import { SurfaceCard, ActionButton } from "@/components/shared/StitchPrimitives";
+import {
+  SurfaceCard,
+  actionButtonClassName,
+} from "@/components/shared/StitchPrimitives";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { formatCadence, formatDate, formatMoney, leaseStatusLabel } from "@/lib/format";
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
@@ -18,10 +21,13 @@ export default async function LeaseListPage() {
         title="Lease Agreements"
         description="Lifecycle-managed contracts that remain separate from booking intake and payment collection."
         action={
-          <ActionButton>
+          <Link
+            className={actionButtonClassName({})}
+            href="/landlord/leases/new"
+          >
             <MaterialIcon name="add" className="text-[18px]" />
-            New Lease
-          </ActionButton>
+            Nouveau bail
+          </Link>
         }
       />
 

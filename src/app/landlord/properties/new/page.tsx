@@ -8,9 +8,9 @@ export default function NewPropertyPage() {
   return (
     <LandlordPageFrame currentPath="/landlord/properties">
       <PageIntro
-        eyebrow="Portfolio"
-        title="Create Property"
-        description="Add a new asset to the portfolio with the same structured editing experience used for property configuration."
+        eyebrow="Patrimoine"
+        title="Créer un bien"
+        description="Ajoutez un nouvel actif au patrimoine avec la même expérience structurée que l’écran de configuration."
       />
 
       <PropertyEditorForm
@@ -19,18 +19,11 @@ export default function NewPropertyPage() {
           name: "",
           propertyType: "apartment",
           status: "active",
-          addressLine1: "",
-          addressLine2: "",
-          city: "",
-          state: "",
-          postalCode: "",
-          country: "",
+          addressContent: "",
+          city: "kinshasa",
+          country: "RD CONGO",
           description: "",
-          yearBuilt: "",
           totalUnits: "1",
-          squareFootage: "",
-          purchasePrice: "",
-          currentValue: "",
           isActive: true,
         }}
         initialState={initialPropertyEditorActionState}

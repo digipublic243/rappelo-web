@@ -1,4 +1,6 @@
 import { notFound } from "next/navigation";
+import { AppForm, FormSubmitButton } from "@/components/forms/AppForm";
+import { FormField } from "@/components/forms/FormField";
 import { LandlordPageFrame } from "@/features/landlord/LandlordPageFrame";
 import { PageIntro } from "@/components/ui/PageIntro";
 import { SurfaceCard, ActionButton } from "@/components/shared/StitchPrimitives";
@@ -78,19 +80,19 @@ export default async function BookingReviewPage({ params }: PageProps) {
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
             <ActionButton variant="ghost">Request more info</ActionButton>
-            <form action={rejectBookingAction}>
-              <input name="bookingId" type="hidden" value={booking.id} />
-              <input name="reason" type="hidden" value="Rejected from landlord review screen." />
-              <button className="inline-flex items-center justify-center rounded-lg bg-[#d8e3fb] px-5 py-3 text-sm font-semibold text-[#475266]" type="submit">
+            <AppForm action={rejectBookingAction}>
+              <FormField name="bookingId" type="hidden" value={booking.id} />
+              <FormField name="reason" type="hidden" value="Rejected from landlord review screen." />
+              <FormSubmitButton className="rounded-lg bg-[#d8e3fb] px-5 text-sm text-[#475266]">
                 Reject Booking
-              </button>
-            </form>
-            <form action={confirmBookingAction}>
-              <input name="bookingId" type="hidden" value={booking.id} />
-              <button className="inline-flex items-center justify-center rounded-lg bg-[#545f73] px-5 py-3 text-sm font-semibold text-[#f6f7ff]" type="submit">
+              </FormSubmitButton>
+            </AppForm>
+            <AppForm action={confirmBookingAction}>
+              <FormField name="bookingId" type="hidden" value={booking.id} />
+              <FormSubmitButton className="rounded-lg bg-[#545f73] px-5 text-sm text-[#f6f7ff]">
                 Approve Booking
-              </button>
-            </form>
+              </FormSubmitButton>
+            </AppForm>
           </div>
         </SurfaceCard>
       </section>

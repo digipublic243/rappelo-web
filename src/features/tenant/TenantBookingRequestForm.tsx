@@ -1,11 +1,14 @@
 "use client";
 
 import { useActionState } from "react";
-import { ActionButton, SurfaceCard } from "@/components/shared/StitchPrimitives";
+import { AppForm, FormInlineError, FormSubmitButton } from "@/components/forms/AppForm";
+import { FormField } from "@/components/forms/FormField";
+import { actionButtonClassName, SurfaceCard } from "@/components/shared/StitchPrimitives";
 import { submitTenantBookingAction } from "@/features/tenant/actions";
 import { initialBookingRequestActionState } from "@/features/tenant/booking-state";
 import { formatCadence, formatMoney } from "@/lib/format";
 import type { Unit } from "@/types/domain";
+import { useSyncGlobalApiError } from "@/components/providers/ApiErrorProvider";
 
 interface TenantBookingRequestFormProps {
   units: Unit[];
@@ -13,10 +16,11 @@ interface TenantBookingRequestFormProps {
 
 export function TenantBookingRequestForm({ units }: TenantBookingRequestFormProps) {
   const [state, formAction, pending] = useActionState(submitTenantBookingAction, initialBookingRequestActionState);
+  useSyncGlobalApiError(state.error, { title: "Booking Request Error", scope: "bookings" });
   const selectedUnit = units[0];
 
   return (
-    <form action={formAction} className="grid gap-8 lg:grid-cols-12">
+    <AppForm action={formAction} className="grid gap-8 lg:grid-cols-12">
       <div className="space-y-6 lg:col-span-8">
         {units.map((unit, index) => (
           <SurfaceCard key={unit.id} className={`p-6 ${index === 0 ? "ring-2 ring-[#545f73]" : ""}`}>
@@ -38,85 +42,52 @@ export function TenantBookingRequestForm({ units }: TenantBookingRequestFormProp
         <SurfaceCard className="p-6">
           <h2 className="text-xl font-bold text-[#2a3439]">Booking Terms</h2>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
-            <label className="text-sm font-medium text-[#566166]">
-              Unit
-              <select className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" defaultValue={selectedUnit?.id} name="unitId">
-                {units.map((unit) => (
-                  <option key={unit.id} value={unit.id}>
-                    {unit.label} — {unit.type}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="text-sm font-medium text-[#566166]">
-              Preferred Move In Time
-              <select className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" defaultValue="morning" name="preferred_move_in_time">
-                <option value="morning">Morning</option>
-                <option value="afternoon">Afternoon</option>
-                <option value="evening">Evening</option>
-              </select>
-            </label>
-            <label className="text-sm font-medium text-[#566166]">
-              Check In
-              <input className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" name="check_in" required type="date" />
-            </label>
-            <label className="text-sm font-medium text-[#566166]">
-              Check Out
-              <input className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" name="check_out" required type="date" />
-            </label>
-            <label className="text-sm font-medium text-[#566166]">
-              Adults
-              <input className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" defaultValue="1" min="1" name="adults_count" type="number" />
-            </label>
-            <label className="text-sm font-medium text-[#566166]">
-              Children
-              <input className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" defaultValue="0" min="0" name="children_count" type="number" />
-            </label>
-            <label className="text-sm font-medium text-[#566166]">
-              Monthly Income Estimate
-              <input className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" name="monthly_income_estimate" type="text" />
-            </label>
-            <label className="text-sm font-medium text-[#566166]">
-              Employment Status
-              <select className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" defaultValue="employed" name="employment_status_snapshot">
-                <option value="employed">Employed</option>
-                <option value="self_employed">Self-employed</option>
-                <option value="student">Student</option>
-                <option value="unemployed">Unemployed</option>
-              </select>
-            </label>
-            <label className="text-sm font-medium text-[#566166]">
-              Emergency Contact Name
-              <input className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" name="emergency_contact_name" type="text" />
-            </label>
-            <label className="text-sm font-medium text-[#566166]">
-              Emergency Contact Phone
-              <input className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" name="emergency_contact_phone" type="text" />
-            </label>
-            <label className="text-sm font-medium text-[#566166]">
-              Booking Deposit
-              <input className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" defaultValue="0" min="0" name="booking_deposit" type="number" />
-            </label>
-            <label className="flex items-center gap-3 rounded-xl border border-[#d9e4ea] px-4 py-3 text-sm font-medium text-[#566166]">
-              <input name="has_pets" type="checkbox" value="true" />
-              I have pets
-            </label>
-            <label className="text-sm font-medium text-[#566166] md:col-span-2">
-              Pet Details
-              <input className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" name="pet_details" type="text" />
-            </label>
-            <label className="text-sm font-medium text-[#566166] md:col-span-2">
-              Stay Purpose
-              <input className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" name="stay_purpose" type="text" />
-            </label>
-            <label className="text-sm font-medium text-[#566166] md:col-span-2">
-              Special Requests
-              <textarea className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" name="special_requests" rows={4} />
-            </label>
-            <label className="text-sm font-medium text-[#566166] md:col-span-2">
-              Internal Notes
-              <textarea className="mt-2 w-full rounded-xl border border-[#d9e4ea] px-4 py-3" name="notes" rows={3} />
-            </label>
+            <FormField
+              defaultValue={selectedUnit?.id}
+              label="Unit"
+              name="unitId"
+              options={units.map((unit) => ({
+                label: `${unit.label} — ${unit.type}`,
+                value: unit.id,
+              }))}
+              type="select"
+            />
+            <FormField
+              defaultValue="morning"
+              label="Preferred Move In Time"
+              name="preferred_move_in_time"
+              options={[
+                { label: "Morning", value: "morning" },
+                { label: "Afternoon", value: "afternoon" },
+                { label: "Evening", value: "evening" },
+              ]}
+              type="select"
+            />
+            <FormField label="Check In" name="check_in" required type="date" />
+            <FormField label="Check Out" name="check_out" required type="date" />
+            <FormField defaultValue="1" label="Adults" min={1} name="adults_count" type="number" />
+            <FormField defaultValue="0" label="Children" min={0} name="children_count" type="number" />
+            <FormField label="Monthly Income Estimate" name="monthly_income_estimate" type="text" />
+            <FormField
+              defaultValue="employed"
+              label="Employment Status"
+              name="employment_status_snapshot"
+              options={[
+                { label: "Employed", value: "employed" },
+                { label: "Self-employed", value: "self_employed" },
+                { label: "Student", value: "student" },
+                { label: "Unemployed", value: "unemployed" },
+              ]}
+              type="select"
+            />
+            <FormField label="Emergency Contact Name" name="emergency_contact_name" type="text" />
+            <FormField label="Emergency Contact Phone" name="emergency_contact_phone" type="text" />
+            <FormField defaultValue="0" label="Booking Deposit" min={0} name="booking_deposit" type="number" />
+            <FormField className="self-end" label="I have pets" name="has_pets" type="checkbox" value="true" />
+            <FormField className="md:col-span-2" label="Pet Details" name="pet_details" type="text" />
+            <FormField className="md:col-span-2" label="Stay Purpose" name="stay_purpose" type="text" />
+            <FormField className="md:col-span-2" label="Special Requests" name="special_requests" rows={4} type="textarea" />
+            <FormField className="md:col-span-2" label="Internal Notes" name="notes" rows={3} type="textarea" />
           </div>
         </SurfaceCard>
       </div>
@@ -139,11 +110,11 @@ export function TenantBookingRequestForm({ units }: TenantBookingRequestFormProp
             </div>
           ))}
         </div>
-        {state.error ? <p className="mt-4 rounded-xl bg-[#fe8983]/20 px-4 py-3 text-sm text-[#752121]">{state.error}</p> : null}
-        <ActionButton className="mt-6 w-full" disabled={pending} type="submit">
+        <FormInlineError className="mt-4" message={state.error} />
+        <FormSubmitButton className={actionButtonClassName({ className: "mt-6 w-full" })} disabled={pending}>
           {pending ? "Submitting..." : "Submit booking request"}
-        </ActionButton>
+        </FormSubmitButton>
       </SurfaceCard>
-    </form>
+    </AppForm>
   );
 }

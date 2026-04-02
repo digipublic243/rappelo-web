@@ -2,11 +2,25 @@ import { createBooking, listBookings } from "@/lib/api/bookings";
 import { getCurrentUser, getShellProfile } from "@/lib/api/accounts";
 import { listLeases } from "@/lib/api/leases";
 import { listPayments } from "@/lib/api/payments";
-import { listAvailableUnits, listProperties, listUnits } from "@/lib/api/properties";
+import {
+  listAvailableUnits,
+  listProperties,
+  listUnits,
+} from "@/lib/api/properties";
 import { getSessionTokens } from "@/lib/api/session";
-import { getTenantDashboard, listTenantNotifications, listTenantProfiles } from "@/lib/api/tenants";
+import {
+  getTenantDashboard,
+  listTenantNotifications,
+  listTenantProfiles,
+} from "@/lib/api/tenants";
 import type { TenantDashboardVm } from "@/types/view-models";
-import { mapApiBookingToDomain, mapApiLeaseToDomain, mapApiPaymentToDomain, mapApiPropertyToDomain, mapApiUnitToDomain } from "@/features/tenant/mappers";
+import {
+  mapApiBookingToDomain,
+  mapApiLeaseToDomain,
+  mapApiPaymentToDomain,
+  mapApiPropertyToDomain,
+  mapApiUnitToDomain,
+} from "@/features/tenant/mappers";
 
 function errorMeta(warning: string) {
   return { source: "error" as const, warning };
@@ -28,13 +42,25 @@ async function buildTenantDomainData() {
       automaticPaymentsEnabled: undefined,
       nextDuePayment: undefined,
       quickStats: undefined,
-      meta: errorMeta("No authenticated tenant session found. Sign in to load live data."),
+      meta: errorMeta(
+        "No authenticated tenant session found. Sign in to load live data.",
+      ),
       accessToken: null,
       profileId: null,
     };
   }
 
-  const [user, shellProfile, profiles, leases, payments, units, properties, tenantDashboard, notifications] = await Promise.all([
+  const [
+    user,
+    shellProfile,
+    profiles,
+    leases,
+    payments,
+    units,
+    properties,
+    tenantDashboard,
+    notifications,
+  ] = await Promise.all([
     getCurrentUser(tokens.accessToken).catch(() => null),
     getShellProfile(tokens.accessToken).catch(() => null),
     listTenantProfiles(tokens.accessToken).catch(() => null),
@@ -43,7 +69,9 @@ async function buildTenantDomainData() {
     listUnits(tokens.accessToken).catch(() => null),
     listProperties(tokens.accessToken).catch(() => null),
     getTenantDashboard(tokens.accessToken).catch(() => null),
-    listTenantNotifications(tokens.accessToken, { unreadOnly: true }).catch(() => []),
+    listTenantNotifications(tokens.accessToken, { unreadOnly: true }).catch(
+      () => [],
+    ),
   ]);
 
   if (!user || !profiles || !leases || !payments || !units || !properties) {
@@ -58,9 +86,13 @@ async function buildTenantDomainData() {
       residenceImage: tenantDashboard?.residence_image,
       heroBanner: tenantDashboard?.hero_banner,
       automaticPaymentsEnabled: tenantDashboard?.automatic_payments_enabled,
-      nextDuePayment: tenantDashboard?.next_due_payment ? mapApiPaymentToDomain(tenantDashboard.next_due_payment) : undefined,
+      nextDuePayment: tenantDashboard?.next_due_payment
+        ? mapApiPaymentToDomain(tenantDashboard.next_due_payment)
+        : undefined,
       quickStats: tenantDashboard?.quick_stats,
-      meta: errorMeta("Some tenant endpoints failed to load. The UI is showing no data instead of static fallback."),
+      meta: errorMeta(
+        "Some tenant endpoints failed to load. The UI is showing no data instead of static fallback.",
+      ),
       accessToken: tokens.accessToken,
       profileId: null,
     };
@@ -78,14 +110,17 @@ async function buildTenantDomainData() {
       notifications: notifications.map((notification) => ({
         id: String(notification.id),
         title: notification.title ?? notification.type ?? "Notification",
-        message: notification.message ?? notification.body ?? "No message provided.",
+        message:
+          notification.message ?? notification.body ?? "No message provided.",
         createdAt: notification.created_at,
         isRead: Boolean(notification.is_read),
       })),
       residenceImage: tenantDashboard?.residence_image,
       heroBanner: tenantDashboard?.hero_banner,
       automaticPaymentsEnabled: tenantDashboard?.automatic_payments_enabled,
-      nextDuePayment: tenantDashboard?.next_due_payment ? mapApiPaymentToDomain(tenantDashboard.next_due_payment) : undefined,
+      nextDuePayment: tenantDashboard?.next_due_payment
+        ? mapApiPaymentToDomain(tenantDashboard.next_due_payment)
+        : undefined,
       quickStats: tenantDashboard?.quick_stats,
       meta: errorMeta("No tenant profile is linked to the current user."),
       accessToken: tokens.accessToken,
@@ -109,28 +144,43 @@ async function buildTenantDomainData() {
       return { ...payment, unitId: lease?.unitId ?? "" };
     });
 
-  const currentLease = tenantLeasesApi.find((lease) => lease.status === "active") ?? tenantLeasesApi[0];
-  const currentUnit = currentLease ? units.find((unit) => String(unit.id) === currentLease.unitId) : undefined;
-  const currentProperty = currentUnit ? properties.find((property) => String(property.id) === String(currentUnit.property)) : undefined;
+  const currentLease =
+    tenantLeasesApi.find((lease) => lease.status === "active") ??
+    tenantLeasesApi[0];
+  const currentUnit = currentLease
+    ? units.find((unit) => String(unit.id) === currentLease.unitId)
+    : undefined;
+  const currentProperty = currentUnit
+    ? properties.find(
+        (property) => String(property.id) === String(currentUnit.property),
+      )
+    : undefined;
 
   return {
     profileName: shellProfile?.full_name || user.full_name || "Tenant",
     leases: tenantLeasesApi,
     payments: tenantPaymentsApi,
     currentLease,
-    currentUnit: currentUnit ? mapApiUnitToDomain(currentUnit, user.full_name) : undefined,
-    currentProperty: currentProperty ? mapApiPropertyToDomain(currentProperty) : undefined,
+    currentUnit: currentUnit
+      ? mapApiUnitToDomain(currentUnit, user.full_name)
+      : undefined,
+    currentProperty: currentProperty
+      ? mapApiPropertyToDomain(currentProperty)
+      : undefined,
     notifications: notifications.map((notification) => ({
       id: String(notification.id),
       title: notification.title ?? notification.type ?? "Notification",
-      message: notification.message ?? notification.body ?? "No message provided.",
+      message:
+        notification.message ?? notification.body ?? "No message provided.",
       createdAt: notification.created_at,
       isRead: Boolean(notification.is_read),
     })),
     residenceImage: tenantDashboard?.residence_image,
     heroBanner: tenantDashboard?.hero_banner,
     automaticPaymentsEnabled: tenantDashboard?.automatic_payments_enabled,
-    nextDuePayment: tenantDashboard?.next_due_payment ? mapApiPaymentToDomain(tenantDashboard.next_due_payment) : undefined,
+    nextDuePayment: tenantDashboard?.next_due_payment
+      ? mapApiPaymentToDomain(tenantDashboard.next_due_payment)
+      : undefined,
     quickStats: tenantDashboard?.quick_stats,
     meta: { source: "api" as const },
     accessToken: tokens.accessToken,
@@ -174,9 +224,14 @@ export async function getTenantBookStayData() {
     return { units: [], meta: domainData.meta };
   }
 
-  const availableUnits = await listAvailableUnits(domainData.accessToken).catch(() => null);
+  const availableUnits = await listAvailableUnits(domainData.accessToken).catch(
+    () => null,
+  );
   if (!availableUnits) {
-    return { units: [], meta: errorMeta("Unable to load available units from the API.") };
+    return {
+      units: [],
+      meta: errorMeta("Unable to load available units from the API."),
+    };
   }
 
   return {
@@ -194,15 +249,23 @@ export async function getTenantBookingsData() {
 
   const bookings = await listBookings(domainData.accessToken).catch(() => null);
   if (!bookings) {
-    return { bookings: [], meta: errorMeta("Unable to load tenant bookings from the API.") };
+    return {
+      bookings: [],
+      meta: errorMeta("Unable to load tenant bookings from the API."),
+    };
   }
 
   const filteredBookings = domainData.profileId
-    ? bookings.filter((booking) => String(booking.tenant ?? "") === domainData.profileId)
+    ? bookings.filter(
+        (booking) => String(booking.tenant ?? "") === domainData.profileId,
+      )
     : bookings;
 
   return {
-    bookings: (filteredBookings.length > 0 ? filteredBookings : bookings)?.map?.(mapApiBookingToDomain) || [],
+    bookings:
+      (filteredBookings.length > 0 ? filteredBookings : bookings)?.map?.(
+        mapApiBookingToDomain,
+      ) || [],
     meta: { source: "api" as const },
   };
 }
@@ -231,7 +294,10 @@ export async function submitTenantBooking(input: {
 }) {
   const tokens = await getSessionTokens();
   if (!tokens?.accessToken) {
-    return { ok: false as const, error: "No authenticated tenant session found." };
+    return {
+      ok: false as const,
+      error: "No authenticated tenant session found.",
+    };
   }
 
   try {
@@ -263,6 +329,10 @@ export async function submitTenantBooking(input: {
 
     return { ok: true as const };
   } catch (error) {
-    return { ok: false as const, error: error instanceof Error ? error.message : "Unable to submit booking." };
+    return {
+      ok: false as const,
+      error:
+        error instanceof Error ? error.message : "Unable to submit booking.",
+    };
   }
 }

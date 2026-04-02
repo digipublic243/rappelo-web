@@ -148,15 +148,76 @@ Usage frontend:
 
 #### Proprietes
 
-- `GET /api/properties/properties/`
-- `POST /api/properties/properties/`
-- `GET /api/properties/properties/{id}/`
-- `GET /api/properties/properties/{id}/enriched/`
-- `PATCH /api/properties/properties/{id}/`
+- `GET /api/properties/properties/` — liste paginee
+- `POST /api/properties/properties/` — creer
+- `GET /api/properties/properties/{id}/` — detail complet
+- `GET /api/properties/properties/{id}/enriched/` — detail enrichi
+- `PATCH /api/properties/properties/{id}/` — modifier
 - `POST /api/properties/properties/{id}/activate/`
 - `POST /api/properties/properties/{id}/deactivate/`
 - `GET /api/properties/properties/{id}/financials/`
 - `GET /api/properties/properties/{id}/statistics/`
+
+**Reponse liste (`GET /api/properties/properties/`):**
+
+```json
+{
+  "count": 2,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": "1c96780c-4273-4e28-92b0-ed46b15a7c65",
+      "name": "hello word",
+      "property_type": "apartment",
+      "status": "active",
+      "landlord_name": "Prenom Nom",
+      "total_units": 3,
+      "manager_count": 0,
+      "monthly_rent_total": null,
+      "is_active": true,
+      "created_at": "2026-04-02T12:13:06.961783Z",
+      "updated_at": "2026-04-02T12:13:06.961795Z"
+    }
+  ]
+}
+```
+
+Filtres disponibles sur la liste:
+
+- `?status=active|inactive|maintenance|sold`
+- `?property_type=apartment|house|condo|townhouse|commercial|other`
+- `?city=kinshasa`
+- `?country=RD+CONGO`
+- `?search=<texte>` — cherche dans `name`, `address_content`, `city`, `description`
+- `?ordering=created_at|-created_at|name`
+
+**Payload creation (`POST /api/properties/properties/`):**
+
+```json
+{
+  "name": "Ma propriete",
+  "property_type": "apartment",
+  "address_content": "1 Avenue Kasa-Vubu",
+  "city": "kinshasa",
+  "country": "RD CONGO",
+  "description": "...",
+  "total_units": 4
+}
+```
+
+Champs modele `Property` (create/update):
+
+| Champ | Type | Requis | Notes |
+|---|---|---|---|
+| `name` | string | oui | |
+| `property_type` | enum | non | `apartment \| house \| condo \| townhouse \| commercial \| other` |
+| `status` | enum | non | `active \| inactive \| maintenance \| sold` |
+| `address_content` | string | oui | remplace les anciens champs `address_line_1/state/postal_code` |
+| `city` | enum | non | actuellement `kinshasa` uniquement |
+| `country` | string | non | defaut `RD CONGO` |
+| `description` | string | non | |
+| `total_units` | integer | non | defaut 1 |
 
 `enriched` renvoie en plus:
 
@@ -176,23 +237,60 @@ Usage frontend:
 
 #### Unites
 
-- `GET /api/properties/units/`
-- `POST /api/properties/units/`
-- `GET /api/properties/units/{id}/`
-- `PATCH /api/properties/units/{id}/`
+- `GET /api/properties/units/` — liste
+- `POST /api/properties/units/` — creer
+- `GET /api/properties/units/{id}/` — detail complet
+- `PATCH /api/properties/units/{id}/` — modifier
 - `POST /api/properties/units/{id}/activate/`
 - `POST /api/properties/units/{id}/deactivate/`
 - `POST /api/properties/units/{id}/update_status/`
 - `GET /api/properties/units/available/?property_id=<property_uuid>`
 
-Champs frontend importants sur `Unit`:
+**Reponse liste / creation (`GET` + `POST /api/properties/units/`):**
 
-- `rent_period`: `daily | weekly | monthly | other`
-- `monthly_rent`: montant du loyer pour la periode choisie
-- `security_deposit`
-- `booking_deposit`
-- `allowed_payment_methods`: liste ex. `['cash', 'easypay']`
+```json
+{
+  "id": "<uuid>",
+  "property": "<property_uuid>",
+  "unit_number": "101",
+  "unit_type": "1br",
+  "status": "vacant",
+  "rent": "450.00",
+  "currency": "USD",
+  "rental_periodicity": "mensuel",
+  "description": "Beau studio lumineux",
+  "is_furnished": false,
+  "is_active": true,
+  "created_at": "2026-04-02T12:00:00Z",
+  "updated_at": "2026-04-02T12:00:00Z"
+}
+```
+
+Champs pour `POST /api/properties/units/` (creation simple):
+
+| Champ | Type | Requis | Notes |
+|---|---|---|---|
+| `unit_number` | string | oui | unique par propriete |
+| `unit_type` | enum | non | `studio \| 1br \| 2br \| 3br \| 4br \| commercial \| other` |
+| `rent` | decimal | oui | montant du loyer |
+| `currency` | string | non | defaut `USD` |
+| `rental_periodicity` | enum | non | `journ \| hebdo \| mensuel \| autre` — defaut `mensuel` |
+| `description` | string | non | |
+| `is_furnished` | boolean | non | defaut `false` |
+
+Filtres disponibles sur la liste:
+
+- `?status=vacant|occupied|maintenance|reserved`
+- `?unit_type=studio|1br|2br|3br|4br|commercial|other`
+- `?is_furnished=true|false`
+
+**Detail (`GET /api/properties/units/{id}/`)** — inclut en plus les champs physiques et financiers:
+
+- `bedrooms`, `bathrooms`, `square_footage`, `floor_number`
+- `security_deposit`, `booking_deposit`
+- `allowed_payment_methods`
 - `advance_payment_policy_text`
+- `current_tenant`, `current_lease`
 
 #### Metadonnees propriete (amenities/facilities/media/branding)
 
@@ -233,7 +331,10 @@ Filtre utile:
 
 #### Comptes utilisateurs
 
-- `POST /api/accounts/users/` pour creer un tenant si le bailleur gere la creation de compte via backoffice
+- `POST /api/accounts/users/` pour créer un landlord, property manager ou admin.
+
+> **Note :** Ne pas utiliser cet endpoint pour créer un tenant. Utiliser directement
+> `POST /api/tenants/profiles/` — il crée l'utilisateur et le profil en une seule requête.
 
 #### Profils locataires
 
@@ -242,6 +343,22 @@ Filtre utile:
 - `GET /api/tenants/profiles/{id}/`
 - `PATCH /api/tenants/profiles/{id}/`
 - `GET /api/tenants/profiles/{id}/statistics/`
+
+**Champs pour `POST /api/tenants/profiles/` et `PATCH /api/tenants/profiles/{id}/`**
+
+> `POST /api/tenants/profiles/` crée automatiquement un `User` (rôle `tenant`) dont le
+> `phone_number` est la valeur de `alternate_phone`. Le locataire peut ensuite se connecter
+> via OTP avec ce numéro. Aucun appel préalable à `POST /api/accounts/users/` n'est nécessaire.
+
+| Champ | Type | POST | PATCH | Description |
+|---|---|---|---|---|
+| `alternate_phone` | string | **obligatoire** | optionnel | Numéro du locataire — devient `User.phone_number` à la création (max 15 chars) |
+| `id_card` | file | optionnel | optionnel | Pièce d'identité (multipart/form-data) |
+| `alternate_email` | email | optionnel | optionnel | Adresse e-mail alternative |
+| `marital_status` | enum | optionnel | optionnel | `single` \| `married` \| `divorced` \| `widowed` \| `separated` |
+| `employment_status` | enum | optionnel | optionnel | `employed` \| `self_employed` \| `unemployed` \| `student` \| `retired` \| `military` \| `officer` |
+| `notes` | string | optionnel | optionnel | Notes libres |
+| `is_active` | boolean | — | optionnel | Actif / inactif (PATCH seulement) |
 
 #### Contacts / emploi / references
 
@@ -504,10 +621,11 @@ Le frontend doit donc tolerer les deux formes: `detail` et `error`.
 
 1. Utiliser `/api/auth/otp/*` comme routes OTP canoniques. Il existe aussi des routes dupliquees sous `/api/accounts/otp/*`, mais elles ne doivent pas etre la reference principale.
 2. Les ressources metier utilisent des UUID, pas des entiers.
-3. `monthly_rent` represente le montant associe a `rent_period`, il ne faut pas supposer que c'est toujours mensuel.
+3. `rent` represente le montant associe a `rental_periodicity` (mensuel, hebdo, journ, autre). Ne pas supposer que c'est toujours mensuel.
 4. `Booking.confirm` ne rend pas le `Lease` directement separement, mais la reservation mise a jour avec son champ `lease` rempli.
 5. Le webhook `POST /api/payments/payments/callback/{token}/` n'est pas destine a l'application frontend.
 6. L'integration EasyPay n'est pas encore cablee: le contrat d'API est prepare, mais `gateway_url` restera vide tant que le provider n'est pas branche.
+7. Le modele `Property` a change: utiliser `address_content` + `city` + `country` au lieu des anciens champs (`address_line_1`, `state`, `postal_code`, etc.) dans les formulaires frontend.
 
 ## Sequence recommandee pour le frontend
 
@@ -529,6 +647,111 @@ Le frontend doit donc tolerer les deux formes: `detail` et `error`.
 6. `GET /api/leases/bookings/`
 7. `GET /api/leases/leases/`
 8. `GET /api/payments/payments/`
+
+### F. Easypay (Paiements par mobile money)
+
+**Endpoints Easypay:**
+
+- `POST /api/payments/payments/{id}/initiate-easypay/` — initier une collecte Easypay
+- `GET /api/payments/payments/{id}/check-easypay-status/` — verifier le statut du paiement
+- `POST /api/payments/payments/{id}/initiate_easypay/` — action viewset (meme endpoint)
+- `GET /api/payments/payments/{id}/check_easypay_status/` — action viewset
+- `POST /api/payments/easypay/callback/` — webhook callback (AllowAny) pour notifications Easypay
+
+**Initier un paiement Easypay:**
+
+```http
+POST /api/payments/payments/{payment_uuid}/initiate-easypay/
+Authorization: Bearer <access_token>
+Content-Type: application/json
+
+{
+  "phone_number": "+243899090907"
+}
+```
+
+Response (en cas de succes):
+
+```json
+{
+  "message": "Payment initiated successfully",
+  "payment": {
+    "id": "<payment_uuid>",
+    "status": "pending",
+    "amount": "2000.00",
+    "currency": "CDF",
+    "payment_method": "mobile_money",
+    "easypay_reference_id": "abc123def456xyz",
+    "easypay_transaction_id": "TX-4C90-4C93-2705",
+    "easypay_provider": "Orange Money",
+    ...
+  }
+}
+```
+
+**Verifier le statut (polling):**
+
+```http
+GET /api/payments/payments/{payment_uuid}/check-easypay-status/
+Authorization: Bearer <access_token>
+```
+
+Response:
+
+```json
+{
+  "status": "success",
+  "payment": { ... },
+  "easypay_status": {
+    "status": "Success",  // ou "Failed" ou "Pending"
+    "transactionId": "TX-4C90-4C93-2705",
+    "amount": 2000,
+    "currency": "CDF",
+    "date": "2025-01-27 10:49:20",
+    "provider": "Orange Money",
+    ...
+  }
+}
+```
+
+**Flow de paiement Easypay:**
+
+1. Frontend: appel `POST /initiate-easypay/` avec le numero de telephone du tenant
+2. Backend: genere une `easypay_reference_id` unique et envoie une collecte via API Easypay
+3. Backend: retourne la reference + details du paiement (`status=pending`)
+4. Easypay: initie l'interaction USSD/mobile money avec le client
+5. Client: complete le paiement sur son telephone
+6. Easypay: envoie un callback au backend (`POST /api/payments/easypay/callback/`)
+7. Backend: met a jour le paiement (`status=paid` ou `failed`) en fonction du callback
+8. **Alternative polling:** Frontend peut periodiquement appeler `check-easypay-status/` pour verifier
+
+**Configuration Easypay côte backend:**
+
+Les variables d'environnement suivantes doivent etre definies:
+
+```bash
+EASYPAY_API_KEY=your-easypay-api-key
+EASYPAY_CALLBACK_URL=https://your-domain.com/api/payments/easypay/callback/
+```
+
+**Status de paiement avec Easypay:**
+
+| Statut | Signification |
+|---|---|
+| `pending` | Paiement initie, en attente de confirmation |
+| `paid` | Paiement reussi via callback ou verifi |
+| `failed` | Paiement echoue (communique via callback) |
+
+**Tache automatique:**
+
+Une tache Celery `check_pending_easypay_payments` s'execute toutes les 5 minutes pour verifier les statuts des paiements en attente et les mettre a jour automatiquement. Cela garantit que meme si le callback Easypay est manque, les statuts seront synchronises.
+
+**Phone numbers de test (Easypay sandbox):**
+
+```
+243898900000  // success
+Tout autre numero // failed
+```
 
 ## Etat actuel de la documentation technique
 

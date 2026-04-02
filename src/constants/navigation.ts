@@ -8,20 +8,20 @@ export interface NavItem {
 
 export const NAVIGATION_BY_ROLE: Record<Role, NavItem[]> = {
   landlord: [
-    { href: "/landlord/dashboard", label: "Dashboard", icon: "dashboard" },
-    { href: "/landlord/properties", label: "Portfolio", icon: "domain" },
-    { href: "/landlord/units", label: "Units", icon: "apartment" },
-    { href: "/landlord/tenants", label: "Management", icon: "group" },
-    { href: "/landlord/bookings", label: "Bookings", icon: "event_repeat" },
-    { href: "/landlord/leases", label: "Leases", icon: "description" },
-    { href: "/landlord/payments", label: "Finance", icon: "payments" },
-    { href: "/landlord/reports", label: "Reports", icon: "query_stats" },
+    { href: "/landlord/dashboard", label: "Tableau de bord", icon: "dashboard" },
+    { href: "/landlord/properties", label: "Patrimoine", icon: "domain" },
+    { href: "/landlord/units", label: "Unités", icon: "apartment" },
+    { href: "/landlord/tenants", label: "Locataires", icon: "group" },
+    { href: "/landlord/bookings", label: "Réservations", icon: "event_repeat" },
+    { href: "/landlord/leases", label: "Baux", icon: "description" },
+    { href: "/landlord/payments", label: "Finances", icon: "payments" },
+    { href: "/landlord/reports", label: "Rapports", icon: "query_stats" },
   ],
   tenant: [
-    { href: "/tenant/dashboard", label: "Dashboard", icon: "home" },
-    { href: "/tenant/bookings", label: "My Stays", icon: "book_online" },
-    { href: "/tenant/leases", label: "Leases", icon: "description" },
-    { href: "/tenant/payments", label: "Payments", icon: "credit_card" },
-    { href: "/tenant/book-stay", label: "Browse Properties", icon: "search" },
+    { href: "/tenant/dashboard", label: "Tableau de bord", icon: "home" },
+    { href: "/tenant/bookings", label: "Mes séjours", icon: "book_online" },
+    { href: "/tenant/leases", label: "Baux", icon: "description" },
+    { href: "/tenant/payments", label: "Paiements", icon: "credit_card" },
+    { href: "/tenant/book-stay", label: "Explorer les biens", icon: "search" },
   ],
 };

@@ -1,4 +1,6 @@
 import { notFound } from "next/navigation";
+import { AppForm, FormSubmitButton } from "@/components/forms/AppForm";
+import { FormField } from "@/components/forms/FormField";
 import { leaseActions } from "@/features/landlord/actionRules";
 import { LandlordPageFrame } from "@/features/landlord/LandlordPageFrame";
 import { PageIntro } from "@/components/ui/PageIntro";
@@ -88,25 +90,25 @@ export default async function LeaseDetailPage({ params }: PageProps) {
           <SurfaceCard className="p-6">
             <h2 className="text-xl font-bold text-[#2a3439]">Actions</h2>
             <div className="mt-4 grid gap-3">
-              <form action={renewLeaseAction}>
-                <input name="leaseId" type="hidden" value={lease.id} />
-                <input name="newEndDate" type="hidden" value={lease.endDate} />
-                <button className="flex w-full justify-start rounded-lg bg-[#545f73] px-5 py-3 text-sm font-semibold text-[#f6f7ff] disabled:opacity-50" disabled={!actions.canRenew} type="submit">
+              <AppForm action={renewLeaseAction}>
+                <FormField name="leaseId" type="hidden" value={lease.id} />
+                <FormField name="newEndDate" type="hidden" value={lease.endDate} />
+                <FormSubmitButton className="flex w-full justify-start rounded-lg bg-[#545f73] px-5 text-sm disabled:opacity-50" disabled={!actions.canRenew}>
                   Prepare renewal
-                </button>
-              </form>
-              <form action={activateLeaseAction}>
-                <input name="leaseId" type="hidden" value={lease.id} />
-                <button className="flex w-full justify-start rounded-lg border border-[#a9b4b9]/40 bg-white px-5 py-3 text-sm font-semibold text-[#545f73] disabled:opacity-50" disabled={!actions.canActivate} type="submit">
+                </FormSubmitButton>
+              </AppForm>
+              <AppForm action={activateLeaseAction}>
+                <FormField name="leaseId" type="hidden" value={lease.id} />
+                <FormSubmitButton className="flex w-full justify-start rounded-lg border border-[#a9b4b9]/40 bg-white px-5 text-sm text-[#545f73] disabled:opacity-50" disabled={!actions.canActivate}>
                   Activate lease
-                </button>
-              </form>
-              <form action={terminateLeaseAction}>
-                <input name="leaseId" type="hidden" value={lease.id} />
-                <button className="flex w-full justify-start rounded-lg bg-[#d8e3fb] px-5 py-3 text-sm font-semibold text-[#475266] disabled:opacity-50" disabled={!actions.canTerminate} type="submit">
+                </FormSubmitButton>
+              </AppForm>
+              <AppForm action={terminateLeaseAction}>
+                <FormField name="leaseId" type="hidden" value={lease.id} />
+                <FormSubmitButton className="flex w-full justify-start rounded-lg bg-[#d8e3fb] px-5 text-sm text-[#475266] disabled:opacity-50" disabled={!actions.canTerminate}>
                   Terminate lease
-                </button>
-              </form>
+                </FormSubmitButton>
+              </AppForm>
             </div>
             <p className="mt-4 text-xs text-[#717c82]">
               Allowed now: activate {actions.canActivate ? "yes" : "no"}, terminate {actions.canTerminate ? "yes" : "no"}, renew {actions.canRenew ? "yes" : "no"}.

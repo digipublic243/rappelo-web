@@ -28,7 +28,7 @@ export async function getCurrentAuthenticatedUser(): Promise<AuthenticatedUser |
   return {
     id: String(shellProfile?.id ?? shellProfile?.user_id ?? user.id),
     role: shellProfile?.role ?? user.role,
-    fullName: shellProfile?.full_name || user.full_name || [user.first_name, user.last_name].filter(Boolean).join(" ").trim() || "User",
+    fullName: shellProfile?.full_name || user.full_name || [user.first_name, user.last_name].filter(Boolean).join(" ").trim() || "Utilisateur",
     phoneNumber: shellProfile?.phone_number || user.phone_number,
     email: shellProfile?.email ?? user.email,
     unreadNotifications:
@@ -43,7 +43,7 @@ export async function getCurrentAccountProfileVm(role: Role) {
       user: null,
       role,
       details: null,
-      meta: errorMeta("No authenticated session found."),
+      meta: errorMeta("Aucune session authentifiée trouvée."),
     };
   }
 
@@ -53,7 +53,7 @@ export async function getCurrentAccountProfileVm(role: Role) {
       user: null,
       role,
       details: null,
-      meta: errorMeta("Unable to load the current user profile."),
+      meta: errorMeta("Impossible de charger le profil utilisateur courant."),
     };
   }
 

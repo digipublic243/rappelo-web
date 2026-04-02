@@ -1,5 +1,6 @@
 import { API_PREFIX } from "@/config/api";
 import { apiRequest } from "@/lib/http/client";
+import type { ApiPaginatedResponse } from "@/types/api";
 
 export interface ApiBooking {
   id: string | number;
@@ -40,8 +41,15 @@ export interface ApiCreateBookingRequest {
   notes?: string;
 }
 
+function unwrapListResponse<T>(response: ApiPaginatedResponse<T> | T[]) {
+  return Array.isArray(response) ? response : response.results;
+}
+
 export function listBookings(token: string) {
-  return apiRequest<ApiBooking[]>(`${API_PREFIX}/leases/bookings/`, { token });
+  return apiRequest<ApiPaginatedResponse<ApiBooking> | ApiBooking[]>(
+    `${API_PREFIX}/leases/bookings/`,
+    { token },
+  ).then(unwrapListResponse);
 }
 
 export function getBookingById(id: string | number, token: string) {
