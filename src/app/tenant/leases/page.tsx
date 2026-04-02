@@ -18,38 +18,38 @@ export default async function TenantLeasesPage() {
       <PageIntro title="Mes baux" description="Consultez vos baux actifs et archivés, avec leur statut réel issu du backend." />
 
       <section>
-        <h2 className="text-sm font-bold uppercase tracking-[0.24em] text-[#566166]">Baux actifs</h2>
+        <h2 className="text-sm font-bold uppercase tracking-[0.24em] text-[var(--muted-foreground)]">Baux actifs</h2>
         <div className="mt-4 grid gap-6">
           {activeLeases.map((lease) => (
             <SurfaceCard key={lease.id} className="overflow-hidden">
               <div className="flex flex-col md:flex-row">
-                <div className="h-56 bg-[#d9e4ea] md:w-72" />
+                <div className="h-56 bg-[var(--outline-soft)] md:w-72" />
                 <div className="flex-1 p-6">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
-                      <p className="text-xs text-[#566166]">Numéro de bail</p>
-                      <h3 className="mt-1 text-xl font-bold text-[#2a3439]">{lease.lease_number}</h3>
-                      <p className="mt-1 text-sm text-[#566166]">Unité {lease.unitId}</p>
+                      <p className="text-xs text-[var(--muted-foreground)]">Numéro de bail</p>
+                      <h3 className="mt-1 text-xl font-bold text-[var(--foreground)]">{lease.lease_number}</h3>
+                      <p className="mt-1 text-sm text-[var(--muted-foreground)]">Unité {lease.unitId}</p>
                     </div>
                     <StatusBadge status={lease.status} label={leaseStatusLabel(lease.status)} />
                   </div>
                   <div className="mt-5 grid gap-4 md:grid-cols-3">
                     <div>
-                      <p className="text-xs text-[#566166]">Période du bail</p>
-                      <p className="mt-1 text-sm font-semibold text-[#2a3439]">{formatDate(lease.startDate)} - {formatDate(lease.endDate)}</p>
+                      <p className="text-xs text-[var(--muted-foreground)]">Période du bail</p>
+                      <p className="mt-1 text-sm font-semibold text-[var(--foreground)]">{formatDate(lease.startDate)} - {formatDate(lease.endDate)}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-[#566166]">Montant contractuel</p>
-                      <p className="mt-1 text-sm font-semibold text-[#2a3439]">{formatMoney(lease.rentAmount)}</p>
-                      <p className="mt-1 text-xs text-[#9a9d9f]">{formatCadence(lease.cadence)}</p>
+                      <p className="text-xs text-[var(--muted-foreground)]">Montant contractuel</p>
+                      <p className="mt-1 text-sm font-semibold text-[var(--foreground)]">{formatMoney(lease.rentAmount)}</p>
+                      <p className="mt-1 text-xs text-[var(--subtle-foreground-soft)]">{formatCadence(lease.cadence)}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-[#566166]">Statut</p>
-                      <p className="mt-1 text-sm font-semibold text-[#545f73]">{leaseStatusLabel(lease.status)}</p>
+                      <p className="text-xs text-[var(--muted-foreground)]">Statut</p>
+                      <p className="mt-1 text-sm font-semibold text-[var(--primary)]">{leaseStatusLabel(lease.status)}</p>
                     </div>
                   </div>
                   <div className="mt-6">
-                    <Link className="text-sm font-semibold text-[#545f73]" href={`/tenant/leases/${lease.id}`}>
+                    <Link className="text-sm font-semibold text-[var(--primary)]" href={`/tenant/leases/${lease.id}`}>
                       Voir le bail
                     </Link>
                   </div>
@@ -61,13 +61,13 @@ export default async function TenantLeasesPage() {
       </section>
 
       <section>
-        <h2 className="text-sm font-bold uppercase tracking-[0.24em] text-[#566166]">Baux archivés</h2>
+        <h2 className="text-sm font-bold uppercase tracking-[0.24em] text-[var(--muted-foreground)]">Baux archivés</h2>
         <SurfaceCard className="mt-4 overflow-hidden">
           <table className="w-full">
-            <thead className="bg-[#f0f4f7]">
+            <thead className="bg-[var(--surface-low)]">
               <tr>
                 {["Bail", "Période", "Statut", "Action"].map((label) => (
-                  <th key={label} className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-[#566166]">
+                  <th key={label} className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">
                     {label}
                   </th>
                 ))}
@@ -75,11 +75,11 @@ export default async function TenantLeasesPage() {
             </thead>
             <tbody>
               {historicLeases.map((lease) => (
-                <tr key={lease.id} className="border-t border-[#e8eff3]">
-                  <td className="px-6 py-4 text-sm font-semibold text-[#2a3439]">{lease.lease_number}</td>
-                  <td className="px-6 py-4 text-sm text-[#566166]">{formatDate(lease.startDate)} - {formatDate(lease.endDate)}</td>
+                <tr key={lease.id} className="border-t border-[var(--secondary)]">
+                  <td className="px-6 py-4 text-sm font-semibold text-[var(--foreground)]">{lease.lease_number}</td>
+                  <td className="px-6 py-4 text-sm text-[var(--muted-foreground)]">{formatDate(lease.startDate)} - {formatDate(lease.endDate)}</td>
                   <td className="px-6 py-4"><StatusBadge status={lease.status} label={leaseStatusLabel(lease.status)} /></td>
-                  <td className="px-6 py-4 text-sm text-[#545f73]">
+                  <td className="px-6 py-4 text-sm text-[var(--primary)]">
                     <Link className="font-semibold" href={`/tenant/leases/${lease.id}`}>
                       Voir le détail
                     </Link>

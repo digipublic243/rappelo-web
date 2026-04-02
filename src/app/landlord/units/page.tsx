@@ -31,17 +31,17 @@ export default async function UnitOverviewPage() {
           <SurfaceCard key={unit.id} className="p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-lg font-bold text-[#2a3439]">{unit.label}</h2>
-                <p className="text-sm text-[#566166]">{unit.type}</p>
+                <h2 className="text-lg font-bold text-[var(--foreground)]">{unit.label}</h2>
+                <p className="text-sm text-[var(--muted-foreground)]">{unit.type}</p>
               </div>
               <StatusBadge status={unit.status} label={unitStatusLabel(unit.status)} />
             </div>
-            <p className="mt-6 text-3xl font-black tracking-tight text-[#2a3439]">{formatMoney(unit.price)}</p>
-            <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#717c82]">{formatCadence(unit.pricingCadence)}</p>
-            <div className="mt-4 rounded-lg bg-[#f0f4f7] px-4 py-3 text-sm text-[#566166]">
+            <p className="mt-6 text-3xl font-black tracking-tight text-[var(--foreground)]">{formatMoney(unit.price)}</p>
+            <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">{formatCadence(unit.pricingCadence)}</p>
+            <div className="mt-4 rounded-lg bg-[var(--surface-low)] px-4 py-3 text-sm text-[var(--muted-foreground)]">
               Dépôt {unit.depositEnabled ? "activé" : "désactivé"} • {unit.tenantName ?? "Contexte vacant"}
             </div>
-            <Link className="mt-5 inline-flex text-sm font-semibold text-[#545f73]" href={`/landlord/units/${unit.id}`}>
+            <Link className="mt-5 inline-flex text-sm font-semibold text-[var(--primary)]" href={`/landlord/units/${unit.id}`}>
               Configurer l’unité
             </Link>
           </SurfaceCard>

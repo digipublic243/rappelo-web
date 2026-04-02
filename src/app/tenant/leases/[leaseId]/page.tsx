@@ -5,7 +5,13 @@ import { SurfaceCard } from "@/components/shared/StitchPrimitives";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { DataStateNotice } from "@/components/ui/DataStateNotice";
 import { getTenantLeaseDetailVm } from "@/features/tenant/api";
-import { formatCadence, formatDate, formatMoney, leaseStatusLabel } from "@/lib/format";
+import {
+  formatCadence,
+  formatDate,
+  formatMoney,
+  leaseOverdueStatusLabel,
+  leaseStatusLabel,
+} from "@/lib/format";
 
 interface PageProps {
   params: Promise<{ leaseId: string }>;
@@ -19,7 +25,7 @@ export default async function TenantLeaseDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const { lease, unit, property, meta, paymentSchedule } = detail;
+  const { lease, unit, property, meta, paymentSchedule, overdue } = detail;
 
   return (
     <TenantPageFrame currentPath="/tenant/leases">
@@ -38,34 +44,34 @@ export default async function TenantLeaseDetailPage({ params }: PageProps) {
                 status={lease.status}
                 label={leaseStatusLabel(lease.status)}
               />
-              <span className="rounded-full bg-[#e8eff3] px-3 py-1 text-xs font-semibold text-[#566166]">
+              <span className="rounded-full bg-[var(--secondary)] px-3 py-1 text-xs font-semibold text-[var(--muted-foreground)]">
                 {formatCadence(lease.cadence)}
               </span>
             </div>
 
             <div className="mt-6 grid gap-5 md:grid-cols-2">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Période du bail
                 </p>
-                <p className="mt-2 text-lg font-bold text-[#2a3439]">
+                <p className="mt-2 text-lg font-bold text-[var(--foreground)]">
                   {formatDate(lease.startDate)} - {formatDate(lease.endDate)}
                 </p>
               </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Montant contractuel
                 </p>
-                <p className="mt-2 text-lg font-bold text-[#2a3439]">
+                <p className="mt-2 text-lg font-bold text-[var(--foreground)]">
                   {formatMoney(lease.rentAmount)}
                 </p>
-                <p className="mt-1 text-xs text-[#717c82]">
+                <p className="mt-1 text-xs text-[var(--subtle-foreground)]">
                   {formatCadence(lease.cadence)}
                 </p>
               </div>
             </div>
             {lease.securityDeposit ? (
-              <p className="mt-4 text-sm text-[#566166]">
+              <p className="mt-4 text-sm text-[var(--muted-foreground)]">
                 Garantie : {formatMoney(lease.securityDeposit)}
                 {lease.securityDepositMonthsTaken != null
                   ? ` • ${lease.securityDepositMonthsTaken} mois prélevé(s)`
@@ -75,41 +81,41 @@ export default async function TenantLeaseDetailPage({ params }: PageProps) {
           </SurfaceCard>
 
           <SurfaceCard className="overflow-hidden">
-            <div className="border-b border-[#e8eff3] px-6 py-5">
-              <h2 className="text-xl font-bold text-[#2a3439]">
+            <div className="border-b border-[var(--secondary)] px-6 py-5">
+              <h2 className="text-xl font-bold text-[var(--foreground)]">
                 Résumé du contrat
               </h2>
             </div>
             <div className="grid gap-5 p-6 md:grid-cols-2">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Numéro de bail
                 </p>
-                <p className="mt-2 text-sm font-semibold text-[#2a3439]">
+                <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
                   {lease.lease_number}
                 </p>
               </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Statut
                 </p>
-                <p className="mt-2 text-sm font-semibold text-[#2a3439]">
+                <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
                   {leaseStatusLabel(lease.status)}
                 </p>
               </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Unité
                 </p>
-                <p className="mt-2 text-sm font-semibold text-[#2a3439]">
+                <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
                   {unit?.label ?? lease.unitId}
                 </p>
               </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Bien
                 </p>
-                <p className="mt-2 text-sm font-semibold text-[#2a3439]">
+                <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
                   {property?.name ?? "Bien non résolu"}
                 </p>
               </div>
@@ -117,26 +123,26 @@ export default async function TenantLeaseDetailPage({ params }: PageProps) {
           </SurfaceCard>
 
           <SurfaceCard className="overflow-hidden">
-            <div className="border-b border-[#e8eff3] px-6 py-5">
-              <h2 className="text-xl font-bold text-[#2a3439]">
+            <div className="border-b border-[var(--secondary)] px-6 py-5">
+              <h2 className="text-xl font-bold text-[var(--foreground)]">
                 Calendrier de paiement
               </h2>
             </div>
-            <div className="divide-y divide-[#e8eff3]">
+            <div className="divide-y divide-[var(--secondary)]">
               {(paymentSchedule ?? []).length > 0 ? (
                 paymentSchedule?.map((item) => (
                   <div key={item.id} className="flex items-center justify-between gap-4 px-6 py-4">
                     <div>
-                      <p className="text-sm font-semibold text-[#2a3439]">{item.label}</p>
-                      <p className="text-xs text-[#566166]">{formatDate(item.dueDate)}</p>
+                      <p className="text-sm font-semibold text-[var(--foreground)]">{item.label}</p>
+                      <p className="text-xs text-[var(--muted-foreground)]">{formatDate(item.dueDate)}</p>
                     </div>
-                    <p className="text-sm font-semibold text-[#2a3439]">
+                    <p className="text-sm font-semibold text-[var(--foreground)]">
                       {formatMoney(item.amount)}
                     </p>
                   </div>
                 ))
               ) : (
-                <div className="px-6 py-4 text-sm text-[#566166]">
+                <div className="px-6 py-4 text-sm text-[var(--muted-foreground)]">
                   Le calendrier détaillé n’est pas encore disponible pour ce bail.
                 </div>
               )}
@@ -146,21 +152,49 @@ export default async function TenantLeaseDetailPage({ params }: PageProps) {
 
         <div className="space-y-8 lg:col-span-4">
           <SurfaceCard className="p-6">
-            <h2 className="text-xl font-bold text-[#2a3439]">
+            <h2 className="text-xl font-bold text-[var(--foreground)]">
               Votre résidence
             </h2>
-            <div className="mt-4 space-y-3 text-sm text-[#566166]">
+            <div className="mt-4 space-y-3 text-sm text-[var(--muted-foreground)]">
               <p>
-                <span className="font-semibold text-[#2a3439]">Bien :</span>{" "}
+                <span className="font-semibold text-[var(--foreground)]">Bien :</span>{" "}
                 {property?.name ?? "Indisponible"}
               </p>
               <p>
-                <span className="font-semibold text-[#2a3439]">Ville :</span>{" "}
+                <span className="font-semibold text-[var(--foreground)]">Ville :</span>{" "}
                 {property?.city ?? "Indisponible"}
               </p>
               <p>
-                <span className="font-semibold text-[#2a3439]">Adresse :</span>{" "}
+                <span className="font-semibold text-[var(--foreground)]">Adresse :</span>{" "}
                 {property?.address ?? "Indisponible"}
+              </p>
+            </div>
+          </SurfaceCard>
+
+          <SurfaceCard className="p-6">
+            <h2 className="text-xl font-bold text-[var(--foreground)]">
+              Statut de retard
+            </h2>
+            <div className="mt-4 space-y-3 text-sm text-[var(--muted-foreground)]">
+              <p>
+                <span className="font-semibold text-[var(--foreground)]">Statut :</span>{" "}
+                {leaseOverdueStatusLabel(overdue?.status)}
+              </p>
+              <p>
+                <span className="font-semibold text-[var(--foreground)]">Jours de retard :</span>{" "}
+                {overdue?.daysOverdue ?? 0}
+              </p>
+              <p>
+                <span className="font-semibold text-[var(--foreground)]">Montant en retard :</span>{" "}
+                {formatMoney(overdue?.overdueAmount ?? 0, "CDF")}
+              </p>
+              <p>
+                <span className="font-semibold text-[var(--foreground)]">Paiements manqués :</span>{" "}
+                {overdue?.missedPaymentCount ?? 0}
+              </p>
+              <p className="text-xs text-[var(--subtle-foreground)]">
+                Le backend applique une période de grâce de 3 jours avant de marquer
+                un bail en retard.
               </p>
             </div>
           </SurfaceCard>

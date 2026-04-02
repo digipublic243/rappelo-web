@@ -90,7 +90,21 @@ export interface LeaseDetailVm {
     status?: string;
     label: string;
   }>;
+  overdue?: {
+    leaseId: string;
+    leaseNumber: string;
+    status?: Lease["overdueStatus"];
+    daysOverdue: number;
+    overdueAmount: number;
+    missedPaymentCount: number;
+    lastAlertSentAt?: string;
+  };
   meta: DataMeta;
+}
+
+export interface LeaseOverdueSummaryVm {
+  countOverdue: number;
+  totalOverdueAmount: number;
 }
 
 export interface BookingDetailVm {
@@ -123,6 +137,7 @@ export interface PaymentDetailVm {
   lease?: Lease;
   property?: Property;
   unit?: Unit;
+  accountPhone?: string;
   meta: DataMeta;
 }
 

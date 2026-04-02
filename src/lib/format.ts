@@ -4,12 +4,20 @@ import {
   PAYMENT_STATUS_LABELS,
   UNIT_STATUS_LABELS,
 } from "@/constants/statuses";
-import type { BookingStatus, LeaseStatus, PaymentMethod, PaymentStatus, PricingCadence, UnitStatus } from "@/types/domain";
+import type {
+  BookingStatus,
+  LeaseOverdueStatus,
+  LeaseStatus,
+  PaymentMethod,
+  PaymentStatus,
+  PricingCadence,
+  UnitStatus,
+} from "@/types/domain";
 
-export function formatMoney(amount: number): string {
+export function formatMoney(amount: number, currency = "USD"): string {
   return new Intl.NumberFormat("fr-CD", {
     style: "currency",
-    currency: "USD",
+    currency,
     maximumFractionDigits: 0,
   }).format(amount);
 }
@@ -63,4 +71,15 @@ export function leaseStatusLabel(status: LeaseStatus): string {
 
 export function bookingStatusLabel(status: BookingStatus): string {
   return BOOKING_STATUS_LABELS[status];
+}
+
+export function leaseOverdueStatusLabel(status?: LeaseOverdueStatus): string {
+  const labels: Record<LeaseOverdueStatus, string> = {
+    on_track: "À jour",
+    overdue: "En retard",
+    severely_overdue: "Retard sévère",
+    resolved: "Retard résolu",
+  };
+
+  return status ? labels[status] : "Statut inconnu";
 }

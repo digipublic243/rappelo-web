@@ -45,7 +45,7 @@ export function useAppFormContext() {
 }
 
 export function FormHelperText({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <p className={cn("text-xs text-[#717c82]", className)}>{children}</p>;
+  return <p className={cn("text-xs text-[var(--subtle-foreground)]", className)}>{children}</p>;
 }
 
 export function FormInlineError({ message, className }: { message?: string; className?: string }) {
@@ -61,7 +61,16 @@ export function FormInlineSuccess({ message, className }: { message?: string; cl
     return null;
   }
 
-  return <p className={cn("rounded-xl bg-[#d8e3fb]/40 px-4 py-3 text-sm text-[#485367]", className)}>{message}</p>;
+  return (
+    <p
+      className={cn(
+        "rounded-[var(--radius-md)] bg-[var(--primary-soft)]/70 px-[var(--space-4)] py-[var(--space-3)] text-sm text-[var(--primary-soft-foreground)]",
+        className,
+      )}
+    >
+      {message}
+    </p>
+  );
 }
 
 export function FormSubmitButton({
@@ -80,7 +89,7 @@ export function FormSubmitButton({
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center rounded-2xl bg-[#545f73] px-4 py-3 font-semibold text-[#f6f7ff] disabled:cursor-not-allowed disabled:opacity-70",
+        "inline-flex items-center justify-center rounded-[var(--radius-lg)] bg-[var(--primary)] px-[var(--space-4)] py-[var(--space-3)] font-semibold text-[var(--primary-foreground)] disabled:cursor-not-allowed disabled:opacity-70",
         className,
       )}
       disabled={disabled}

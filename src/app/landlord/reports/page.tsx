@@ -34,26 +34,26 @@ export default async function ReportsPage() {
           ["Open Risk Items", String(payments.filter((payment) => payment.status === "pending").length)],
         ].map(([label, value]) => (
           <SurfaceCard key={label} className="p-5">
-            <p className="text-sm font-medium text-[#566166]">{label}</p>
-            <p className="mt-2 text-3xl font-black text-[#2a3439]">{value}</p>
+            <p className="text-sm font-medium text-[var(--muted-foreground)]">{label}</p>
+            <p className="mt-2 text-3xl font-black text-[var(--foreground)]">{value}</p>
           </SurfaceCard>
         ))}
       </section>
 
       <section className="grid gap-8 lg:grid-cols-12">
         <SurfaceCard className="p-6 lg:col-span-8">
-          <h2 className="text-xl font-bold text-[#2a3439]">Revenue by Property</h2>
+          <h2 className="text-xl font-bold text-[var(--foreground)]">Revenue by Property</h2>
           <div className="mt-5 space-y-3">
             {properties.map((property) => (
-              <div key={property.id} className="flex items-center justify-between rounded-xl bg-[#f0f4f7] px-4 py-4">
-                <span className="font-semibold text-[#2a3439]">{property.name}</span>
-                <span className="text-sm font-bold text-[#545f73]">{formatMoney(property.monthlyRevenue)}</span>
+              <div key={property.id} className="flex items-center justify-between rounded-xl bg-[var(--surface-low)] px-4 py-4">
+                <span className="font-semibold text-[var(--foreground)]">{property.name}</span>
+                <span className="text-sm font-bold text-[var(--primary)]">{formatMoney(property.monthlyRevenue)}</span>
               </div>
             ))}
           </div>
         </SurfaceCard>
 
-        <SurfaceCard className="rounded-[28px] bg-[linear-gradient(145deg,#545f73,#7e8898)] p-8 text-white lg:col-span-4">
+        <SurfaceCard className="rounded-[28px] bg-[linear-gradient(145deg,var(--panel-strong),var(--panel-strong-alt))] p-8 text-white lg:col-span-4">
           <h2 className="text-xl font-bold">Quarterly Report</h2>
           <p className="mt-3 text-sm text-white/80">Narrative insight card preserved as a distinct reporting block instead of collapsing everything into generic KPI tiles.</p>
         </SurfaceCard>

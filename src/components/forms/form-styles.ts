@@ -1,18 +1,19 @@
 import { cn } from "@/lib/cn";
 
 export const formFieldInputClassName = cn(
-  "w-full rounded-2xl border border-[#d9e4ea] bg-white px-4 py-3 text-[#2a3439] outline-none transition-colors",
-  "placeholder:text-[#9aa4aa] focus:border-[#b7c7d8]",
+  "w-full rounded-[var(--radius-lg)] border border-[var(--outline-soft)] bg-[var(--surface-card)] px-[var(--space-4)] py-[var(--space-3)] text-[var(--foreground)] outline-none transition-colors",
+  "placeholder:text-[var(--placeholder)] focus:border-[var(--outline-strong)]",
 );
 
 export const formFieldMutedInputClassName = cn(
-  "w-full rounded-xl border border-[#d9e4ea] bg-[#f0f4f7] px-4 py-3 text-[#2a3439] outline-none transition-colors",
-  "placeholder:text-[#9aa4aa] focus:border-[#b7c7d8]",
+  "w-full rounded-[var(--radius-md)] border border-[var(--outline-soft)] bg-[var(--surface-low)] px-[var(--space-4)] py-[var(--space-3)] text-[var(--foreground)] outline-none transition-colors",
+  "placeholder:text-[var(--placeholder)] focus:border-[var(--outline-strong)]",
 );
 
-export const formFieldLabelClassName = "block text-sm font-medium text-[#566166]";
+export const formFieldLabelClassName =
+  "block text-sm font-medium text-[var(--muted-foreground)]";
 
-export const formHintClassName = "text-[11px] text-[#717c82]";
+export const formHintClassName = "text-[11px] text-[var(--subtle-foreground)]";
 
 export const formInlineErrorClassName =
-  "rounded-xl bg-[#fe8983]/20 px-4 py-3 text-sm text-[#752121]";
+  "rounded-[var(--radius-md)] border border-[var(--danger-border)] bg-[var(--danger-soft)] px-[var(--space-4)] py-[var(--space-3)] text-sm text-[var(--danger)]";

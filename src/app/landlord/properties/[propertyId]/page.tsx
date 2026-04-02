@@ -128,32 +128,32 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               </div>
             </div>
             <div className="p-6">
-              <h3 className="text-xl font-bold text-[#2a3439]">
+              <h3 className="text-xl font-bold text-[var(--foreground)]">
                 Profil du bien
               </h3>
-              <p className="mt-3 text-sm leading-6 text-[#566166]">
+              <p className="mt-3 text-sm leading-6 text-[var(--muted-foreground)]">
                 {details.description?.trim() ||
                   "Aucune description de ce bien n’est encore disponible via l’API."}
               </p>
               <div className="mt-6 space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="rounded-lg bg-[#e8eff3] p-3 text-[#545f73]">
+                  <div className="rounded-lg bg-[var(--secondary)] p-3 text-[var(--primary)]">
                     <MaterialIcon name="map" className="text-[20px]" />
                   </div>
                   <div>
-                    <p className="text-xs text-[#566166]">Adresse</p>
-                    <p className="text-sm font-bold text-[#2a3439]">
+                    <p className="text-xs text-[var(--muted-foreground)]">Adresse</p>
+                    <p className="text-sm font-bold text-[var(--foreground)]">
                       {property.address}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="rounded-lg bg-[#e8eff3] p-3 text-[#545f73]">
+                  <div className="rounded-lg bg-[var(--secondary)] p-3 text-[var(--primary)]">
                     <MaterialIcon name="apartment" className="text-[20px]" />
                   </div>
                   <div>
-                    <p className="text-xs text-[#566166]">Inventaire</p>
-                    <p className="text-sm font-bold text-[#2a3439]">
+                    <p className="text-xs text-[var(--muted-foreground)]">Inventaire</p>
+                    <p className="text-sm font-bold text-[var(--foreground)]">
                       {property.totalUnits} unités au total
                     </p>
                   </div>
@@ -161,14 +161,14 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               </div>
               {featureTags.length > 0 ? (
                 <div className="mt-6">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#717c82]">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                     Équipements et services
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {featureTags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full bg-[#f0f4f7] px-3 py-2 text-xs font-semibold text-[#566166]"
+                        className="rounded-full bg-[var(--surface-low)] px-3 py-2 text-xs font-semibold text-[var(--muted-foreground)]"
                       >
                         {tag}
                       </span>
@@ -179,17 +179,17 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             </div>
           </SurfaceCard>
 
-          <SurfaceCard className="bg-[#f0f4f7] p-6">
-            <h3 className="mb-4 text-sm font-black uppercase tracking-[0.24em] text-[#717c82]">
+          <SurfaceCard className="bg-[var(--surface-low)] p-6">
+            <h3 className="mb-4 text-sm font-black uppercase tracking-[0.24em] text-[var(--subtle-foreground)]">
               Informations du bien
             </h3>
             <div className="grid grid-cols-2 gap-4">
               {facts.map(([label, value]) => (
                 <div key={label} className="rounded-lg bg-white p-4">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#717c82]">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                     {label}
                   </p>
-                  <p className="mt-2 text-sm font-semibold text-[#2a3439]">
+                  <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
                     {value}
                   </p>
                 </div>
@@ -200,18 +200,18 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
         <div className="space-y-8 lg:col-span-7">
           <SurfaceCard className="overflow-hidden">
-            <div className="flex items-center justify-between border-b border-[#e8eff3] px-6 py-5">
+            <div className="flex items-center justify-between border-b border-[var(--secondary)] px-6 py-5">
               <div>
-                <h3 className="text-lg font-bold text-[#2a3439]">
+                <h3 className="text-lg font-bold text-[var(--foreground)]">
                   Inventaire des unités
                 </h3>
-                <p className="text-sm text-[#566166]">
+                <p className="text-sm text-[var(--muted-foreground)]">
                   {property.occupiedUnits}/{property.totalUnits} occupées dans
                   ce bien.
                 </p>
               </div>
               <Link
-                className="text-sm font-semibold text-[#545f73]"
+                className="text-sm font-semibold text-[var(--primary)]"
                 href="/landlord/units"
               >
                 Ouvrir la vue des unités
@@ -219,7 +219,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             </div>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[720px]">
-                <thead className="bg-[#f0f4f7] text-left">
+                <thead className="bg-[var(--surface-low)] text-left">
                   <tr>
                     {[
                       "Unité",
@@ -230,7 +230,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                     ].map((label) => (
                       <th
                         key={label}
-                        className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#566166]"
+                        className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]"
                       >
                         {label}
                       </th>
@@ -245,12 +245,12 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                         payment.status === "pending",
                     );
                     return (
-                      <tr key={unit.id} className="border-t border-[#e8eff3]">
+                      <tr key={unit.id} className="border-t border-[var(--secondary)]">
                         <td className="px-6 py-4">
-                          <p className="font-semibold text-[#2a3439]">
+                          <p className="font-semibold text-[var(--foreground)]">
                             {unit.label}
                           </p>
-                          <p className="text-xs text-[#566166]">{unit.type}</p>
+                          <p className="text-xs text-[var(--muted-foreground)]">{unit.type}</p>
                         </td>
                         <td className="px-6 py-4">
                           <StatusBadge
@@ -258,21 +258,21 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                             label={unitStatusLabel(unit.status)}
                           />
                         </td>
-                        <td className="px-6 py-4 text-sm text-[#2a3439]">
+                        <td className="px-6 py-4 text-sm text-[var(--foreground)]">
                           {unit.tenantName ?? (
-                            <span className="italic text-[#9a9d9f]">
+                            <span className="italic text-[var(--subtle-foreground-soft)]">
                               Aucun bail actif
                             </span>
                           )}
                         </td>
-                        <td className="px-6 py-4 text-sm text-[#566166]">
+                        <td className="px-6 py-4 text-sm text-[var(--muted-foreground)]">
                           {nextPayment
                             ? formatDate(nextPayment.dueDate)
                             : "Aucun paiement dû"}
                         </td>
                         <td className="px-6 py-4">
                           <Link
-                            className="text-sm font-semibold text-[#545f73]"
+                            className="text-sm font-semibold text-[var(--primary)]"
                             href={`/landlord/units/${unit.id}`}
                           >
                             Configurer
@@ -287,41 +287,41 @@ export default async function PropertyDetailPage({ params }: PageProps) {
           </SurfaceCard>
 
           <SurfaceCard className="p-6">
-            <h3 className="text-lg font-bold text-[#2a3439]">
+            <h3 className="text-lg font-bold text-[var(--foreground)]">
               Panneau des revenus
             </h3>
             <div className="mt-4 grid gap-4 md:grid-cols-4">
-              <div className="rounded-xl bg-[#f0f4f7] p-5">
-                <p className="text-xs uppercase tracking-[0.2em] text-[#717c82]">
+              <div className="rounded-xl bg-[var(--surface-low)] p-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Revenu mensuel
                 </p>
-                <p className="mt-2 text-xl font-black text-[#2a3439]">
+                <p className="mt-2 text-xl font-black text-[var(--foreground)]">
                   {formatMoney(property.monthlyRevenue)}
                 </p>
               </div>
-              <div className="rounded-xl bg-[#f0f4f7] p-5">
-                <p className="text-xs uppercase tracking-[0.2em] text-[#717c82]">
+              <div className="rounded-xl bg-[var(--surface-low)] p-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Unités occupées
                 </p>
-                <p className="mt-2 text-xl font-black text-[#2a3439]">
+                <p className="mt-2 text-xl font-black text-[var(--foreground)]">
                   {property.occupiedUnits}
                 </p>
               </div>
-              <div className="rounded-xl bg-[#f0f4f7] p-5">
-                <p className="text-xs uppercase tracking-[0.2em] text-[#717c82]">
+              <div className="rounded-xl bg-[var(--surface-low)] p-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Tarif moyen
                 </p>
-                <p className="mt-2 text-xl font-black text-[#2a3439]">
+                <p className="mt-2 text-xl font-black text-[var(--foreground)]">
                   {formatMoney(
                     Math.round(property.monthlyRevenue / property.totalUnits),
                   )}
                 </p>
               </div>
-              <div className="rounded-xl bg-[#f0f4f7] p-5">
-                <p className="text-xs uppercase tracking-[0.2em] text-[#717c82]">
+              <div className="rounded-xl bg-[var(--surface-low)] p-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Occupation
                 </p>
-                <p className="mt-2 text-xl font-black text-[#2a3439]">
+                <p className="mt-2 text-xl font-black text-[var(--foreground)]">
                   {details.occupancyRate != null
                     ? `${Math.round(details.occupancyRate)}%`
                     : "N/D"}
@@ -330,11 +330,11 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             </div>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               {financialFacts.map(([label, value]) => (
-                <div key={label} className="rounded-xl bg-[#f0f4f7] p-5">
-                  <p className="text-xs uppercase tracking-[0.2em] text-[#717c82]">
+                <div key={label} className="rounded-xl bg-[var(--surface-low)] p-5">
+                  <p className="text-xs uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                     {label}
                   </p>
-                  <p className="mt-2 text-xl font-bold text-[#2a3439]">
+                  <p className="mt-2 text-xl font-bold text-[var(--foreground)]">
                     {value}
                   </p>
                 </div>

@@ -1,6 +1,8 @@
 import { getCurrentUser } from "@/lib/api/accounts";
 import { getBookingById, listBookings } from "@/lib/api/bookings";
 import {
+  getLeaseOverdueStatus,
+  getLeaseOverdueSummary,
   getLeaseById,
   getLeasePaymentSchedule,
   listLeases,
@@ -34,6 +36,7 @@ import type {
   DataMeta,
   LandlordDashboardVm,
   LeaseDetailVm,
+  LeaseOverdueSummaryVm,
   PaymentDetailVm,
   PaymentsPageVm,
   PropertyDetailVm,
@@ -48,6 +51,11 @@ import {
   mapApiUnitToDomain,
   mapTenantAggregateToDomain,
 } from "@/features/landlord/mappers";
+
+function normalizeOverdueMetric(value: number | string | null | undefined) {
+  const parsed = Number(value ?? 0);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
 
 interface LandlordDomainData {
   properties: Property[];
@@ -405,7 +413,42 @@ export async function getLandlordTenantDetailVm(
 
 export async function getLandlordLeasesData() {
   const domainData = await buildLandlordDomainData();
-  return { leases: domainData.leases, meta: domainData.meta };
+  const accessToken = await getAccessTokenForServer();
+  const overdueSummary = accessToken
+    ? await getLeaseOverdueSummary(accessToken).catch(() => null)
+    : null;
+  const overdueByLeaseId = new Map(
+    (overdueSummary?.leases ?? []).map((lease) => [
+      String(lease.lease_id ?? lease.id ?? ""),
+      lease,
+    ]),
+  );
+
+  return {
+    leases: domainData.leases.map((lease) => {
+      const overdue = overdueByLeaseId.get(lease.id);
+      return overdue
+        ? {
+            ...lease,
+            overdueStatus: overdue.overdue_status,
+            daysOverdue: overdue.days_overdue,
+            overdueAmount: normalizeOverdueMetric(overdue.overdue_amount),
+            missedPaymentCount: overdue.missed_payment_count,
+            lastOverdueAlertSentAt:
+              overdue.last_overdue_alert_sent_at ?? undefined,
+          }
+        : lease;
+    }),
+    overdueSummary: overdueSummary
+      ? ({
+          countOverdue: overdueSummary.count_overdue,
+          totalOverdueAmount: normalizeOverdueMetric(
+            overdueSummary.total_overdue_amount,
+          ),
+        } satisfies LeaseOverdueSummaryVm)
+      : undefined,
+    meta: domainData.meta,
+  };
 }
 
 export async function getLandlordLeaseCreationData() {
@@ -435,6 +478,9 @@ export async function getLandlordLeaseDetailVm(
   const schedule = await getLeasePaymentSchedule(leaseId, accessToken).catch(
     () => [],
   );
+  const overdue = await getLeaseOverdueStatus(leaseId, accessToken).catch(
+    () => null,
+  );
   const tenantProfile = await getTenantProfileById(
     apiLease.tenant,
     accessToken,
@@ -461,6 +507,17 @@ export async function getLandlordLeaseDetailVm(
       status: item.status,
       label: item.label ?? item.name ?? `Échéance ${index + 1}`,
     })),
+    overdue: overdue
+      ? {
+          leaseId: String(overdue.lease_id ?? leaseId),
+          leaseNumber: overdue.lease_number ?? lease.lease_number,
+          status: overdue.overdue_status,
+          daysOverdue: overdue.days_overdue,
+          overdueAmount: normalizeOverdueMetric(overdue.overdue_amount),
+          missedPaymentCount: overdue.missed_payment_count,
+          lastAlertSentAt: overdue.last_overdue_alert_sent_at ?? undefined,
+        }
+      : undefined,
     meta: { source: "api" },
   };
 }

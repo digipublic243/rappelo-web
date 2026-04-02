@@ -3,6 +3,11 @@ export type ApiPropertyStatus = "active" | "inactive" | "maintenance" | "sold";
 export type ApiUnitStatus = "vacant" | "occupied" | "maintenance" | "reserved";
 export type ApiRentalPeriodicity = "journ" | "hebdo" | "mensuel" | "autre";
 export type ApiLeaseStatus = "draft" | "active" | "terminated" | "expired";
+export type ApiLeaseOverdueStatus =
+  | "on_track"
+  | "overdue"
+  | "severely_overdue"
+  | "resolved";
 export type ApiPaymentStatus = "pending" | "paid" | "failed" | "refunded";
 export type ApiPaymentMethod =
   | "cash"
@@ -332,6 +337,23 @@ export interface ApiLeaseRenewRequest {
 
 export interface ApiLeaseTerminateRequest {
   move_out_date?: string;
+}
+
+export interface ApiLeaseOverdue {
+  lease_id?: string | number;
+  id?: string | number;
+  lease_number?: string;
+  overdue_status: ApiLeaseOverdueStatus;
+  days_overdue: number;
+  overdue_amount: number | string;
+  missed_payment_count: number;
+  last_overdue_alert_sent_at?: string | null;
+}
+
+export interface ApiLeaseOverdueSummary {
+  count_overdue: number;
+  total_overdue_amount: number | string;
+  leases: ApiLeaseOverdue[];
 }
 
 export interface ApiPayment {

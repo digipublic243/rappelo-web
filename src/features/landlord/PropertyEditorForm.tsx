@@ -75,12 +75,12 @@ export function PropertyEditorForm({
       <div className="space-y-8 lg:col-span-8">
         <section className="rounded-[28px] bg-white p-8 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-[#e8eff3] p-3 text-[#545f73]">
+            <div className="rounded-xl bg-[var(--secondary)] p-3 text-[var(--primary)]">
               <MaterialIcon name="domain" className="text-[22px]" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-[#2a3439]">{title}</h2>
-              <p className="text-sm text-[#566166]">Renseignez l’identité du bien, son adresse et sa configuration principale.</p>
+              <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)]">{title}</h2>
+              <p className="text-sm text-[var(--muted-foreground)]">Renseignez l’identité du bien, son adresse et sa configuration principale.</p>
             </div>
           </div>
 
@@ -110,18 +110,18 @@ export function PropertyEditorForm({
 
         <section className="rounded-[28px] bg-white p-8 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-[#e8eff3] p-3 text-[#545f73]">
+            <div className="rounded-xl bg-[var(--secondary)] p-3 text-[var(--primary)]">
               <MaterialIcon name="payments" className="text-[22px]" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-[#2a3439]">Configuration documentée</h2>
-              <p className="text-sm text-[#566166]">Le contrat backend actuel accepte ici surtout le statut métier et le nombre total d’unités.</p>
+              <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)]">Configuration documentée</h2>
+              <p className="text-sm text-[var(--muted-foreground)]">Le contrat backend actuel accepte ici surtout le statut métier et le nombre total d’unités.</p>
             </div>
           </div>
 
           <div className="mt-8 grid gap-5 md:grid-cols-2">
             <FormFieldMuted defaultValue={defaults.totalUnits} label="Nombre total d’unités" min={1} name="total_units" type="number" />
-            <div className="rounded-2xl bg-[#f0f4f7] px-4 py-4 text-sm text-[#566166] md:col-span-2">
+            <div className="rounded-2xl bg-[var(--surface-low)] px-4 py-4 text-sm text-[var(--muted-foreground)] md:col-span-2">
               Les informations avancées comme l’année de construction, la superficie, la valorisation ou le total des loyers restent visibles en lecture sur la fiche bien, mais ne font plus partie du payload documenté pour la création et la mise à jour.
             </div>
           </div>
@@ -129,7 +129,7 @@ export function PropertyEditorForm({
       </div>
 
       <div className="space-y-8 lg:col-span-4">
-        <section className="rounded-[28px] bg-[#5d6980] p-8 text-white shadow-[0_24px_60px_rgba(84,95,115,0.22)]">
+        <section className="rounded-[28px] bg-[var(--panel-mid)] p-8 text-white shadow-[var(--ring-soft)]">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold tracking-tight">Statut du bien</h2>
             <span className="rounded-full bg-white/14 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
@@ -161,35 +161,35 @@ export function PropertyEditorForm({
         </section>
 
         <section className="rounded-[28px] bg-white p-8 shadow-sm">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#717c82]">Aperçu média</p>
-          <div className="mt-6 overflow-hidden rounded-2xl bg-[#d9e4ea]">
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--subtle-foreground)]">Aperçu média</p>
+          <div className="mt-6 overflow-hidden rounded-2xl bg-[var(--outline-soft)]">
             <img
               alt="Aperçu du bien"
               className="h-56 w-full object-cover"
               src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80"
             />
           </div>
-          <p className="mt-4 text-sm text-[#566166]">
+          <p className="mt-4 text-sm text-[var(--muted-foreground)]">
             La spécification backend actuelle n’expose pas encore l’envoi des médias du bien. Ce bloc reste donc un aperçu visuel.
           </p>
         </section>
 
-        <section className="rounded-[28px] bg-[#e8eff3] p-8 shadow-sm">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#717c82]">Résumé de performance</p>
+        <section className="rounded-[28px] bg-[var(--secondary)] p-8 shadow-sm">
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--subtle-foreground)]">Résumé de performance</p>
           <div className="mt-5 space-y-4">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-[#566166]">Unités occupées</span>
-              <span className="font-bold text-[#2a3439]">{propertyStats?.occupiedUnits ?? 0}</span>
+              <span className="text-[var(--muted-foreground)]">Unités occupées</span>
+              <span className="font-bold text-[var(--foreground)]">{propertyStats?.occupiedUnits ?? 0}</span>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-[#566166]">Taux d’occupation</span>
-              <span className="font-bold text-[#2a3439]">
+              <span className="text-[var(--muted-foreground)]">Taux d’occupation</span>
+              <span className="font-bold text-[var(--foreground)]">
                 {propertyStats?.occupancyRate != null ? `${Math.round(propertyStats.occupancyRate)}%` : "N/D"}
               </span>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-[#566166]">Revenu mensuel</span>
-              <span className="font-bold text-[#2a3439]">
+              <span className="text-[var(--muted-foreground)]">Revenu mensuel</span>
+              <span className="font-bold text-[var(--foreground)]">
                 {propertyStats?.monthlyRevenue != null
                   ? new Intl.NumberFormat("fr-CD", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(propertyStats.monthlyRevenue)
                   : "N/D"}
@@ -201,9 +201,9 @@ export function PropertyEditorForm({
         <div className="space-y-3">
           <FormInlineError className="rounded-2xl" message={state.error} />
           {state.errorDetails?.length ? (
-            <div className="rounded-2xl border border-[#f2b7b3] bg-white px-5 py-4">
-              <p className="text-sm font-bold text-[#752121]">Veuillez vérifier ces champs :</p>
-              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[#5d3b39]">
+            <div className="rounded-2xl border border-[var(--danger-border)] bg-white px-5 py-4">
+              <p className="text-sm font-bold text-[var(--danger)]">Veuillez vérifier ces champs :</p>
+              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--danger-muted)]">
                 {state.errorDetails.map((detail) => (
                   <li key={detail}>{detail}</li>
                 ))}
@@ -215,7 +215,7 @@ export function PropertyEditorForm({
 
       <div className="lg:col-span-12">
         <div className="flex flex-wrap items-center justify-end gap-3">
-          <Link className="inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold text-[#566166]" href="/landlord/properties">
+          <Link className="inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold text-[var(--muted-foreground)]" href="/landlord/properties">
             Annuler
           </Link>
           <FormSubmitButton

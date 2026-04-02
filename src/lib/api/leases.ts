@@ -3,6 +3,8 @@ import { apiRequest } from "@/lib/http/client";
 import type {
   ApiLease,
   ApiLeaseCreateRequest,
+  ApiLeaseOverdue,
+  ApiLeaseOverdueSummary,
   ApiLeaseRenewRequest,
   ApiLeaseTerminateRequest,
   ApiPaginatedResponse,
@@ -67,5 +69,30 @@ export function getLeasePaymentSchedule(id: string | number, token: string) {
   return apiRequest<ApiLeasePaymentScheduleItem[]>(
     `${API_PREFIX}/leases/leases/${id}/payment_schedule/`,
     { token },
+  );
+}
+
+export function getLeaseOverdueStatus(id: string | number, token: string) {
+  return apiRequest<ApiLeaseOverdue>(
+    `${API_PREFIX}/leases/leases/${id}/overdue_status/`,
+    { token },
+  );
+}
+
+export function getLeaseOverdueSummary(token: string) {
+  return apiRequest<ApiLeaseOverdueSummary>(
+    `${API_PREFIX}/leases/leases/overdue_summary/`,
+    { token },
+  );
+}
+
+export function alertLeaseOverdue(id: string | number, token: string) {
+  return apiRequest<{ message?: string; lease?: ApiLeaseOverdue }>(
+    `${API_PREFIX}/leases/leases/${id}/alert_overdue/`,
+    {
+      method: "POST",
+      token,
+      body: {},
+    },
   );
 }

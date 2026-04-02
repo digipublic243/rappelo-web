@@ -83,9 +83,9 @@ export function GeneratePaymentLinkForm({ leases, tenants, payments }: GenerateP
 
       <FormInlineError message={state.error} />
       {state.errorDetails?.length ? (
-        <div className="rounded-xl border border-[#f2b7b3] bg-white px-4 py-4">
-          <p className="text-sm font-bold text-[#752121]">Détails de l’erreur :</p>
-          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[#5d3b39]">
+        <div className="rounded-xl border border-[var(--danger-border)] bg-white px-4 py-4">
+          <p className="text-sm font-bold text-[var(--danger)]">Détails de l’erreur :</p>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--danger-muted)]">
             {state.errorDetails.map((detail) => (
               <li key={detail}>{detail}</li>
             ))}
@@ -94,25 +94,25 @@ export function GeneratePaymentLinkForm({ leases, tenants, payments }: GenerateP
       ) : null}
       <FormInlineSuccess message={state.message} />
       {state.linkUrl ? (
-        <div className="rounded-xl bg-[#f0f4f7] px-4 py-3">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">Lien généré</p>
-          <p className="mt-2 break-all text-sm font-semibold text-[#2a3439]">{state.linkUrl}</p>
+        <div className="rounded-xl bg-[var(--surface-low)] px-4 py-3">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">Lien généré</p>
+          <p className="mt-2 break-all text-sm font-semibold text-[var(--foreground)]">{state.linkUrl}</p>
           {state.expiresAt ? (
-            <p className="mt-2 text-xs text-[#566166]">
+            <p className="mt-2 text-xs text-[var(--muted-foreground)]">
               Expire le {formatDate(state.expiresAt)}
             </p>
           ) : null}
           {state.gatewayReference ? (
-            <p className="mt-2 text-xs text-[#566166]">
+            <p className="mt-2 text-xs text-[var(--muted-foreground)]">
               Référence passerelle : {state.gatewayReference}
             </p>
           ) : null}
           {state.gatewayUrl ? (
-            <p className="mt-2 break-all text-xs text-[#566166]">
+            <p className="mt-2 break-all text-xs text-[var(--muted-foreground)]">
               URL passerelle : {state.gatewayUrl}
             </p>
           ) : (
-            <p className="mt-2 text-xs text-[#566166]">
+            <p className="mt-2 text-xs text-[var(--muted-foreground)]">
               L’URL de passerelle restera vide tant que l’intégration EasyPay n’est pas câblée côté backend.
             </p>
           )}

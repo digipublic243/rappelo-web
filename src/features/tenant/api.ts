@@ -1,6 +1,10 @@
 import { createBooking, listBookings } from "@/lib/api/bookings";
 import { getCurrentUser, getShellProfile } from "@/lib/api/accounts";
-import { getLeasePaymentSchedule, listLeases } from "@/lib/api/leases";
+import {
+  getLeaseOverdueStatus,
+  getLeasePaymentSchedule,
+  listLeases,
+} from "@/lib/api/leases";
 import { listPayments } from "@/lib/api/payments";
 import {
   listAvailableUnits,
@@ -22,6 +26,11 @@ import {
   mapApiPropertyToDomain,
   mapApiUnitToDomain,
 } from "@/features/tenant/mappers";
+
+function normalizeOverdueMetric(value: number | string | null | undefined) {
+  const parsed = Number(value ?? 0);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
 
 function errorMeta(warning: string) {
   return { source: "error" as const, warning };
@@ -51,6 +60,7 @@ async function buildTenantDomainData() {
       accessToken: null,
       profileId: null,
       tenantActorId: null,
+      accountPhone: undefined,
     };
   }
 
@@ -102,6 +112,7 @@ async function buildTenantDomainData() {
       accessToken: tokens.accessToken,
       profileId: null,
       tenantActorId: user ? String(user.id) : null,
+      accountPhone: user?.phone_number,
     };
   }
 
@@ -144,6 +155,7 @@ async function buildTenantDomainData() {
       accessToken: tokens.accessToken,
       profileId: null,
       tenantActorId: String(user.id),
+      accountPhone: user.phone_number,
     };
   }
 
@@ -214,6 +226,7 @@ async function buildTenantDomainData() {
     accessToken: tokens.accessToken,
     profileId: String(currentProfile.id),
     tenantActorId,
+    accountPhone: user.phone_number,
   };
 }
 
@@ -267,6 +280,7 @@ export async function getTenantPaymentDetailVm(
     lease,
     unit: unit ?? domainData.currentUnit,
     property: property ?? domainData.currentProperty,
+    accountPhone: domainData.accountPhone,
     meta: domainData.meta,
   };
 }
@@ -339,6 +353,12 @@ export async function getTenantLeaseDetailVm(leaseId: string) {
           () => [],
         )
       : [];
+  const overdue =
+    domainData.accessToken != null
+      ? await getLeaseOverdueStatus(leaseId, domainData.accessToken).catch(
+          () => null,
+        )
+      : null;
 
   return {
     lease,
@@ -355,6 +375,17 @@ export async function getTenantLeaseDetailVm(leaseId: string) {
       status: item.status,
       label: item.label ?? item.name ?? `Échéance ${index + 1}`,
     })),
+    overdue: overdue
+      ? {
+          leaseId: String(overdue.lease_id ?? leaseId),
+          leaseNumber: overdue.lease_number ?? lease.lease_number,
+          status: overdue.overdue_status,
+          daysOverdue: overdue.days_overdue,
+          overdueAmount: normalizeOverdueMetric(overdue.overdue_amount),
+          missedPaymentCount: overdue.missed_payment_count,
+          lastAlertSentAt: overdue.last_overdue_alert_sent_at ?? undefined,
+        }
+      : undefined,
     meta: domainData.meta,
   };
 }

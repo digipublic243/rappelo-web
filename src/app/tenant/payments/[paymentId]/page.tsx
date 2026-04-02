@@ -29,7 +29,7 @@ export default async function TenantPaymentDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const { payment, lease, unit, property, meta } = detail;
+  const { payment, lease, unit, property, accountPhone, meta } = detail;
 
   return (
     <TenantPageFrame currentPath="/tenant/payments">
@@ -50,92 +50,96 @@ export default async function TenantPaymentDetailPage({ params }: PageProps) {
         }
       />
 
-      <section className="grid gap-8 lg:grid-cols-12">
-        <div className="space-y-8 lg:col-span-8">
-          <SurfaceCard className="p-6">
-            <div className="flex flex-wrap items-center gap-3">
-              <StatusBadge
-                status={payment.status}
-                label={paymentStatusLabel(payment.status)}
-              />
-              <span className="rounded-full bg-[#e8eff3] px-3 py-1 text-xs font-semibold text-[#566166]">
-                {formatPaymentMethod(payment.method)}
-              </span>
-            </div>
-            <p className="mt-5 text-4xl font-black tracking-tight text-[#2a3439]">
-              {formatMoney(payment.amount)}
-            </p>
-            <div className="mt-6 grid gap-5 md:grid-cols-2">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
-                  Échéance
-                </p>
-                <p className="mt-2 text-sm font-semibold text-[#2a3439]">
-                  {formatDate(payment.dueDate)}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
-                  Réglé le
-                </p>
-                <p className="mt-2 text-sm font-semibold text-[#2a3439]">
-                  {payment.paidAt ? formatDate(payment.paidAt) : "En attente"}
-                </p>
-              </div>
-            </div>
-          </SurfaceCard>
-
-          <SurfaceCard className="p-6">
-            <h2 className="text-xl font-bold text-[#2a3439]">
-              Détails de facturation
-            </h2>
-            <div className="mt-5 grid gap-5 md:grid-cols-2">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
-                  Bail
-                </p>
-                <p className="mt-2 text-sm font-semibold text-[#2a3439]">
-                  {lease?.lease_number ?? payment.leaseId ?? "Aucun bail"}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
-                  Référence transaction
-                </p>
-                <p className="mt-2 text-sm font-semibold text-[#2a3439]">
-                  {payment.transactionReference ?? "Aucune référence"}
-                </p>
-              </div>
-              <div className="md:col-span-2">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
-                  Notes
-                </p>
-                <p className="mt-2 text-sm text-[#566166]">
-                  {payment.notes ?? "Aucune note enregistrée."}
-                </p>
-              </div>
-            </div>
-          </SurfaceCard>
-        </div>
-
-        <div className="space-y-8 lg:col-span-4">
-          <SurfaceCard className="p-6">
-            <h2 className="text-xl font-bold text-[#2a3439]">Contexte</h2>
-            <div className="mt-4 space-y-3 text-sm text-[#566166]">
-              <p>
-                <span className="font-semibold text-[#2a3439]">Unité :</span>{" "}
-                {unit?.label ?? payment.unitId ?? "Indisponible"}
+      <section className="space-y-8">
+        <SurfaceCard className="p-6">
+          <div className="flex flex-wrap items-center gap-3">
+            <StatusBadge
+              status={payment.status}
+              label={paymentStatusLabel(payment.status)}
+            />
+            <span className="rounded-full bg-[var(--secondary)] px-3 py-1 text-xs font-semibold text-[var(--muted-foreground)]">
+              {formatPaymentMethod(payment.method)}
+            </span>
+          </div>
+          <p className="mt-5 text-4xl font-black tracking-tight text-[var(--foreground)]">
+            {formatMoney(payment.amount)}
+          </p>
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
+                Échéance
               </p>
-              <p>
-                <span className="font-semibold text-[#2a3439]">Bien :</span>{" "}
-                {property?.name ?? "Indisponible"}
+              <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
+                {formatDate(payment.dueDate)}
               </p>
             </div>
-          </SurfaceCard>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
+                Réglé le
+              </p>
+              <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
+                {payment.paidAt ? formatDate(payment.paidAt) : "En attente"}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
+                Bail
+              </p>
+              <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
+                {lease?.lease_number ?? payment.leaseId ?? "Aucun bail"}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
+                Référence transaction
+              </p>
+              <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
+                {payment.transactionReference ?? "Aucune référence"}
+              </p>
+            </div>
+          </div>
+        </SurfaceCard>
 
-          <SurfaceCard className="p-6">
-            <TenantEasyPayPanel payment={payment} />
-          </SurfaceCard>
+        <div className="grid gap-8 xl:grid-cols-3">
+          <div className="space-y-8 xl:col-span-2">
+            <SurfaceCard className="p-6">
+              <TenantEasyPayPanel accountPhone={accountPhone} payment={payment} />
+            </SurfaceCard>
+          </div>
+
+          <div className="space-y-8 xl:col-span-1">
+            <SurfaceCard className="p-6">
+              <h2 className="text-xl font-bold text-[var(--foreground)]">
+                Informations du paiement
+              </h2>
+              <div className="mt-5 grid gap-5">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
+                    Notes
+                  </p>
+                  <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+                    {payment.notes ?? "Aucune note enregistrée."}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
+                    Unité
+                  </p>
+                  <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
+                    {unit?.label ?? payment.unitId ?? "Indisponible"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
+                    Bien
+                  </p>
+                  <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
+                    {property?.name ?? "Indisponible"}
+                  </p>
+                </div>
+              </div>
+            </SurfaceCard>
+          </div>
         </div>
       </section>
     </TenantPageFrame>

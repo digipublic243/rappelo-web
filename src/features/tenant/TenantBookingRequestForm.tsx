@@ -23,15 +23,15 @@ export function TenantBookingRequestForm({ units }: TenantBookingRequestFormProp
     <AppForm action={formAction} className="grid gap-8 lg:grid-cols-12">
       <div className="space-y-6 lg:col-span-8">
         {units.map((unit, index) => (
-          <SurfaceCard key={unit.id} className={`p-6 ${index === 0 ? "ring-2 ring-[#545f73]" : ""}`}>
+          <SurfaceCard key={unit.id} className={`p-6 ${index === 0 ? "ring-2 ring-[var(--primary)]" : ""}`}>
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <h2 className="text-xl font-bold text-[#2a3439]">{unit.label}</h2>
-                <p className="mt-1 text-sm text-[#566166]">{unit.type}</p>
+                <h2 className="text-xl font-bold text-[var(--foreground)]">{unit.label}</h2>
+                <p className="mt-1 text-sm text-[var(--muted-foreground)]">{unit.type}</p>
               </div>
               <div className="text-right">
-                <p className="text-3xl font-black text-[#2a3439]">{formatMoney(unit.price)}</p>
-                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#717c82]">
+                <p className="text-3xl font-black text-[var(--foreground)]">{formatMoney(unit.price)}</p>
+                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   {formatCadence(unit.pricingCadence)}
                 </p>
               </div>
@@ -40,7 +40,7 @@ export function TenantBookingRequestForm({ units }: TenantBookingRequestFormProp
         ))}
 
         <SurfaceCard className="p-6">
-          <h2 className="text-xl font-bold text-[#2a3439]">Booking Terms</h2>
+          <h2 className="text-xl font-bold text-[var(--foreground)]">Booking Terms</h2>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             <FormField
               defaultValue={selectedUnit?.id}
@@ -93,8 +93,8 @@ export function TenantBookingRequestForm({ units }: TenantBookingRequestFormProp
       </div>
 
       <SurfaceCard className="p-6 lg:col-span-4">
-        <h2 className="text-2xl font-bold tracking-tight text-[#2a3439]">Booking Summary</h2>
-        <p className="mt-1 text-xs text-[#566166]">
+        <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)]">Booking Summary</h2>
+        <p className="mt-1 text-xs text-[var(--muted-foreground)]">
           {selectedUnit?.type ?? "Available unit"} • {selectedUnit?.label ?? "Selection pending"}
         </p>
         <div className="mt-6 space-y-4">
@@ -104,17 +104,17 @@ export function TenantBookingRequestForm({ units }: TenantBookingRequestFormProp
             ["Cadence", selectedUnit ? formatCadence(selectedUnit.pricingCadence) : "Not available"],
             ["Method", selectedUnit?.allowedPaymentMethods?.join(" + ").toUpperCase() || "Cash / EasyPay"],
           ].map(([label, value]) => (
-            <div key={label} className="flex items-center justify-between rounded-xl bg-[#f0f4f7] px-4 py-3 text-sm">
-              <span className="text-[#566166]">{label}</span>
-              <span className="font-semibold text-[#2a3439]">{value}</span>
+            <div key={label} className="flex items-center justify-between rounded-xl bg-[var(--surface-low)] px-4 py-3 text-sm">
+              <span className="text-[var(--muted-foreground)]">{label}</span>
+              <span className="font-semibold text-[var(--foreground)]">{value}</span>
             </div>
           ))}
         </div>
         <FormInlineError className="mt-4" message={state.error} />
         {state.errorDetails?.length ? (
-          <div className="mt-4 rounded-xl border border-[#f2b7b3] bg-white px-4 py-4">
-            <p className="text-sm font-bold text-[#752121]">Détails de l’erreur :</p>
-            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[#5d3b39]">
+          <div className="mt-4 rounded-xl border border-[var(--danger-border)] bg-white px-4 py-4">
+            <p className="text-sm font-bold text-[var(--danger)]">Détails de l’erreur :</p>
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--danger-muted)]">
               {state.errorDetails.map((detail) => (
                 <li key={detail}>{detail}</li>
               ))}

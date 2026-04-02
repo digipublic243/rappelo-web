@@ -6,7 +6,16 @@ interface SurfaceCardProps {
 }
 
 export function SurfaceCard({ children, className }: SurfaceCardProps) {
-  return <section className={cn("rounded-xl bg-white shadow-sm", className)}>{children}</section>;
+  return (
+    <section
+      className={cn(
+        "rounded-[var(--radius-md)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]",
+        className,
+      )}
+    >
+      {children}
+    </section>
+  );
 }
 
 interface ActionButtonProps {
@@ -25,10 +34,13 @@ export function actionButtonClassName({
   className?: string;
 }) {
   return cn(
-    "inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-all",
-    variant === "primary" && "bg-[#545f73] text-[#f6f7ff] shadow-sm hover:brightness-110",
-    variant === "secondary" && "bg-[#d8e3fb] text-[#475266] hover:opacity-90",
-    variant === "ghost" && "border border-[#a9b4b9]/40 bg-white text-[#545f73] hover:bg-[#f0f4f7]",
+    "inline-flex items-center justify-center gap-[var(--space-2)] rounded-[var(--radius-sm)] px-[var(--space-5)] py-[var(--space-3)] text-sm font-semibold transition-all",
+    variant === "primary" &&
+      "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[var(--shadow-xs)] hover:brightness-110",
+    variant === "secondary" &&
+      "bg-[var(--primary-soft)] text-[var(--primary-soft-foreground)] hover:opacity-90",
+    variant === "ghost" &&
+      "border border-[color:color-mix(in_srgb,var(--outline-strong)_40%,transparent)] bg-[var(--surface-card)] text-[var(--primary)] hover:bg-[var(--surface-low)]",
     className,
   );
 }
@@ -53,9 +65,14 @@ interface FilterChipProps {
 
 export function FilterChip({ label, value, className }: FilterChipProps) {
   return (
-    <div className={cn("flex items-center gap-2 rounded-lg border border-[#a9b4b9]/10 bg-white px-4 py-2 text-sm", className)}>
-      <span className="text-[#717c82]">{label}</span>
-      <span className="font-semibold text-[#545f73]">{value}</span>
+    <div
+      className={cn(
+        "flex items-center gap-[var(--space-2)] rounded-[var(--radius-sm)] border border-[color:color-mix(in_srgb,var(--outline-soft)_60%,transparent)] bg-[var(--surface-card)] px-[var(--space-4)] py-[var(--space-2)] text-sm",
+        className,
+      )}
+    >
+      <span className="text-[var(--subtle-foreground)]">{label}</span>
+      <span className="font-semibold text-[var(--primary)]">{value}</span>
     </div>
   );
 }
@@ -67,11 +84,11 @@ interface StatTileProps {
   hint?: string;
 }
 
-export function StatTile({ label, value, accent = "#545f73", hint }: StatTileProps) {
+export function StatTile({ label, value, accent = "var(--primary)", hint }: StatTileProps) {
   return (
-    <div className="rounded-xl bg-white p-6 shadow-sm">
-      <p className="text-sm font-medium text-[#566166]">{label}</p>
-      <p className="mt-2 text-3xl font-extrabold tracking-tight text-[#2a3439]">{value}</p>
+    <div className="rounded-[var(--radius-md)] bg-[var(--surface-card)] p-[var(--space-6)] shadow-[var(--shadow-sm)]">
+      <p className="text-sm font-medium text-[var(--muted-foreground)]">{label}</p>
+      <p className="mt-2 text-3xl font-extrabold tracking-tight text-[var(--foreground)]">{value}</p>
       {hint ? (
         <p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: accent }}>
           {hint}

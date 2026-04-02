@@ -20,12 +20,12 @@ export function PhoneField(props: PhoneFieldProps) {
       label={props.label}
     >
       <input name={props.name} type="hidden" value={submittedValue} />
-      <div className="flex overflow-hidden rounded-2xl border border-[#d9e4ea] bg-white">
-        <span className="inline-flex items-center border-r border-[#d9e4ea] bg-[#f8fbfd] px-4 text-sm font-semibold text-[#566166]">
+      <div className="flex overflow-hidden rounded-2xl border border-[var(--outline-soft)] bg-[var(--surface-card)]">
+        <span className="inline-flex items-center border-r border-[var(--outline-soft)] bg-[var(--surface-soft)] px-4 text-sm font-semibold text-[var(--muted-foreground)]">
           {prefix}
         </span>
         <input
-          className="w-full bg-white px-4 py-3 outline-none"
+          className="w-full bg-[var(--surface-card)] px-4 py-3 text-[var(--foreground)] outline-none"
           inputMode="numeric"
           maxLength={props.maxLength ?? 9}
           onChange={(event) =>

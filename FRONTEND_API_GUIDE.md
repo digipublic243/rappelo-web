@@ -877,6 +877,195 @@ Une tache Celery `check_pending_easypay_payments` s'execute toutes les 5 minutes
 Tout autre numero // failed
 ```
 
+## Suivi des retards de paiement (Lease overdue tracking)
+
+### Contexte
+
+Chaque bail (`Lease`) dispose d'un systeme de suivi automatique des retards de paiement. Le backend compare les paiements attendus (definis par les termcs du bail et la frequence de paiement) avec les paiements reellement recus.
+
+### Endpoints pour consulter les retards
+
+#### 1. Obtenir le statut de retard pour un bail (Landlord/Tenant)
+
+```http
+GET /api/leases/leases/{lease_id}/overdue_status/
+Authorization: Bearer <access_token>
+```
+
+Response:
+
+```json
+{
+  "lease_id": "<lease_uuid>",
+  "lease_number": "LEASE-001",
+  "overdue_status": "overdue",
+  "days_overdue": 15,
+  "overdue_amount": "50000.00",
+  "missed_payment_count": 1,
+  "last_overdue_alert_sent_at": null
+}
+```
+
+**Champs returnees:**
+
+| Champ                      | Type      | Description                                              |
+| -------------------------- | --------- | -------------------------------------------------------- |
+| `lease_id`                 | UUID      | Identifiant du bail                                      |
+| `lease_number`             | string    | Numero du bail (ex: LEASE-001)                           |
+| `overdue_status`           | enum      | `on_track` \| `overdue` \| `severely_overdue` \| `resolved` |
+| `days_overdue`             | int       | Nombre de jours de retard (0 si a jour)                 |
+| `overdue_amount`           | decimal   | Montant total en retard (CDF)                           |
+| `missed_payment_count`     | int       | Nombre de paiements manques                              |
+| `last_overdue_alert_sent_at` | datetime | Moment du dernier alerte envoye (null si aucun)        |
+
+**Enum `overdue_status`:**
+
+- `on_track`: Aucun retard, paiements conformes
+- `overdue`: Retard < 30 jours
+- `severely_overdue`: Retard >= 30 jours
+- `resolved`: Retard resolu (ancien statut, maintenant a jour)
+
+#### 2. Resume des retards dans le portefeuille (Landlord/PropertyManager)
+
+```http
+GET /api/leases/leases/overdue_summary/
+Authorization: Bearer <access_token>
+```
+
+Response:
+
+```json
+{
+  "count_overdue": 2,
+  "total_overdue_amount": "150000.00",
+  "leases": [
+    {
+      "id": "<lease_uuid_1>",
+      "lease_number": "LEASE-001",
+      "overdue_status": "overdue",
+      "days_overdue": 15,
+      "overdue_amount": "50000.00",
+      ...
+    },
+    {
+      "id": "<lease_uuid_2>",
+      "lease_number": "LEASE-003",
+      "overdue_status": "severely_overdue",
+      "days_overdue": 45,
+      "overdue_amount": "100000.00",
+      ...
+    }
+  ]
+}
+```
+
+### Endpoints pour envoyer des alertes
+
+#### 1. Envoyer une alerte de retard (Landlord/PropertyManager only)
+
+```http
+POST /api/leases/leases/{lease_id}/alert_overdue/
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+Payload (optionnel):
+
+```json
+{}
+```
+
+Response:
+
+```json
+{
+  "message": "Overdue alert recorded",
+  "lease": {
+    "id": "<lease_uuid>",
+    "lease_number": "LEASE-001",
+    "overdue_status": "overdue",
+    "days_overdue": 15,
+    "overdue_amount": "50000.00",
+    "missed_payment_count": 1,
+    "last_overdue_alert_sent_at": "2025-01-27T14:30:00Z",
+    ...
+  }
+}
+```
+
+**Comportement:**
+
+- Verifie qu'il existe effectivement des paiements en retard
+- Met a jour le champ `last_overdue_alert_sent_at` du bail
+- Recalcule le `overdue_status` et les metriques
+- TODO: Envoie des notifications (email/SMS) au tenant et au landlord
+
+**Permissions:**
+
+- Seul le landlord propriétaire du bien ou un property manager autorise peut envoyer une alerte
+- Retourne `403 Forbidden` si l'utilisateur ne peut pas acceder au bail
+
+### Logic de calcul des retards
+
+Le backend execute quotidiennement une tache Celery (`update_overdue_statuses`) qui:
+
+1. **Itere tous les bails actifs**
+2. **Compare les paiements attendus vs recus:**
+   - Les paiements attendus viennent des `PaymentScheduleItem` du bail
+   - Les paiements recus sont dans la table `Payment` avec `status=PAID`
+   - Les retards sont les items `PaymentScheduleItem` qui n'ont pas de paiement correspondant et dont la `due_date` est depassee
+3. **Calcule les metriques:**
+   - `missed_payment_count`: Nombre de paiements planifies non payes
+   - `overdue_amount`: Somme des montants non payes
+   - `days_overdue`: Nombre de jours depuis le premier paiement manque (avec periode de grace de 3 jours)
+   - `overdue_status`: Determine selon le parametre `days_overdue`
+
+**Periode de grace:**
+
+Par defaut, il y a une **periode de grace de 3 jours** apres la `due_date`. Apres 3 jours sans paiement, le bail passe en statut `overdue`.
+
+**Seuils de severite:**
+
+- `on_track`: 0 jours de retard
+- `overdue`: 1-29 jours de retard
+- `severely_overdue`: 30 jours ou plus de retard
+
+### Exemple de flux complet (Landlord)
+
+```
+1. Frontend affiche le dashboard avec listne des bails
+2. Frontend appelle GET /api/leases/leases/overdue_summary/
+3. Backend retourne les 2 bails en retard (LEASE-001: 15 jours, LEASE-003: 45 jours)
+4. Landlord clique sur LEASE-003 pour voir les details
+5. Frontend affiche GET /api/leases/leases/{lease_id}/overdue_status/
+6. Backend retourne overdue_status="severely_overdue", days_overdue=45
+7. Landlord envoie une alerte: POST /api/leases/leases/{lease_id}/alert_overdue/
+8. Backend met a jour last_overdue_alert_sent_at et retourne la confirmation
+9. TODO: Tenant recoit un SMS/Email d'alerte de retard
+10. TODO: Landlord recoit un SMS/Email de confirmation d'alerte envoye
+```
+
+### Configuration Celery Beat (tache periodique)
+
+Pour que les retards se mettent a jour automatiquement, assurez-vous que Celery Beat est configure pour executer la tache `leases.update_overdue_statuses` quotidiennement.
+
+Configuration dans `settings.py`:
+
+```python
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'update-lease-overdue-statuses': {
+        'task': 'leases.update_overdue_statuses',
+        'schedule': crontab(hour=0, minute=0),  # Minuit
+    },
+    'check-severely-overdue-leases': {
+        'task': 'leases.check_severely_overdue_leases',
+        'schedule': crontab(hour=6, minute=0),  # 6h du matin
+    },
+}
+```
+
 ## Etat actuel de la documentation technique
 
 - La spec [openapi.yaml](./openapi.yaml) existe mais n'est pas encore completement alignee avec tous les endpoints recents.

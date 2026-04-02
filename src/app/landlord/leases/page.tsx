@@ -6,13 +6,19 @@ import {
   actionButtonClassName,
 } from "@/components/shared/StitchPrimitives";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { formatCadence, formatDate, formatMoney, leaseStatusLabel } from "@/lib/format";
+import {
+  formatCadence,
+  formatDate,
+  formatMoney,
+  leaseOverdueStatusLabel,
+  leaseStatusLabel,
+} from "@/lib/format";
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
 import { getLandlordLeasesData } from "@/features/landlord/api";
 import { DataStateNotice } from "@/components/ui/DataStateNotice";
 
 export default async function LeaseListPage() {
-  const { leases, meta } = await getLandlordLeasesData();
+  const { leases, overdueSummary, meta } = await getLandlordLeasesData();
 
   return (
     <LandlordPageFrame currentPath="/landlord/leases">
@@ -34,19 +40,25 @@ export default async function LeaseListPage() {
       <section className="grid gap-4 md:grid-cols-3">
         {[
           ["Baux actifs", String(leases.filter((lease) => lease.status === "active").length)],
-          ["Baux en brouillon", String(leases.filter((lease) => lease.status === "draft").length)],
-          ["Valeur contractuelle", formatMoney(leases.reduce((total, lease) => total + lease.rentAmount, 0))],
+          [
+            "Baux en retard",
+            overdueSummary ? String(overdueSummary.countOverdue) : "0",
+          ],
+          [
+            "Montant en retard",
+            formatMoney(overdueSummary?.totalOverdueAmount ?? 0, "CDF"),
+          ],
         ].map(([label, value]) => (
           <SurfaceCard key={label} className="p-5">
-            <p className="text-sm font-medium text-[#566166]">{label}</p>
-            <p className="mt-2 text-3xl font-black text-[#2a3439]">{value}</p>
+            <p className="text-sm font-medium text-[var(--muted-foreground)]">{label}</p>
+            <p className="mt-2 text-3xl font-black text-[var(--foreground)]">{value}</p>
           </SurfaceCard>
         ))}
       </section>
 
       <SurfaceCard className="overflow-hidden">
         <table className="w-full min-w-[860px]">
-          <thead className="bg-[#f0f4f7] text-left">
+          <thead className="bg-[var(--surface-low)] text-left">
             <tr>
               {[
                 "Numéro de bail",
@@ -54,10 +66,11 @@ export default async function LeaseListPage() {
                 "Unité",
                 "Période",
                 "Montant contractuel",
+                "Retard",
                 "Statut",
                 "Action",
               ].map((label) => (
-                <th key={label} className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#566166]">
+                <th key={label} className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">
                   {label}
                 </th>
               ))}
@@ -65,29 +78,41 @@ export default async function LeaseListPage() {
           </thead>
           <tbody>
             {leases.map((lease) => (
-              <tr key={lease.id} className="border-t border-[#e8eff3]">
-                <td className="px-6 py-5 text-sm font-semibold text-[#2a3439]">{lease.lease_number}</td>
-                <td className="px-6 py-5 text-sm text-[#566166]">
-                  <span className="font-semibold text-[#2a3439]">{lease.tenantId}</span>
+              <tr key={lease.id} className="border-t border-[var(--secondary)]">
+                <td className="px-6 py-5 text-sm font-semibold text-[var(--foreground)]">{lease.lease_number}</td>
+                <td className="px-6 py-5 text-sm text-[var(--muted-foreground)]">
+                  <span className="font-semibold text-[var(--foreground)]">{lease.tenantId}</span>
                 </td>
-                <td className="px-6 py-5 text-sm text-[#566166]">
-                  <span className="font-semibold text-[#2a3439]">{lease.unitId}</span>
+                <td className="px-6 py-5 text-sm text-[var(--muted-foreground)]">
+                  <span className="font-semibold text-[var(--foreground)]">{lease.unitId}</span>
                 </td>
-                <td className="px-6 py-5 text-sm text-[#566166]">
+                <td className="px-6 py-5 text-sm text-[var(--muted-foreground)]">
                   {formatDate(lease.startDate)}
-                  <div className="text-xs text-[#9a9d9f]">au {formatDate(lease.endDate)}</div>
+                  <div className="text-xs text-[var(--subtle-foreground-soft)]">au {formatDate(lease.endDate)}</div>
                 </td>
-                <td className="px-6 py-5 text-sm text-[#566166]">
+                <td className="px-6 py-5 text-sm text-[var(--muted-foreground)]">
                   {formatMoney(lease.rentAmount)}
-                  <div className="text-xs text-[#9a9d9f]">
+                  <div className="text-xs text-[var(--subtle-foreground-soft)]">
                     {formatCadence(lease.cadence)}
                   </div>
+                </td>
+                <td className="px-6 py-5 text-sm text-[var(--muted-foreground)]">
+                  <span className="font-semibold text-[var(--foreground)]">
+                    {leaseOverdueStatusLabel(lease.overdueStatus)}
+                  </span>
+                  {lease.daysOverdue && lease.daysOverdue > 0 ? (
+                    <div className="text-xs text-[var(--subtle-foreground-soft)]">
+                      {lease.daysOverdue} j • {formatMoney(lease.overdueAmount ?? 0, "CDF")}
+                    </div>
+                  ) : (
+                    <div className="text-xs text-[var(--subtle-foreground-soft)]">Aucun retard enregistré</div>
+                  )}
                 </td>
                 <td className="px-6 py-5">
                   <StatusBadge status={lease.status} label={leaseStatusLabel(lease.status)} />
                 </td>
                 <td className="px-6 py-5">
-                  <Link className="text-sm font-semibold text-[#545f73]" href={`/landlord/leases/${lease.id}`}>
+                  <Link className="text-sm font-semibold text-[var(--primary)]" href={`/landlord/leases/${lease.id}`}>
                     Voir le détail
                   </Link>
                 </td>

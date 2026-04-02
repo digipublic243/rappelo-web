@@ -3,6 +3,11 @@ export type Role = "landlord" | "tenant";
 export type UnitStatus = "vacant" | "occupied" | "reserved" | "maintenance";
 export type PaymentStatus = "pending" | "paid" | "failed" | "refunded";
 export type LeaseStatus = "draft" | "active" | "terminated" | "expired";
+export type LeaseOverdueStatus =
+  | "on_track"
+  | "overdue"
+  | "severely_overdue"
+  | "resolved";
 export type BookingStatus =
   | "new"
   | "in_review"
@@ -77,6 +82,11 @@ export interface Lease {
   cadence: PricingCadence;
   securityDeposit?: number;
   securityDepositMonthsTaken?: number;
+  overdueStatus?: LeaseOverdueStatus;
+  daysOverdue?: number;
+  overdueAmount?: number;
+  missedPaymentCount?: number;
+  lastOverdueAlertSentAt?: string;
 }
 
 export interface Payment {

@@ -31,17 +31,17 @@ export default async function BookingRequestsPage() {
             <SurfaceCard key={booking.id} className="p-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-lg font-bold text-[#2a3439]">{booking.id}</p>
-                  <p className="mt-1 text-sm text-[#566166]">{booking.unitId || "Unit pending"}</p>
+                  <p className="text-lg font-bold text-[var(--foreground)]">{booking.id}</p>
+                  <p className="mt-1 text-sm text-[var(--muted-foreground)]">{booking.unitId || "Unit pending"}</p>
                 </div>
                 <StatusBadge status={booking.status} label={bookingStatusLabel(booking.status)} />
               </div>
-              <div className="mt-5 grid gap-3 text-sm text-[#566166]">
+              <div className="mt-5 grid gap-3 text-sm text-[var(--muted-foreground)]">
                 <p>Stay window: {formatDate(booking.requestedFrom)} - {formatDate(booking.requestedTo)}</p>
                 <p>Deposit: {formatMoney(booking.depositAmount)}</p>
                 <p>Property: {booking.propertyId || "Property pending"}</p>
               </div>
-              <Link className="mt-6 inline-flex text-sm font-semibold text-[#545f73]" href={`/landlord/bookings/${booking.id}`}>
+              <Link className="mt-6 inline-flex text-sm font-semibold text-[var(--primary)]" href={`/landlord/bookings/${booking.id}`}>
                 Open review drawer
               </Link>
             </SurfaceCard>

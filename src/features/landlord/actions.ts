@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { confirmBooking, rejectBooking } from "@/lib/api/bookings";
 import {
   activateLease,
+  alertLeaseOverdue,
   createLease,
   getLeaseById,
   renewLease,
@@ -35,6 +36,7 @@ import type {
   ApiUnitStatus,
 } from "@/types/api";
 import type { LeaseEditorActionState } from "@/features/landlord/lease-editor-state";
+import type { LeaseOverdueActionState } from "@/features/landlord/lease-overdue-state";
 import type { PropertyEditorActionState } from "@/features/landlord/property-editor-state";
 import type { PaymentWorkflowActionState } from "@/features/landlord/payment-workflow-state";
 import type { TenantEditorActionState } from "@/features/landlord/tenant-editor-state";
@@ -497,6 +499,48 @@ export async function createLeaseAction(
   }
 
   redirect(redirectPath);
+}
+
+export async function alertLeaseOverdueAction(
+  _: LeaseOverdueActionState,
+  formData: FormData,
+): Promise<LeaseOverdueActionState> {
+  const accessToken = await requireAccessToken();
+  if (!accessToken) {
+    return {
+      error: "Votre session a expiré. Reconnectez-vous pour envoyer une alerte.",
+    };
+  }
+
+  const leaseId = String(formData.get("leaseId") ?? "").trim();
+  if (!leaseId) {
+    return {
+      error: "Aucun bail n’a été sélectionné.",
+      errorDetails: ["lease: requis"],
+    };
+  }
+
+  try {
+    const response = await alertLeaseOverdue(leaseId, accessToken);
+    revalidatePath("/landlord/leases");
+    revalidatePath(`/landlord/leases/${leaseId}`);
+    revalidatePath("/landlord/dashboard");
+
+    return {
+      message:
+        response.message ?? "L’alerte de retard a bien été enregistrée.",
+    };
+  } catch (error) {
+    const formatted = formatFormApiError(
+      error,
+      "Impossible d’enregistrer l’alerte de retard pour ce bail.",
+    );
+
+    return {
+      error: formatted.message,
+      errorDetails: formatted.details,
+    };
+  }
 }
 
 export async function updateUnitStatusAction(formData: FormData) {

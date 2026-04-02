@@ -86,12 +86,24 @@ export async function initiateTenantEasyPayAction(
   }
 
   const user = await getCurrentUser(accessToken).catch(() => null);
-  const phoneNumber = toBackendPhoneNumber(user?.phone_number ?? "");
+  const phoneSource = String(formData.get("phone_source") ?? "account").trim();
+  const rawOtherPhone = String(formData.get("other_phone_number") ?? "").trim();
+  const phoneNumber =
+    phoneSource === "other"
+      ? toBackendPhoneNumber(rawOtherPhone)
+      : toBackendPhoneNumber(user?.phone_number ?? "");
 
   if (!phoneNumber) {
     return {
-      error: "Aucun numéro de téléphone valide n’est associé à votre compte.",
-      errorDetails: ["phone number: un numéro congolais valide est requis"],
+      error:
+        phoneSource === "other"
+          ? "Le numéro alternatif saisi est invalide."
+          : "Aucun numéro de téléphone valide n’est associé à votre compte.",
+      errorDetails: [
+        phoneSource === "other"
+          ? "other phone number: un numéro congolais valide est requis"
+          : "phone number: un numéro congolais valide est requis",
+      ],
     };
   }
 

@@ -78,27 +78,27 @@ export default async function LandlordPaymentDetailPage({ params }: PageProps) {
                 status={payment.status}
                 label={paymentStatusLabel(payment.status)}
               />
-              <span className="rounded-full bg-[#e8eff3] px-3 py-1 text-xs font-semibold text-[#566166]">
+              <span className="rounded-full bg-[var(--secondary)] px-3 py-1 text-xs font-semibold text-[var(--muted-foreground)]">
                 {formatPaymentMethod(payment.method)}
               </span>
             </div>
-            <p className="mt-5 text-4xl font-black tracking-tight text-[#2a3439]">
+            <p className="mt-5 text-4xl font-black tracking-tight text-[var(--foreground)]">
               {formatMoney(payment.amount)}
             </p>
             <div className="mt-6 grid gap-5 md:grid-cols-2">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Échéance
                 </p>
-                <p className="mt-2 text-sm font-semibold text-[#2a3439]">
+                <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
                   {formatDate(payment.dueDate)}
                 </p>
               </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Réglé le
                 </p>
-                <p className="mt-2 text-sm font-semibold text-[#2a3439]">
+                <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
                   {payment.paidAt ? formatDate(payment.paidAt) : "Non réglé"}
                 </p>
               </div>
@@ -106,31 +106,31 @@ export default async function LandlordPaymentDetailPage({ params }: PageProps) {
           </SurfaceCard>
 
           <SurfaceCard className="p-6">
-            <h2 className="text-xl font-bold text-[#2a3439]">
+            <h2 className="text-xl font-bold text-[var(--foreground)]">
               Références du paiement
             </h2>
             <div className="mt-5 grid gap-5 md:grid-cols-2">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Bail
                 </p>
-                <p className="mt-2 text-sm font-semibold text-[#2a3439]">
+                <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
                   {lease?.lease_number ?? payment.leaseId ?? "Aucun bail"}
                 </p>
               </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Référence transaction
                 </p>
-                <p className="mt-2 text-sm font-semibold text-[#2a3439]">
+                <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
                   {payment.transactionReference ?? "Aucune référence"}
                 </p>
               </div>
               <div className="md:col-span-2">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#717c82]">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
                   Notes
                 </p>
-                <p className="mt-2 text-sm text-[#566166]">
+                <p className="mt-2 text-sm text-[var(--muted-foreground)]">
                   {payment.notes ?? "Aucune note enregistrée."}
                 </p>
               </div>
@@ -140,18 +140,18 @@ export default async function LandlordPaymentDetailPage({ params }: PageProps) {
 
         <div className="space-y-8 lg:col-span-4">
           <SurfaceCard className="p-6">
-            <h2 className="text-xl font-bold text-[#2a3439]">Contexte locatif</h2>
-            <div className="mt-4 space-y-3 text-sm text-[#566166]">
+            <h2 className="text-xl font-bold text-[var(--foreground)]">Contexte locatif</h2>
+            <div className="mt-4 space-y-3 text-sm text-[var(--muted-foreground)]">
               <p>
-                <span className="font-semibold text-[#2a3439]">Locataire :</span>{" "}
+                <span className="font-semibold text-[var(--foreground)]">Locataire :</span>{" "}
                 {payment.tenantName ?? tenant?.fullName ?? payment.tenantId}
               </p>
               <p>
-                <span className="font-semibold text-[#2a3439]">Unité :</span>{" "}
+                <span className="font-semibold text-[var(--foreground)]">Unité :</span>{" "}
                 {unit?.label ?? payment.unitId ?? "Indisponible"}
               </p>
               <p>
-                <span className="font-semibold text-[#2a3439]">Bien :</span>{" "}
+                <span className="font-semibold text-[var(--foreground)]">Bien :</span>{" "}
                 {property?.name ?? "Indisponible"}
               </p>
             </div>

@@ -14,7 +14,7 @@ export function CheckboxField(props: CheckboxFieldProps) {
   return (
     <label
       className={cn(
-        "flex items-center gap-3 rounded-xl border border-[#d9e4ea] px-4 py-3 text-sm font-medium text-[#566166]",
+        "flex items-center gap-3 rounded-xl border border-[var(--outline-soft)] px-4 py-3 text-sm font-medium text-[var(--muted-foreground)]",
         props.className,
       )}
     >

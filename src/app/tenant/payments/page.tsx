@@ -36,24 +36,24 @@ export default async function TenantPaymentsPage() {
           ["Méthodes", methods.length > 0 ? methods.join(" + ").toUpperCase() : "N/A"],
         ].map(([label, value]) => (
           <SurfaceCard key={label} className="p-5">
-            <p className="text-sm font-medium text-[#566166]">{label}</p>
-            <p className="mt-2 text-3xl font-black text-[#2a3439]">{value}</p>
+            <p className="text-sm font-medium text-[var(--muted-foreground)]">{label}</p>
+            <p className="mt-2 text-3xl font-black text-[var(--foreground)]">{value}</p>
           </SurfaceCard>
         ))}
       </section>
 
       <SurfaceCard className="overflow-hidden">
-        <div className="border-b border-[#e8eff3] px-6 py-5">
-          <h2 className="text-xl font-bold text-[#2a3439]">Historique des paiements</h2>
+        <div className="border-b border-[var(--secondary)] px-6 py-5">
+          <h2 className="text-xl font-bold text-[var(--foreground)]">Historique des paiements</h2>
         </div>
         <table className="w-full min-w-[860px]">
-          <thead className="bg-[#f0f4f7] text-left">
+          <thead className="bg-[var(--surface-low)] text-left">
             <tr>
               {["Période / date", "Montant", "Mode", "Statut", "Bail", "Action"].map(
                 (label) => (
                   <th
                     key={label}
-                    className="px-8 py-4 text-xs font-bold uppercase tracking-wider text-[#566166]"
+                    className="px-8 py-4 text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]"
                   >
                     {label}
                   </th>
@@ -63,17 +63,17 @@ export default async function TenantPaymentsPage() {
           </thead>
           <tbody>
             {payments.map((payment) => (
-              <tr key={payment.id} className="border-t border-[#e8eff3]">
-                <td className="px-8 py-5 text-sm text-[#566166]">
+              <tr key={payment.id} className="border-t border-[var(--secondary)]">
+                <td className="px-8 py-5 text-sm text-[var(--muted-foreground)]">
                   <p>{formatDate(payment.paidAt ?? payment.dueDate)}</p>
-                  <p className="mt-1 text-xs text-[#9a9d9f]">
+                  <p className="mt-1 text-xs text-[var(--subtle-foreground-soft)]">
                     {payment.paymentLabel ?? `Paiement à partir du ${payment.dueDate}`}
                   </p>
                 </td>
-                <td className="px-8 py-5 text-sm font-semibold text-[#2a3439]">
+                <td className="px-8 py-5 text-sm font-semibold text-[var(--foreground)]">
                   {formatMoney(payment.amount)}
                 </td>
-                <td className="px-8 py-5 text-sm text-[#566166]">
+                <td className="px-8 py-5 text-sm text-[var(--muted-foreground)]">
                   {formatPaymentMethod(payment.method)}
                 </td>
                 <td className="px-8 py-5">
@@ -82,14 +82,14 @@ export default async function TenantPaymentsPage() {
                     label={paymentStatusLabel(payment.status)}
                   />
                 </td>
-                <td className="px-8 py-5 text-sm text-[#566166]">
+                <td className="px-8 py-5 text-sm text-[var(--muted-foreground)]">
                   {payment.leaseId ?? "Aucun bail"}
                 </td>
-                <td className="px-8 py-5 text-sm text-[#545f73]">
+                <td className="px-8 py-5 text-sm text-[var(--primary)]">
                   <div className="flex flex-col gap-2">
                     {payment.status === "pending" ? (
                       <Link
-                        className="font-semibold text-[#2f5bd3]"
+                        className="font-semibold text-[var(--link)]"
                         href={`/tenant/payments/${payment.id}`}
                       >
                         Payer via EasyPay

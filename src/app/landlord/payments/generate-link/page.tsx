@@ -44,24 +44,24 @@ export default async function GeneratePaymentLinkPage() {
             const lease = leases.find((item) => item.id === payment.leaseId);
             return (
               <SurfaceCard key={payment.id} className="p-5">
-                <p className="font-semibold text-[#2a3439]">{tenant?.fullName ?? payment.tenantId}</p>
-                <p className="mt-1 text-xs text-[#566166]">
+                <p className="font-semibold text-[var(--foreground)]">{tenant?.fullName ?? payment.tenantId}</p>
+                <p className="mt-1 text-xs text-[var(--muted-foreground)]">
                   {lease?.lease_number ?? "Bail non lié"} • {payment.unitId || "Unité indisponible"} • {formatMoney(payment.amount)}
                 </p>
               </SurfaceCard>
             );
           })}
           <SurfaceCard className="p-6">
-            <p className="text-sm text-[#566166]">En attente sur ce cycle</p>
-            <p className="mt-2 text-4xl font-black text-[#2a3439]">{formatMoney(summary?.totalPending ?? 0)}</p>
-            <p className="mt-2 text-xs text-[#566166]">
+            <p className="text-sm text-[var(--muted-foreground)]">En attente sur ce cycle</p>
+            <p className="mt-2 text-4xl font-black text-[var(--foreground)]">{formatMoney(summary?.totalPending ?? 0)}</p>
+            <p className="mt-2 text-xs text-[var(--muted-foreground)]">
               {summary?.countPending ?? 0} paiement(s) encore à régulariser.
             </p>
           </SurfaceCard>
         </div>
 
         <SurfaceCard className="p-6">
-          <h2 className="text-2xl font-bold tracking-tight text-[#2a3439]">Lien de paiement</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)]">Lien de paiement</h2>
           <GeneratePaymentLinkForm leases={leases} payments={payments} tenants={tenants} />
         </SurfaceCard>
       </section>

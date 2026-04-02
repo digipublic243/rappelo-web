@@ -41,15 +41,15 @@ export default async function SendReminderPage() {
 
       <section className="grid gap-8 lg:grid-cols-2">
         <SurfaceCard className="p-6">
-          <h2 className="text-xl font-bold text-[#2a3439]">Relance de paiement</h2>
-          <div className="mt-5 rounded-xl bg-[#f0f4f7] p-4">
-            <p className="font-semibold text-[#2a3439]">{relatedTenant?.fullName ?? "Locataire indisponible"}</p>
-            <p className="text-xs text-[#566166]">{overduePayment?.unitId || "Unité indisponible"} • Contexte du paiement</p>
+          <h2 className="text-xl font-bold text-[var(--foreground)]">Relance de paiement</h2>
+          <div className="mt-5 rounded-xl bg-[var(--surface-low)] p-4">
+            <p className="font-semibold text-[var(--foreground)]">{relatedTenant?.fullName ?? "Locataire indisponible"}</p>
+            <p className="text-xs text-[var(--muted-foreground)]">{overduePayment?.unitId || "Unité indisponible"} • Contexte du paiement</p>
           </div>
           <SendPaymentReminderForm payments={payments} tenants={tenants} />
         </SurfaceCard>
 
-        <SurfaceCard className="rounded-[28px] bg-[linear-gradient(145deg,#2a3439,#556170)] p-8 text-white">
+        <SurfaceCard className="rounded-[28px] bg-[linear-gradient(145deg,var(--panel-deep),var(--panel-deep-alt))] p-8 text-white">
           <p className="text-xs uppercase tracking-[0.24em] text-white/60">Aperçu</p>
           <h2 className="mt-3 text-2xl font-bold">Contexte de relance</h2>
           <p className="mt-4 text-sm leading-6 text-white/80">

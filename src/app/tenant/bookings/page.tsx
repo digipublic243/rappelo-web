@@ -30,7 +30,7 @@ export default async function TenantBookingsPage() {
         {["All Bookings", "Upcoming", "In Review", "Archived"].map((label, index) => (
           <button
             key={label}
-            className={`rounded-full px-6 py-2 text-sm font-semibold whitespace-nowrap ${index === 0 ? "bg-[#545f73] text-[#f6f7ff]" : "bg-white text-[#566166]"}`}
+            className={`rounded-full px-6 py-2 text-sm font-semibold whitespace-nowrap ${index === 0 ? "bg-[var(--primary)] text-[var(--primary-foreground)]" : "bg-white text-[var(--muted-foreground)]"}`}
             type="button"
           >
             {label}
@@ -47,16 +47,16 @@ export default async function TenantBookingsPage() {
         <div className="grid gap-6 md:grid-cols-2">
           {bookings?.map?.((booking) => (
             <SurfaceCard key={booking.id} className="overflow-hidden">
-              <div className="h-56 bg-[#d9e4ea]" />
+              <div className="h-56 bg-[var(--outline-soft)]" />
               <div className="p-6">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h2 className="text-xl font-bold text-[#2a3439]">{booking.unitId || "Unit pending"}</h2>
-                    <p className="text-sm text-[#566166]">{booking.propertyId || "Property pending"}</p>
+                    <h2 className="text-xl font-bold text-[var(--foreground)]">{booking.unitId || "Unit pending"}</h2>
+                    <p className="text-sm text-[var(--muted-foreground)]">{booking.propertyId || "Property pending"}</p>
                   </div>
                   <StatusBadge status={booking.status} label={bookingStatusLabel(booking.status)} />
                 </div>
-                <div className="mt-5 space-y-2 text-sm text-[#566166]">
+                <div className="mt-5 space-y-2 text-sm text-[var(--muted-foreground)]">
                   <p>{formatDate(booking.requestedFrom)} - {formatDate(booking.requestedTo)}</p>
                   <p>Deposit {formatMoney(booking.depositAmount)}</p>
                 </div>

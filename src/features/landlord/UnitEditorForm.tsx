@@ -58,12 +58,12 @@ export function UnitEditorForm({ action, defaults, initialState, propertyOptions
       <div className="space-y-8 lg:col-span-8">
         <section className="rounded-[28px] bg-white p-8 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-[#e8eff3] p-3 text-[#545f73]">
+            <div className="rounded-xl bg-[var(--secondary)] p-3 text-[var(--primary)]">
               <MaterialIcon name="apartment" className="text-[22px]" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-[#2a3439]">Identité de l’unité</h2>
-              <p className="text-sm text-[#566166]">Rattachez l’unité à un bien et définissez son identité opérationnelle pour les baux et paiements.</p>
+              <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)]">Identité de l’unité</h2>
+              <p className="text-sm text-[var(--muted-foreground)]">Rattachez l’unité à un bien et définissez son identité opérationnelle pour les baux et paiements.</p>
             </div>
           </div>
 
@@ -91,12 +91,12 @@ export function UnitEditorForm({ action, defaults, initialState, propertyOptions
 
         <section className="rounded-[28px] bg-white p-8 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-[#e8eff3] p-3 text-[#545f73]">
+            <div className="rounded-xl bg-[var(--secondary)] p-3 text-[var(--primary)]">
               <MaterialIcon name="payments" className="text-[22px]" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-[#2a3439]">Tarification et caractéristiques</h2>
-              <p className="text-sm text-[#566166]">Définissez le loyer et la périodicité pris en charge par le contrat backend de création simple.</p>
+              <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)]">Tarification et caractéristiques</h2>
+              <p className="text-sm text-[var(--muted-foreground)]">Définissez le loyer et la périodicité pris en charge par le contrat backend de création simple.</p>
             </div>
           </div>
 
@@ -134,7 +134,7 @@ export function UnitEditorForm({ action, defaults, initialState, propertyOptions
       </div>
 
       <div className="space-y-8 lg:col-span-4">
-        <section className="rounded-[28px] bg-[#5d6980] p-8 text-white shadow-[0_24px_60px_rgba(84,95,115,0.22)]">
+        <section className="rounded-[28px] bg-[var(--panel-mid)] p-8 text-white shadow-[var(--ring-soft)]">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold tracking-tight">Statut initial</h2>
             <span className="rounded-full bg-white/14 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
@@ -152,11 +152,11 @@ export function UnitEditorForm({ action, defaults, initialState, propertyOptions
         </section>
 
         <section className="rounded-[28px] bg-white p-8 shadow-sm">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#717c82]">Résumé de configuration</p>
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--subtle-foreground)]">Résumé de configuration</p>
           <div className="mt-5 space-y-4">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-[#566166]">Cadence tarifaire</span>
-              <span className="font-bold text-[#2a3439]">
+              <span className="text-[var(--muted-foreground)]">Cadence tarifaire</span>
+              <span className="font-bold text-[var(--foreground)]">
                 {defaults.rentalPeriodicity === "journ"
                   ? "Journalier"
                   : defaults.rentalPeriodicity === "hebdo"
@@ -167,10 +167,10 @@ export function UnitEditorForm({ action, defaults, initialState, propertyOptions
               </span>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-[#566166]">Statut initial</span>
-              <span className="font-bold capitalize text-[#2a3439]">{selectedStatus}</span>
+              <span className="text-[var(--muted-foreground)]">Statut initial</span>
+              <span className="font-bold capitalize text-[var(--foreground)]">{selectedStatus}</span>
             </div>
-            <div className="rounded-xl bg-[#f0f4f7] px-4 py-3 text-sm text-[#566166]">
+            <div className="rounded-xl bg-[var(--surface-low)] px-4 py-3 text-sm text-[var(--muted-foreground)]">
               Les champs avancés comme `security_deposit`, `booking_deposit`, `allowed_payment_methods` et `advance_payment_policy_text` sont documentés au niveau détail ou mise à jour, pas dans la création simple.
             </div>
           </div>
@@ -179,9 +179,9 @@ export function UnitEditorForm({ action, defaults, initialState, propertyOptions
         <div className="space-y-3">
           <FormInlineError className="rounded-2xl" message={state.error} />
           {state.errorDetails?.length ? (
-            <div className="rounded-2xl border border-[#f2b7b3] bg-white px-5 py-4">
-              <p className="text-sm font-bold text-[#752121]">Veuillez vérifier ces champs :</p>
-              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[#5d3b39]">
+            <div className="rounded-2xl border border-[var(--danger-border)] bg-white px-5 py-4">
+              <p className="text-sm font-bold text-[var(--danger)]">Veuillez vérifier ces champs :</p>
+              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--danger-muted)]">
                 {state.errorDetails.map((detail) => (
                   <li key={detail}>{detail}</li>
                 ))}
@@ -193,7 +193,7 @@ export function UnitEditorForm({ action, defaults, initialState, propertyOptions
 
       <div className="lg:col-span-12">
         <div className="flex flex-wrap items-center justify-end gap-3">
-          <Link className="inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold text-[#566166]" href="/landlord/units">
+          <Link className="inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold text-[var(--muted-foreground)]" href="/landlord/units">
             Annuler
           </Link>
           <FormSubmitButton className="rounded-lg px-6 text-sm shadow-sm" disabled={pending}>
