@@ -60,7 +60,7 @@ async function AsyncAppShell({
 
   return (
     <div
-      className="min-h-screen bg-[var(--background)] text-[var(--foreground)]"
+      className="min-h-screen bg-[var(--background)] text-foreground"
       data-theme={role}
     >
       {isTenant ? (
@@ -89,7 +89,7 @@ async function AsyncAppShell({
             <button className="relative rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-100" type="button">
               <MaterialIcon name="notifications" size={20} />
               {unreadNotifications > 0 ? (
-                <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--notification)] px-1 text-[10px] font-bold text-white">
+                <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--alert)] px-1 text-[10px] font-bold text-white">
                   {unreadNotifications > 9 ? "9+" : unreadNotifications}
                 </span>
               ) : null}
@@ -97,7 +97,7 @@ async function AsyncAppShell({
             <button className="rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-100" type="button">
               <MaterialIcon name="apps" className="text-[20px]" size={20} />
             </button>
-            <Link href={profileHref} className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--outline-soft)] text-xs font-bold text-[var(--primary)]">
+            <Link href={profileHref} className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--secondary-1)] text-xs font-bold text-[var(--primary)]">
               {profileInitials}
             </Link>
           </div>
@@ -114,12 +114,12 @@ async function AsyncAppShell({
             <button className="relative rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-100" type="button">
               <MaterialIcon name="notifications" className="text-[20px]" size={20} />
               {unreadNotifications > 0 ? (
-                <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--notification)] px-1 text-[10px] font-bold text-white">
+                <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--alert)] px-1 text-[10px] font-bold text-white">
                   {unreadNotifications > 9 ? "9+" : unreadNotifications}
                 </span>
               ) : null}
             </button>
-            <Link href={profileHref} className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--outline-soft)] text-xs font-bold text-[var(--primary)]">
+            <Link href={profileHref} className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--secondary-1)] text-xs font-bold text-[var(--primary)]">
               {profileInitials}
             </Link>
           </div>
@@ -177,8 +177,8 @@ async function AsyncAppShell({
             </button>
           ) : null}
           {!isTenant ? (
-            <div className="mt-2 flex items-center gap-3 rounded-xl bg-[var(--surface-low)] px-3 py-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--primary-soft)] text-xs font-bold text-[var(--primary)]">
+            <div className="mt-2 flex items-center gap-3 rounded-xl bg-[var(--secondary-4)] px-3 py-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--primary-3)] text-xs font-bold text-[var(--primary)]">
                 {profileInitials}
               </div>
               <div className="overflow-hidden">
@@ -193,7 +193,7 @@ async function AsyncAppShell({
       <main className={cn("min-h-screen pb-28 md:pb-12", "md:ml-64", isTenant ? "pt-24" : "pt-20 md:pt-0")}>
         {!isTenant ? (
           <header className="fixed left-64 right-0 top-0 z-40 hidden h-16 items-center justify-between bg-white/80 px-8 shadow-sm backdrop-blur-md md:flex">
-            <div className="hidden items-center gap-2 rounded-full bg-[var(--surface-low)] px-4 py-2 md:flex">
+            <div className="hidden items-center gap-2 rounded-full bg-[var(--secondary-4)] px-4 py-2 md:flex">
               <MaterialIcon name="search" className="text-[18px] text-slate-400" />
               <input
                 className="w-64 border-none bg-transparent p-0 text-sm text-slate-700 focus:ring-0"
@@ -204,7 +204,7 @@ async function AsyncAppShell({
               <button className="relative rounded-full p-2 hover:bg-slate-100" type="button">
                 <MaterialIcon name="notifications" className="text-[20px]" />
                 {unreadNotifications > 0 ? (
-                  <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--notification)] px-1 text-[10px] font-bold text-white">
+                  <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--alert)] px-1 text-[10px] font-bold text-white">
                     {unreadNotifications > 9 ? "9+" : unreadNotifications}
                   </span>
                 ) : null}
@@ -218,13 +218,13 @@ async function AsyncAppShell({
 
         <div className={cn("mx-auto max-w-7xl", isTenant ? "px-6 lg:pr-12" : "px-5 pt-4 md:px-8 md:pt-24")}>
           {!isTenant ? (
-            <div className="mb-4 flex items-center gap-2 rounded-lg bg-[var(--secondary)] px-3 py-1.5 md:hidden">
+            <div className="mb-4 flex items-center gap-2 rounded-lg bg-secondary px-3 py-1.5 md:hidden">
               <MaterialIcon name="search" className="text-[18px] text-slate-400" />
               <input className="w-full border-none bg-transparent p-0 text-sm text-slate-700 focus:ring-0" placeholder={searchPlaceholder} />
             </div>
           ) : null}
           {!isTenant ? null : (
-            <div className="hidden items-center gap-2 rounded-lg bg-[var(--secondary)] px-3 py-1.5 md:flex lg:hidden">
+            <div className="hidden items-center gap-2 rounded-lg bg-secondary px-3 py-1.5 md:flex lg:hidden">
               <MaterialIcon name="search" className="text-[18px] text-slate-400" />
               <input className="w-full border-none bg-transparent p-0 text-sm text-slate-700 focus:ring-0" placeholder={searchPlaceholder} />
             </div>
@@ -243,7 +243,7 @@ async function AsyncAppShell({
                 href={item.href}
                 className={cn(
                   "flex min-w-[88px] flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-3 py-2 text-center text-[11px] font-semibold",
-                  active ? "bg-[var(--secondary)] text-slate-900" : "text-slate-500",
+                  active ? "bg-secondary text-slate-900" : "text-slate-500",
                 )}
               >
                 <MaterialIcon name={item.icon} className="text-[18px]" filled={active} />

@@ -22,7 +22,7 @@ export type PricingCadence =
   | "semiAnnual"
   | "year"
   | "custom";
-export type PaymentMethod = "cash" | "easypay";
+export type PaymentMethod = "cash" | "bank_transfer" | "easypay";
 
 export interface Property {
   id: string;
@@ -108,6 +108,8 @@ export interface Payment {
   easypayProvider?: string;
   easypayAttempts?: number;
   easypayLastCheck?: string;
+  easypayGatewayReference?: string;
+  easypayLastPhoneNumber?: string;
   method: PaymentMethod;
   status: PaymentStatus;
 }

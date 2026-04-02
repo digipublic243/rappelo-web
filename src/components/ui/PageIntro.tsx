@@ -15,8 +15,8 @@ export function PageIntro({ eyebrow, title, description, action, className }: Pa
         {eyebrow ? (
           <p className="mb-1 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--primary)]">{eyebrow}</p>
         ) : null}
-        <h1 className="text-4xl font-extrabold tracking-tight text-[var(--foreground)]">{title}</h1>
-        {description ? <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted-foreground)]">{description}</p> : null}
+        <h1 className="text-4xl font-extrabold tracking-tight text-foreground">{title}</h1>
+        {description ? <p className="mt-2 max-w-2xl text-sm leading-6 text-secondary-2">{description}</p> : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
     </header>

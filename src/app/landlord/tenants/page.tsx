@@ -32,18 +32,18 @@ export default async function TenantListPage() {
           ["Baux brouillon", String(tenants.filter((tenant) => tenant.leaseStatus === "draft").length)],
         ].map(([label, value]) => (
           <SurfaceCard key={label} className="p-5">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--muted-foreground)]">{label}</p>
-            <p className="mt-2 text-3xl font-black text-[var(--foreground)]">{value}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-secondary-2">{label}</p>
+            <p className="mt-2 text-3xl font-black text-foreground">{value}</p>
           </SurfaceCard>
         ))}
       </section>
 
       <SurfaceCard className="overflow-hidden">
         <table className="w-full min-w-[820px]">
-          <thead className="bg-[var(--surface-low)] text-left">
+          <thead className="bg-[var(--secondary-4)] text-left">
             <tr>
               {["Locataire", "Bail actif", "Santé paiement", "Unité", "Action"].map((label) => (
-                <th key={label} className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">
+                <th key={label} className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-secondary-2">
                   {label}
                 </th>
               ))}
@@ -53,8 +53,8 @@ export default async function TenantListPage() {
             {tenants.map((tenant) => (
               <tr key={tenant.id} className="border-t border-[var(--secondary)]">
                 <td className="px-6 py-5">
-                  <p className="font-semibold text-[var(--foreground)]">{tenant.fullName}</p>
-                  <p className="text-xs text-[var(--muted-foreground)]">{tenant.email}</p>
+                  <p className="font-semibold text-foreground">{tenant.fullName}</p>
+                  <p className="text-xs text-secondary-2">{tenant.email}</p>
                 </td>
                 <td className="px-6 py-5">
                   <StatusBadge status={tenant.leaseStatus} label={leaseStatusLabel(tenant.leaseStatus)} />
@@ -62,7 +62,7 @@ export default async function TenantListPage() {
                 <td className="px-6 py-5">
                   <StatusBadge status={tenant.paymentStatus} label={paymentStatusLabel(tenant.paymentStatus)} />
                 </td>
-                <td className="px-6 py-5 text-sm text-[var(--foreground)]">{tenant.unitId}</td>
+                <td className="px-6 py-5 text-sm text-foreground">{tenant.unitId}</td>
                 <td className="px-6 py-5">
                   <Link className="text-sm font-semibold text-[var(--primary)]" href={`/landlord/tenants/${tenant.id}`}>
                     Voir le détail

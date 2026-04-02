@@ -70,12 +70,12 @@ export default async function LeaseDetailPage({ params }: PageProps) {
           <SurfaceCard className="p-6">
             <div className="flex flex-wrap items-center gap-3">
               <StatusBadge status={lease.status} label={leaseStatusLabel(lease.status)} />
-              <span className="rounded-full bg-[var(--secondary)] px-3 py-1 text-xs font-semibold text-[var(--muted-foreground)]">{formatCadence(lease.cadence)}</span>
+              <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-secondary-2">{formatCadence(lease.cadence)}</span>
             </div>
-            <p className="mt-5 text-4xl font-black tracking-tight text-[var(--foreground)]">{formatMoney(lease.rentAmount)}</p>
-            <p className="mt-2 text-sm text-[var(--muted-foreground)]">Période du bail : {formatDate(lease.startDate)} - {formatDate(lease.endDate)}</p>
+            <p className="mt-5 text-4xl font-black tracking-tight text-foreground">{formatMoney(lease.rentAmount)}</p>
+            <p className="mt-2 text-sm text-secondary-2">Période du bail : {formatDate(lease.startDate)} - {formatDate(lease.endDate)}</p>
             {lease.securityDeposit ? (
-              <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+              <p className="mt-2 text-sm text-secondary-2">
                 Garantie : {formatMoney(lease.securityDeposit)}
                 {lease.securityDepositMonthsTaken != null
                   ? ` • ${lease.securityDepositMonthsTaken} mois prélevé(s)`
@@ -86,15 +86,15 @@ export default async function LeaseDetailPage({ params }: PageProps) {
 
           <SurfaceCard className="overflow-hidden">
             <div className="border-b border-[var(--secondary)] px-6 py-5">
-              <h2 className="text-xl font-bold text-[var(--foreground)]">Calendrier de paiement</h2>
+              <h2 className="text-xl font-bold text-foreground">Calendrier de paiement</h2>
             </div>
             <table className="w-full">
               <tbody>
                 {renderedSchedule.map((payment) => (
                   <tr key={payment.id} className="border-t border-[var(--secondary)] first:border-t-0">
-                    <td className="px-8 py-5 text-sm text-[var(--muted-foreground)]">{payment.label}</td>
-                    <td className="px-8 py-5 text-sm font-semibold text-[var(--foreground)]">{formatMoney(payment.amount)}</td>
-                    <td className="px-8 py-5 text-sm text-[var(--muted-foreground)]">{formatDate(payment.dueDate)}</td>
+                    <td className="px-8 py-5 text-sm text-secondary-2">{payment.label}</td>
+                    <td className="px-8 py-5 text-sm font-semibold text-foreground">{formatMoney(payment.amount)}</td>
+                    <td className="px-8 py-5 text-sm text-secondary-2">{formatDate(payment.dueDate)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -104,33 +104,33 @@ export default async function LeaseDetailPage({ params }: PageProps) {
 
         <div className="space-y-8 lg:col-span-5">
           <SurfaceCard className="p-6">
-            <h2 className="text-xl font-bold text-[var(--foreground)]">Documents du bail</h2>
-            <div className="mt-4 rounded-xl bg-[var(--surface-low)] px-4 py-4 text-sm text-[var(--muted-foreground)]">
+            <h2 className="text-xl font-bold text-foreground">Documents du bail</h2>
+            <div className="mt-4 rounded-xl bg-[var(--secondary-4)] px-4 py-4 text-sm text-secondary-2">
               L’API actuelle n’expose pas encore les fichiers de documents de bail dans cette vue, donc aucun faux document n’est affiché.
             </div>
           </SurfaceCard>
 
           <SurfaceCard className="p-6">
-            <h2 className="text-xl font-bold text-[var(--foreground)]">Suivi du retard</h2>
-            <div className="mt-4 space-y-3 text-sm text-[var(--muted-foreground)]">
+            <h2 className="text-xl font-bold text-foreground">Suivi du retard</h2>
+            <div className="mt-4 space-y-3 text-sm text-secondary-2">
               <p>
-                <span className="font-semibold text-[var(--foreground)]">Statut :</span>{" "}
+                <span className="font-semibold text-foreground">Statut :</span>{" "}
                 {leaseOverdueStatusLabel(overdue?.status)}
               </p>
               <p>
-                <span className="font-semibold text-[var(--foreground)]">Jours de retard :</span>{" "}
+                <span className="font-semibold text-foreground">Jours de retard :</span>{" "}
                 {overdue?.daysOverdue ?? 0}
               </p>
               <p>
-                <span className="font-semibold text-[var(--foreground)]">Montant en retard :</span>{" "}
+                <span className="font-semibold text-foreground">Montant en retard :</span>{" "}
                 {formatMoney(overdue?.overdueAmount ?? 0, "CDF")}
               </p>
               <p>
-                <span className="font-semibold text-[var(--foreground)]">Paiements manqués :</span>{" "}
+                <span className="font-semibold text-foreground">Paiements manqués :</span>{" "}
                 {overdue?.missedPaymentCount ?? 0}
               </p>
               <p>
-                <span className="font-semibold text-[var(--foreground)]">Dernière alerte :</span>{" "}
+                <span className="font-semibold text-foreground">Dernière alerte :</span>{" "}
                 {overdue?.lastAlertSentAt ? formatDate(overdue.lastAlertSentAt) : "Aucune"}
               </p>
             </div>
@@ -143,7 +143,7 @@ export default async function LeaseDetailPage({ params }: PageProps) {
           </SurfaceCard>
 
           <SurfaceCard className="p-6">
-            <h2 className="text-xl font-bold text-[var(--foreground)]">Actions</h2>
+            <h2 className="text-xl font-bold text-foreground">Actions</h2>
             <div className="mt-4 grid gap-3">
               <AppForm action={renewLeaseAction}>
                 <FormField name="leaseId" type="hidden" value={lease.id} />
@@ -154,18 +154,18 @@ export default async function LeaseDetailPage({ params }: PageProps) {
               </AppForm>
               <AppForm action={activateLeaseAction}>
                 <FormField name="leaseId" type="hidden" value={lease.id} />
-                <FormSubmitButton className="flex w-full justify-start rounded-lg border border-[color:color-mix(in_srgb,var(--outline-strong)_40%,transparent)] bg-[var(--surface-card)] px-5 text-sm text-[var(--primary)] disabled:opacity-50" disabled={!actions.canActivate}>
+                <FormSubmitButton className="flex w-full justify-start rounded-lg border border-[color:color-mix(in_srgb,var(--secondary)_40%,transparent)] bg-[var(--secondary-4)] px-5 text-sm text-[var(--primary)] disabled:opacity-50" disabled={!actions.canActivate}>
                   Activer le bail
                 </FormSubmitButton>
               </AppForm>
               <AppForm action={terminateLeaseAction}>
                 <FormField name="leaseId" type="hidden" value={lease.id} />
-                <FormSubmitButton className="flex w-full justify-start rounded-lg bg-[var(--primary-soft)] px-5 text-sm text-[var(--secondary-foreground)] disabled:opacity-50" disabled={!actions.canTerminate}>
+                <FormSubmitButton className="flex w-full justify-start rounded-lg bg-[var(--primary-3)] px-5 text-sm text-secondary-2 disabled:opacity-50" disabled={!actions.canTerminate}>
                   Terminer le bail
                 </FormSubmitButton>
               </AppForm>
             </div>
-            <p className="mt-4 text-xs text-[var(--subtle-foreground)]">
+            <p className="mt-4 text-xs text-[var(--secondary-3)]">
               Autorisé actuellement : activer {actions.canActivate ? "oui" : "non"}, terminer {actions.canTerminate ? "oui" : "non"}, renouveler {actions.canRenew ? "oui" : "non"}.
             </p>
           </SurfaceCard>

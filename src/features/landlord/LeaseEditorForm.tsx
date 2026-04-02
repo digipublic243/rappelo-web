@@ -55,14 +55,14 @@ export function LeaseEditorForm({
       <div className="space-y-8 lg:col-span-8">
         <section className="rounded-[28px] bg-white p-8 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-[var(--secondary)] p-3 text-[var(--primary)]">
+            <div className="rounded-xl bg-secondary p-3 text-[var(--primary)]">
               <MaterialIcon name="description" className="text-[22px]" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)]">
+              <h2 className="text-2xl font-bold tracking-tight text-foreground">
                 Contrat de bail
               </h2>
-              <p className="text-sm text-[var(--muted-foreground)]">
+              <p className="text-sm text-secondary-2">
                 Associez un locataire à une unité et définissez les bases du
                 contrat avant activation.
               </p>
@@ -159,7 +159,7 @@ export function LeaseEditorForm({
       </div>
 
       <div className="space-y-8 lg:col-span-4">
-        <section className="rounded-[28px] bg-[var(--panel-mid)] p-8 text-white shadow-[var(--ring-soft)]">
+        <section className="rounded-[28px] bg-[var(--primary-2)] p-8 text-white shadow-[var(--shadow-lg)]">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold tracking-tight">
               Cycle du bail
@@ -183,10 +183,10 @@ export function LeaseEditorForm({
         </section>
 
         <section className="rounded-[28px] bg-white p-8 shadow-sm">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--subtle-foreground)]">
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--secondary-3)]">
             Vérifications utiles
           </p>
-          <div className="mt-5 space-y-3 text-sm text-[var(--muted-foreground)]">
+          <div className="mt-5 space-y-3 text-sm text-secondary-2">
             <p>Choisissez de préférence une unité vacante ou réservée.</p>
             <p>La date de fin doit être postérieure à la date de début.</p>
             <p>
@@ -199,11 +199,11 @@ export function LeaseEditorForm({
         <div className="space-y-3">
           <FormInlineError className="rounded-2xl" message={state.error} />
           {state.errorDetails?.length ? (
-            <div className="rounded-2xl border border-[var(--danger-border)] bg-white px-5 py-4">
+            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-white px-5 py-4">
               <p className="text-sm font-bold text-[var(--danger)]">
                 Veuillez vérifier ces champs :
               </p>
-              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--danger-muted)]">
+              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[color-mix(in_srgb,var(--danger) 72%,var(--background))]">
                 {state.errorDetails.map((detail) => (
                   <li key={detail}>{detail}</li>
                 ))}
@@ -216,7 +216,7 @@ export function LeaseEditorForm({
       <div className="lg:col-span-12">
         <div className="flex flex-wrap items-center justify-end gap-3">
           <Link
-            className="inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold text-[var(--muted-foreground)]"
+            className="inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold text-secondary-2"
             href="/landlord/leases"
           >
             Annuler

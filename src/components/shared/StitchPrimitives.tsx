@@ -1,4 +1,5 @@
 import { cn } from "@/lib/cn";
+import { Button, buttonClassName, type ButtonVariant } from "@/components/ui/Button";
 
 interface SurfaceCardProps {
   children: React.ReactNode;
@@ -9,7 +10,7 @@ export function SurfaceCard({ children, className }: SurfaceCardProps) {
   return (
     <section
       className={cn(
-        "rounded-[var(--radius-md)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]",
+        "rounded-[var(--radius-md)] bg-[var(--secondary-4)] shadow-[var(--shadow-sm)]",
         className,
       )}
     >
@@ -20,7 +21,7 @@ export function SurfaceCard({ children, className }: SurfaceCardProps) {
 
 interface ActionButtonProps {
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: ButtonVariant;
   className?: string;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
@@ -30,30 +31,28 @@ export function actionButtonClassName({
   variant = "primary",
   className,
 }: {
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: ButtonVariant;
   className?: string;
 }) {
-  return cn(
-    "inline-flex items-center justify-center gap-[var(--space-2)] rounded-[var(--radius-sm)] px-[var(--space-5)] py-[var(--space-3)] text-sm font-semibold transition-all",
-    variant === "primary" &&
-      "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[var(--shadow-xs)] hover:brightness-110",
-    variant === "secondary" &&
-      "bg-[var(--primary-soft)] text-[var(--primary-soft-foreground)] hover:opacity-90",
-    variant === "ghost" &&
-      "border border-[color:color-mix(in_srgb,var(--outline-strong)_40%,transparent)] bg-[var(--surface-card)] text-[var(--primary)] hover:bg-[var(--surface-low)]",
-    className,
-  );
+  return buttonClassName({ variant, size: "md", className });
 }
 
-export function ActionButton({ children, variant = "primary", className, type = "button", disabled }: ActionButtonProps) {
+export function ActionButton({
+  children,
+  variant = "primary",
+  className,
+  type = "button",
+  disabled,
+}: ActionButtonProps) {
   return (
-    <button
-      className={actionButtonClassName({ variant, className })}
+    <Button
+      className={className}
       disabled={disabled}
       type={type}
+      variant={variant}
     >
       {children}
-    </button>
+    </Button>
   );
 }
 
@@ -67,11 +66,11 @@ export function FilterChip({ label, value, className }: FilterChipProps) {
   return (
     <div
       className={cn(
-        "flex items-center gap-[var(--space-2)] rounded-[var(--radius-sm)] border border-[color:color-mix(in_srgb,var(--outline-soft)_60%,transparent)] bg-[var(--surface-card)] px-[var(--space-4)] py-[var(--space-2)] text-sm",
+        "flex items-center gap-[var(--space-2)] rounded-[var(--radius-sm)] border border-[color:color-mix(in_srgb,var(--secondary-1)_60%,transparent)] bg-[var(--secondary-4)] px-[var(--space-4)] py-[var(--space-2)] text-sm",
         className,
       )}
     >
-      <span className="text-[var(--subtle-foreground)]">{label}</span>
+      <span className="text-[var(--secondary-3)]">{label}</span>
       <span className="font-semibold text-[var(--primary)]">{value}</span>
     </div>
   );
@@ -86,9 +85,9 @@ interface StatTileProps {
 
 export function StatTile({ label, value, accent = "var(--primary)", hint }: StatTileProps) {
   return (
-    <div className="rounded-[var(--radius-md)] bg-[var(--surface-card)] p-[var(--space-6)] shadow-[var(--shadow-sm)]">
-      <p className="text-sm font-medium text-[var(--muted-foreground)]">{label}</p>
-      <p className="mt-2 text-3xl font-extrabold tracking-tight text-[var(--foreground)]">{value}</p>
+    <div className="rounded-[var(--radius-md)] bg-[var(--secondary-4)] p-[var(--space-6)] shadow-[var(--shadow-sm)]">
+      <p className="text-sm font-medium text-secondary-2">{label}</p>
+      <p className="mt-2 text-3xl font-extrabold tracking-tight text-foreground">{value}</p>
       {hint ? (
         <p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: accent }}>
           {hint}

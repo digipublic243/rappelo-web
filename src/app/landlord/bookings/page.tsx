@@ -31,12 +31,12 @@ export default async function BookingRequestsPage() {
             <SurfaceCard key={booking.id} className="p-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-lg font-bold text-[var(--foreground)]">{booking.id}</p>
-                  <p className="mt-1 text-sm text-[var(--muted-foreground)]">{booking.unitId || "Unit pending"}</p>
+                  <p className="text-lg font-bold text-foreground">{booking.id}</p>
+                  <p className="mt-1 text-sm text-secondary-2">{booking.unitId || "Unit pending"}</p>
                 </div>
                 <StatusBadge status={booking.status} label={bookingStatusLabel(booking.status)} />
               </div>
-              <div className="mt-5 grid gap-3 text-sm text-[var(--muted-foreground)]">
+              <div className="mt-5 grid gap-3 text-sm text-secondary-2">
                 <p>Stay window: {formatDate(booking.requestedFrom)} - {formatDate(booking.requestedTo)}</p>
                 <p>Deposit: {formatMoney(booking.depositAmount)}</p>
                 <p>Property: {booking.propertyId || "Property pending"}</p>

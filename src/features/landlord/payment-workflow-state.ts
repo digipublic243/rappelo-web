@@ -6,6 +6,7 @@ export interface PaymentWorkflowActionState {
   gatewayUrl?: string;
   gatewayReference?: string;
   expiresAt?: string;
+  paymentId?: string;
 }
 
 export const initialPaymentWorkflowActionState: PaymentWorkflowActionState = {};

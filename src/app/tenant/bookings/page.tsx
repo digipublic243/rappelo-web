@@ -30,7 +30,7 @@ export default async function TenantBookingsPage() {
         {["All Bookings", "Upcoming", "In Review", "Archived"].map((label, index) => (
           <button
             key={label}
-            className={`rounded-full px-6 py-2 text-sm font-semibold whitespace-nowrap ${index === 0 ? "bg-[var(--primary)] text-[var(--primary-foreground)]" : "bg-white text-[var(--muted-foreground)]"}`}
+            className={`rounded-full px-6 py-2 text-sm font-semibold whitespace-nowrap ${index === 0 ? "bg-[var(--primary)] text-[var(--primary-4)]" : "bg-white text-secondary-2"}`}
             type="button"
           >
             {label}
@@ -47,16 +47,16 @@ export default async function TenantBookingsPage() {
         <div className="grid gap-6 md:grid-cols-2">
           {bookings?.map?.((booking) => (
             <SurfaceCard key={booking.id} className="overflow-hidden">
-              <div className="h-56 bg-[var(--outline-soft)]" />
+              <div className="h-56 bg-[var(--secondary-1)]" />
               <div className="p-6">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h2 className="text-xl font-bold text-[var(--foreground)]">{booking.unitId || "Unit pending"}</h2>
-                    <p className="text-sm text-[var(--muted-foreground)]">{booking.propertyId || "Property pending"}</p>
+                    <h2 className="text-xl font-bold text-foreground">{booking.unitId || "Unit pending"}</h2>
+                    <p className="text-sm text-secondary-2">{booking.propertyId || "Property pending"}</p>
                   </div>
                   <StatusBadge status={booking.status} label={bookingStatusLabel(booking.status)} />
                 </div>
-                <div className="mt-5 space-y-2 text-sm text-[var(--muted-foreground)]">
+                <div className="mt-5 space-y-2 text-sm text-secondary-2">
                   <p>{formatDate(booking.requestedFrom)} - {formatDate(booking.requestedTo)}</p>
                   <p>Deposit {formatMoney(booking.depositAmount)}</p>
                 </div>

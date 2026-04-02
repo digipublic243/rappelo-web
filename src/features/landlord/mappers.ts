@@ -54,6 +54,8 @@ export function mapApiUnitToDomain(unit: ApiUnit, tenantName?: string): Unit {
     .map((method) =>
       method === "mobile_money" || method === "easypay"
         ? "easypay"
+        : method === "bank_transfer"
+          ? "bank_transfer"
         : method === "cash"
           ? "cash"
           : null,
@@ -143,6 +145,10 @@ function mapPaymentMethod(method?: ApiPaymentMethod): Payment["method"] {
     return "easypay";
   }
 
+  if (method === "bank_transfer") {
+    return "bank_transfer";
+  }
+
   return "cash";
 }
 
@@ -170,6 +176,8 @@ export function mapApiPaymentToDomain(payment: ApiPayment): Payment {
         ? Number(payment.easypay_attempts)
         : undefined,
     easypayLastCheck: payment.easypay_last_check ?? undefined,
+    easypayGatewayReference: undefined,
+    easypayLastPhoneNumber: undefined,
     method: mapPaymentMethod(payment.payment_method),
     status: payment.status,
   };

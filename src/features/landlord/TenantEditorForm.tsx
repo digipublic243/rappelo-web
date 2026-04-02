@@ -45,12 +45,12 @@ export function TenantEditorForm({ action, initialState }: TenantEditorFormProps
       <div className="space-y-8 lg:col-span-8">
         <section className="rounded-[28px] bg-white p-8 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-[var(--secondary)] p-3 text-[var(--primary)]">
+            <div className="rounded-xl bg-secondary p-3 text-[var(--primary)]">
               <MaterialIcon name="group" className="text-[22px]" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)]">Accès locataire</h2>
-              <p className="text-sm text-[var(--muted-foreground)]">Le backend créera automatiquement le compte tenant à partir du numéro saisi ici.</p>
+              <h2 className="text-2xl font-bold tracking-tight text-foreground">Accès locataire</h2>
+              <p className="text-sm text-secondary-2">Le backend créera automatiquement le compte tenant à partir du numéro saisi ici.</p>
             </div>
           </div>
 
@@ -72,12 +72,12 @@ export function TenantEditorForm({ action, initialState }: TenantEditorFormProps
 
         <section className="rounded-[28px] bg-white p-8 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-[var(--secondary)] p-3 text-[var(--primary)]">
+            <div className="rounded-xl bg-secondary p-3 text-[var(--primary)]">
               <MaterialIcon name="description" className="text-[22px]" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)]">Profil locataire</h2>
-              <p className="text-sm text-[var(--muted-foreground)]">Renseignez les informations de base disponibles dans le guide API.</p>
+              <h2 className="text-2xl font-bold tracking-tight text-foreground">Profil locataire</h2>
+              <p className="text-sm text-secondary-2">Renseignez les informations de base disponibles dans le guide API.</p>
             </div>
           </div>
 
@@ -102,7 +102,7 @@ export function TenantEditorForm({ action, initialState }: TenantEditorFormProps
       </div>
 
       <div className="space-y-8 lg:col-span-4">
-        <section className="rounded-[28px] bg-[var(--panel-mid)] p-8 text-white shadow-[var(--ring-soft)]">
+        <section className="rounded-[28px] bg-[var(--primary-2)] p-8 text-white shadow-[var(--shadow-lg)]">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold tracking-tight">Création guidée</h2>
             <span className="rounded-full bg-white/14 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
@@ -119,9 +119,9 @@ export function TenantEditorForm({ action, initialState }: TenantEditorFormProps
         <div className="space-y-3">
           <FormInlineError className="rounded-2xl" message={state.error} />
           {state.errorDetails?.length ? (
-            <div className="rounded-2xl border border-[var(--danger-border)] bg-white px-5 py-4">
+            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-white px-5 py-4">
               <p className="text-sm font-bold text-[var(--danger)]">Veuillez vérifier ces champs :</p>
-              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--danger-muted)]">
+              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[color-mix(in_srgb,var(--danger) 72%,var(--background))]">
                 {state.errorDetails.map((detail) => (
                   <li key={detail}>{detail}</li>
                 ))}
@@ -133,7 +133,7 @@ export function TenantEditorForm({ action, initialState }: TenantEditorFormProps
 
       <div className="lg:col-span-12">
         <div className="flex flex-wrap items-center justify-end gap-3">
-          <Link className="inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold text-[var(--muted-foreground)]" href="/landlord/tenants">
+          <Link className="inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold text-secondary-2" href="/landlord/tenants">
             Annuler
           </Link>
           <FormSubmitButton className="rounded-lg px-6 text-sm shadow-sm" disabled={pending}>

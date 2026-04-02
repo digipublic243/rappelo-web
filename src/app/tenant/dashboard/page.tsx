@@ -64,7 +64,7 @@ export default async function TenantDashboardPage() {
               />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             <div className="absolute bottom-6 left-8 text-white">
-              <span className="mb-3 inline-block rounded-full bg-[var(--success-strong)] px-3 py-1 text-[10px] font-bold uppercase tracking-widest">Séjour en cours</span>
+              <span className="mb-3 inline-block rounded-full bg-success/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest">Séjour en cours</span>
               <h2 className="text-2xl font-bold">
                 {dashboard.currentUnit?.label ?? "Unité indisponible"}, {dashboard.currentProperty?.name ?? "Bien indisponible"}
               </h2>
@@ -80,8 +80,8 @@ export default async function TenantDashboardPage() {
               ["Loyer", dashboard.currentLease ? formatMoney(dashboard.currentLease.rentAmount) : formatMoney(0)],
             ].map(([label, value]) => (
               <div key={label}>
-                <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--subtle-foreground)]">{label}</p>
-                <p className="mt-1 text-sm font-semibold text-[var(--foreground)]">{value}</p>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--secondary-3)]">{label}</p>
+                <p className="mt-1 text-sm font-semibold text-foreground">{value}</p>
               </div>
             ))}
             <div className="flex items-center justify-end">
@@ -92,18 +92,18 @@ export default async function TenantDashboardPage() {
           </div>
         </SurfaceCard>
 
-        <SurfaceCard className="bg-[var(--primary-soft)] p-8 md:col-span-4">
+        <SurfaceCard className="bg-[var(--primary-3)] p-8 md:col-span-4">
           <div className="flex items-start justify-between">
             <div className="rounded-xl bg-white/50 p-3">
               <MaterialIcon name="account_balance_wallet" className="text-[22px] text-[var(--primary)]" />
             </div>
-            <span className="rounded-full bg-[var(--primary)]/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[var(--primary-soft-foreground)]">
+            <span className="rounded-full bg-[var(--primary)]/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[var(--primary-2)]">
               Prochaine échéance
             </span>
           </div>
-          <h3 className="mt-10 text-lg font-bold text-[var(--foreground)]">Paiement du loyer</h3>
-          <p className="mt-1 text-4xl font-black tracking-tight text-[var(--foreground)]">{nextPayment ? formatMoney(nextPayment.amount) : formatMoney(0)}</p>
-          <p className="mt-4 text-sm font-medium text-[var(--secondary-foreground)]">
+          <h3 className="mt-10 text-lg font-bold text-foreground">Paiement du loyer</h3>
+          <p className="mt-1 text-4xl font-black tracking-tight text-foreground">{nextPayment ? formatMoney(nextPayment.amount) : formatMoney(0)}</p>
+          <p className="mt-4 text-sm font-medium text-secondary-2">
             {nextPayment ? `À régler avant le ${formatDate(nextPayment.dueDate)}` : "Aucun paiement à venir"}
           </p>
           <Link
@@ -112,27 +112,27 @@ export default async function TenantDashboardPage() {
           >
             Payer maintenant
           </Link>
-          <p className="mt-3 text-center text-[11px] text-[var(--secondary-foreground)]">
+          <p className="mt-3 text-center text-[11px] text-secondary-2">
             {dashboard.automaticPaymentsEnabled ? "Les paiements automatiques sont activés pour cette unité." : "Les paiements automatiques ne sont pas encore activés."}
           </p>
         </SurfaceCard>
 
-        <SurfaceCard className="bg-[var(--surface-low)] p-8 md:col-span-6">
+        <SurfaceCard className="bg-[var(--secondary-4)] p-8 md:col-span-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold text-[var(--foreground)]">Résumé du séjour</h3>
-            <span className="rounded-full bg-white px-3 py-1 text-[10px] font-bold text-[var(--muted-foreground)]">
+            <h3 className="text-lg font-bold text-foreground">Résumé du séjour</h3>
+            <span className="rounded-full bg-white px-3 py-1 text-[10px] font-bold text-secondary-2">
               {dashboard.leases.length} contexte(s) actif(s)
             </span>
           </div>
           <div className="mt-6 space-y-4">
             {dashboardFacts.map(({ icon, title, text }) => (
               <div key={title} className="flex gap-4 rounded-lg bg-white/70 p-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--info-soft)] text-[var(--info-foreground)]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--primary-3)] text-[var(--primary-2)]">
                   <MaterialIcon name={icon} className="text-[18px]" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-[var(--foreground)]">{title}</p>
-                  <p className="mt-1 text-xs text-[var(--muted-foreground)]">{text}</p>
+                  <p className="text-sm font-bold text-foreground">{title}</p>
+                  <p className="mt-1 text-xs text-secondary-2">{text}</p>
                 </div>
               </div>
             ))}
@@ -140,9 +140,9 @@ export default async function TenantDashboardPage() {
         </SurfaceCard>
 
         <SurfaceCard className="p-8 md:col-span-6">
-          <h3 className="text-lg font-bold text-[var(--foreground)]">Vue d’ensemble du compte</h3>
-          <p className="mt-2 text-sm text-[var(--muted-foreground)]">Résumé en direct dérivé du profil locataire, de vos baux et de vos paiements.</p>
-          <div className="mt-6 rounded-2xl bg-[linear-gradient(145deg,var(--panel-deep),var(--panel-deep-alt))] p-6 text-white">
+          <h3 className="text-lg font-bold text-foreground">Vue d’ensemble du compte</h3>
+          <p className="mt-2 text-sm text-secondary-2">Résumé en direct dérivé du profil locataire, de vos baux et de vos paiements.</p>
+          <div className="mt-6 rounded-2xl bg-[linear-gradient(145deg,var(--primary-1),var(--primary-2))] p-6 text-white">
             <p className="text-sm font-semibold">{dashboard.profileName}</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               {accountSummary.map(([label, value]) => (
@@ -157,21 +157,21 @@ export default async function TenantDashboardPage() {
 
         <SurfaceCard className="p-8 md:col-span-12">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold text-[var(--foreground)]">Notifications non lues</h3>
-            <span className="rounded-full bg-[var(--surface-low)] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--muted-foreground)]">
+            <h3 className="text-lg font-bold text-foreground">Notifications non lues</h3>
+            <span className="rounded-full bg-[var(--secondary-4)] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-secondary-2">
               {dashboard.notifications.length} en attente
             </span>
           </div>
           {dashboard.notifications.length === 0 ? (
-            <p className="mt-4 text-sm text-[var(--muted-foreground)]">Aucune notification non lue côté backend pour le moment.</p>
+            <p className="mt-4 text-sm text-secondary-2">Aucune notification non lue côté backend pour le moment.</p>
           ) : (
             <div className="mt-5 grid gap-4 md:grid-cols-2">
               {dashboard.notifications.slice(0, 4).map((notification) => (
-                <div key={notification.id} className="rounded-2xl bg-[var(--surface-low)] p-4">
-                  <p className="text-sm font-bold text-[var(--foreground)]">{notification.title}</p>
-                  <p className="mt-2 text-sm text-[var(--muted-foreground)]">{notification.message}</p>
+                <div key={notification.id} className="rounded-2xl bg-[var(--secondary-4)] p-4">
+                  <p className="text-sm font-bold text-foreground">{notification.title}</p>
+                  <p className="mt-2 text-sm text-secondary-2">{notification.message}</p>
                   {notification.createdAt ? (
-                    <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
+                    <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--secondary-3)]">
                       {formatDate(notification.createdAt)}
                     </p>
                   ) : null}

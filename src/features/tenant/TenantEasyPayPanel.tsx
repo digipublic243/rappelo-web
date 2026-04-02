@@ -32,7 +32,9 @@ function EasyPayActionForm({
   submitLabel,
 }: {
   action: (state: typeof initialTenantEasyPayActionState, formData: FormData) => Promise<typeof initialTenantEasyPayActionState>;
-  children: React.ReactNode;
+  children:
+    | React.ReactNode
+    | ((state: typeof initialTenantEasyPayActionState) => React.ReactNode);
   paymentId: string;
   onBeforeSubmit?: () => void;
   submitLabel: string;
@@ -59,7 +61,7 @@ function EasyPayActionForm({
       <FormField name="paymentId" type="hidden" value={paymentId} />
       <FormInlineError message={state.error} />
       {state.errorDetails?.length ? (
-        <div className="rounded-xl border border-[var(--danger-border)] bg-[var(--surface-card)] px-4 py-4">
+        <div className="rounded-xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-[var(--secondary-4)] px-4 py-4">
           <p className="text-sm font-bold text-[var(--danger)]">Détails de l’erreur :</p>
           <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--danger)]/80">
             {state.errorDetails.map((detail) => (
@@ -69,7 +71,7 @@ function EasyPayActionForm({
         </div>
       ) : null}
       <FormInlineSuccess message={state.message} />
-      {children}
+      {typeof children === "function" ? children(state) : children}
       <FormSubmitButton
         className="w-full rounded-lg px-6 text-sm"
         disabled={pending}
@@ -100,6 +102,11 @@ export function TenantEasyPayPanel({
     payment.status === "pending" ||
     Boolean(payment.easypayReferenceId || payment.easypayTransactionId);
 
+  const displayedUsedPhone =
+    usedPhone ?? payment.easypayLastPhoneNumber ?? null;
+  const displayedGatewayReference =
+    payment.easypayGatewayReference ?? payment.easypayReferenceId ?? null;
+
   function rememberSelectedPhone() {
     const selectedPhone =
       phoneSource === "other"
@@ -113,64 +120,65 @@ export function TenantEasyPayPanel({
     window.sessionStorage.setItem(storageKey, selectedPhone);
     setUsedPhone(selectedPhone);
   }
-
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-[var(--foreground)]">Paiement EasyPay</h2>
-        <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+        <h2 className="text-xl font-bold text-foreground">Paiement EasyPay</h2>
+        <p className="mt-2 text-sm text-secondary-2">
           Lancez la collecte EasyPay depuis votre numéro enregistré ou un autre
           numéro mobile, puis vérifiez le statut une fois la demande validée sur
           votre téléphone.
         </p>
       </div>
 
-      <div className="grid gap-4 rounded-[28px] border border-[var(--outline-soft)] bg-[var(--surface-soft)] p-5">
+      <div className="grid gap-4 rounded-[28px] border border-[var(--secondary-1)] bg-[var(--background)] p-5">
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary-3)]">
               Référence EasyPay
             </p>
-            <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
-              {payment.easypayReferenceId ?? "Pas encore générée"}
+            <p className="mt-2 text-sm font-semibold text-foreground">
+              {displayedGatewayReference ?? "Pas encore générée"}
             </p>
           </div>
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary-3)]">
               Transaction
             </p>
-            <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
+            <p className="mt-2 text-sm font-semibold text-foreground">
               {payment.easypayTransactionId ?? "En attente"}
             </p>
           </div>
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary-3)]">
               Opérateur
             </p>
-            <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
+            <p className="mt-2 text-sm font-semibold text-foreground">
               {payment.easypayProvider ?? "Déterminé par EasyPay"}
             </p>
           </div>
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary-3)]">
               Dernière vérification
             </p>
-            <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
+            <p className="mt-2 text-sm font-semibold text-foreground">
               {payment.easypayLastCheck ? formatDate(payment.easypayLastCheck) : "Jamais vérifié"}
             </p>
           </div>
           <div className="md:col-span-2">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary-3)]">
               Numéro utilisé
             </p>
-            <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">
-              {usedPhone ? formatPhone(usedPhone) : "Aucun numéro enregistré pour ce paiement"}
+            <p className="mt-2 text-sm font-semibold text-foreground">
+              {displayedUsedPhone
+                ? formatPhone(displayedUsedPhone)
+                : "Aucun numéro enregistré pour ce paiement"}
             </p>
           </div>
         </div>
-        <p className="text-sm text-[var(--muted-foreground)]">
+        <p className="text-sm text-secondary-2">
           Tentatives de synchronisation :{" "}
-          <span className="font-semibold text-[var(--foreground)]">
+          <span className="font-semibold text-foreground">
             {payment.easypayAttempts ?? 0}
           </span>
         </p>
@@ -184,45 +192,61 @@ export function TenantEasyPayPanel({
             paymentId={payment.id}
             submitLabel="Payer via EasyPay"
           >
-            <div className="space-y-4 text-left">
-              <FormField
-                activeOptionClassName="border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)]"
-                inactiveOptionClassName="border-[var(--outline-soft)] bg-[var(--surface-card)] text-[var(--foreground)]"
-                label="Numéro à utiliser"
-                name="phone_source"
-                onChange={(value) => setPhoneSource(value as "account" | "other")}
-                options={[
-                  {
-                    label: "Mon numéro",
-                    value: "account",
-                    description: accountPhone
-                      ? formatPhone(accountPhone)
-                      : "Aucun numéro valide sur le compte",
-                  },
-                  {
-                    label: "Un autre numéro",
-                    value: "other",
-                    description: "Saisir un numéro mobile congolais pour EasyPay",
-                  },
-                ]}
-                type="radio-group"
-                value={phoneSource}
-              />
-
-              {phoneSource === "other" ? (
+            {(state) => (
+              <div className="space-y-4 text-left">
                 <FormField
-                  helperText="Saisissez les 9 derniers chiffres, le préfixe +243 sera appliqué au moment de l’envoi."
-                  inputMode="numeric"
-                  label="Autre numéro"
-                  maxLength={9}
-                  name="other_phone_number"
-                  onChange={(event) => setOtherPhone(event.target.value)}
-                  placeholder="899090907"
-                  type="text"
-                  value={otherPhone}
+                  activeOptionClassName="border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-4)]"
+                  inactiveOptionClassName="border-[var(--secondary-1)] bg-[var(--secondary-4)] text-foreground"
+                  label="Numéro à utiliser"
+                  name="phone_source"
+                  onChange={(value) =>
+                    setPhoneSource(value as "account" | "other")
+                  }
+                  options={[
+                    {
+                      label: "Mon numéro",
+                      value: "account",
+                      description: accountPhone
+                        ? formatPhone(accountPhone)
+                        : "Aucun numéro valide sur le compte",
+                    },
+                    {
+                      label: "Un autre numéro",
+                      value: "other",
+                      description:
+                        "Saisir un numéro mobile congolais pour EasyPay",
+                    },
+                  ]}
+                  type="radio-group"
+                  value={phoneSource}
                 />
-              ) : null}
-            </div>
+
+                {phoneSource === "other" ? (
+                  <FormField
+                    helperText="Saisissez les 9 derniers chiffres, le préfixe +243 sera appliqué au moment de l’envoi."
+                    inputMode="numeric"
+                    label="Autre numéro"
+                    maxLength={9}
+                    name="other_phone_number"
+                    onChange={(event) => setOtherPhone(event.target.value)}
+                    placeholder="899090907"
+                    type="text"
+                    value={otherPhone}
+                  />
+                ) : null}
+
+                {state.gatewayReference ? (
+                  <div className="rounded-xl border border-[var(--secondary-1)] bg-[var(--secondary-4)] px-4 py-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary-3)]">
+                      Référence passerelle
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-foreground">
+                      {state.gatewayReference}
+                    </p>
+                  </div>
+                ) : null}
+              </div>
+            )}
           </EasyPayActionForm>
         ) : null}
 
@@ -232,10 +256,24 @@ export function TenantEasyPayPanel({
             paymentId={payment.id}
             submitLabel="Vérifier le statut"
           >
-            <div className="rounded-xl border border-[var(--outline-soft)] bg-[var(--surface-soft)] px-4 py-4 text-sm text-[var(--muted-foreground)]">
-              Vérifiez si le paiement a été accepté ou rejeté par votre opérateur
-              mobile après la demande EasyPay.
-            </div>
+            {(state) => (
+              <div className="space-y-3">
+                <div className="rounded-xl border border-[var(--secondary-1)] bg-[var(--background)] px-4 py-4 text-sm text-secondary-2">
+                  Vérifiez si le paiement a été accepté ou rejeté par votre opérateur
+                  mobile après la demande EasyPay.
+                </div>
+                {state.easypayStatus ? (
+                  <div className="rounded-xl border border-[var(--secondary-1)] bg-[var(--secondary-4)] px-4 py-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary-3)]">
+                      Statut EasyPay
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-foreground">
+                      {state.easypayStatus}
+                    </p>
+                  </div>
+                ) : null}
+              </div>
+            )}
           </EasyPayActionForm>
         ) : null}
       </div>

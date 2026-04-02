@@ -38,16 +38,16 @@ export function TenantOtpForm() {
 
   return (
     <div className="mt-6 space-y-6">
-      <div className="rounded-4xl border border-[var(--outline-soft)] bg-[var(--surface-soft)] p-5">
+      <div className="rounded-4xl border border-[var(--secondary-1)] bg-[var(--background)] p-5">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <p className="text-sm font-bold text-[var(--foreground)]">Connexion par OTP</p>
-            <p className="mt-1 text-xs text-[var(--subtle-foreground)]">
+            <p className="text-sm font-bold text-foreground">Connexion par OTP</p>
+            <p className="mt-1 text-xs text-[var(--secondary-3)]">
               Flux locataire recommandé par le backend. En développement, le
               code OTP s’affiche dans la console du serveur.
             </p>
           </div>
-          <span className="rounded-full bg-[var(--primary-soft)] px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-[var(--primary-soft-foreground)]">
+          <span className="rounded-full bg-[var(--primary-3)] px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-[var(--primary-2)]">
             Recommandé
           </span>
         </div>
@@ -65,9 +65,9 @@ export function TenantOtpForm() {
             />
             <FormInlineError message={otpError} />
             {otpErrorDetails?.length ? (
-              <div className="rounded-xl border border-[var(--danger-border)] bg-white px-4 py-4">
+              <div className="rounded-xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-white px-4 py-4">
                 <p className="text-sm font-bold text-[var(--danger)]">Détails :</p>
-                <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--danger-muted)]">
+                <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[color-mix(in_srgb,var(--danger) 72%,var(--background))]">
                   {otpErrorDetails.map((detail) => (
                     <li key={detail}>{detail}</li>
                   ))}
@@ -81,7 +81,7 @@ export function TenantOtpForm() {
         ) : (
           <AppForm action={verifyAction} className="mt-5 space-y-4">
             <FormField name="phone_number" type="hidden" value={resolvedPhoneNumber} />
-            <div className="rounded-2xl bg-white px-4 py-3 text-sm text-[var(--muted-foreground)]">
+            <div className="rounded-2xl bg-white px-4 py-3 text-sm text-secondary-2">
               {formatPhonePreview(resolvedPhoneNumber)}
             </div>
             <FormField
@@ -92,12 +92,12 @@ export function TenantOtpForm() {
               required
               type="text"
             />
-            <FormInlineSuccess className="bg-[var(--primary-soft)]/50" message={otpMessage} />
+            <FormInlineSuccess className="bg-[var(--primary-3)]/50" message={otpMessage} />
             <FormInlineError message={otpError} />
             {otpErrorDetails?.length ? (
-              <div className="rounded-xl border border-[var(--danger-border)] bg-white px-4 py-4">
+              <div className="rounded-xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-white px-4 py-4">
                 <p className="text-sm font-bold text-[var(--danger)]">Détails :</p>
-                <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--danger-muted)]">
+                <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[color-mix(in_srgb,var(--danger) 72%,var(--background))]">
                   {otpErrorDetails.map((detail) => (
                     <li key={detail}>{detail}</li>
                   ))}
@@ -106,7 +106,7 @@ export function TenantOtpForm() {
             ) : null}
             <div className="flex gap-3">
               <FormSubmitButton
-                className="flex-1 border border-[var(--outline-soft)] bg-white text-[var(--muted-foreground)]"
+                className="flex-1 border border-[var(--secondary-1)] bg-white text-secondary-2"
                 onClick={() => {
                   setPhoneNumber(resolvedPhoneNumber);
                 }}

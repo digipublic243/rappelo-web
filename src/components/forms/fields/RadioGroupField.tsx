@@ -30,7 +30,7 @@ export function RadioGroupField(props: RadioGroupFieldProps) {
               </div>
               <input
                 checked={active}
-                className="h-5 w-5 accent-[var(--success-bright)]"
+                className="h-5 w-5 accent-success"
                 name={props.name}
                 onChange={() => {
                   form?.setValue(props.name, option.value);

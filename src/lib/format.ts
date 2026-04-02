@@ -58,7 +58,8 @@ export function paymentStatusLabel(status: PaymentStatus): string {
 
 export function formatPaymentMethod(method: PaymentMethod): string {
   const labels: Record<PaymentMethod, string> = {
-    cash: "Espèces / virement",
+    cash: "Espèces",
+    bank_transfer: "Virement bancaire",
     easypay: "EasyPay",
   };
 

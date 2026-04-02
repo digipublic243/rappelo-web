@@ -654,7 +654,8 @@ Flux complet pour un tenant:
 2. Initier la collection EasyPay sur un paiement:
    - `POST /api/payments/payments/{id}/initiate_easypay/`
    - Payload: `{"phone_number": "+243899090907"}` (numéro du tenant)
-   - Response: Payment avec `easypay_reference_id`, `easypay_transaction_id`, status=pending, payment_method=mobile_money
+    - Response: inclut `payment` + `payment_link`
+    - Les operations EasyPay (initiation, callback, status checks) sont historisees dans `payment_link.metadata`
    - Le backend appelle l'API EasyPay qui contacte le tenant sur son téléphone
 
 3. EasyPay envoie une requête au tenant (SMS/USSD) pour valider/rejeter:
@@ -663,14 +664,15 @@ Flux complet pour un tenant:
 
 4. Vérifier le statut du paiement:
    - `GET /api/payments/payments/{id}/check_easypay_status/`
-   - Response: Payment avec `status=paid` ou `status=failed` (selon la validation du tenant)
-   - Le backend sync avec EasyPay et met à jour le paiement
-   - Champ `easypay_attempts` augmente à chaque check
+   - Response: Payment + `easypay_status`
+   - Si EasyPay retourne `Success`, le backend met a jour la table `Payment` (status `paid`, refs transaction)
+   - Si EasyPay retourne `Failed`, le backend enregistre l'echec dans `payment_link.metadata` mais garde le `Payment` en `pending`
 
 Reponse exemple apres initiate_easypay:
 
 ```json
 {
+  "message": "Payment initiated successfully",
   "payment": {
     "id": "<uuid>",
     "lease": "<lease_uuid>",
@@ -680,15 +682,27 @@ Reponse exemple apres initiate_easypay:
     "due_date": "2026-04-05",
     "payment_label": "Paiement du 2026-04-01 au 2026-04-30",
     "status": "pending",
-    "payment_method": "mobile_money",
-    "paid_at": null,
-    "easypay_reference_id": "REF123456789",
-    "easypay_transaction_id": "TXN987654321",
-    "easypay_provider": "Orange Money",
-    "easypay_attempts": 1,
-    "easypay_last_check": "2026-04-02T10:00:00Z"
+    "payment_method": "bank_transfer",
+    "paid_at": null
   },
-  "message": "Payment initiated successfully"
+  "payment_link": {
+    "id": "<payment_link_uuid>",
+    "payment": "<uuid>",
+    "token": "<token>",
+    "gateway": "easypay",
+    "status": "active",
+    "gateway_reference": "REF123456789",
+    "metadata": {
+      "last_easypay_phone_number": "+243899090907",
+      "last_reference_id": "REF123456789",
+      "easypay_operations": [
+        {
+          "type": "initiate",
+          "success": true
+        }
+      ]
+    }
+  }
 }
 ```
 
@@ -748,7 +762,7 @@ Le frontend doit donc tolerer les deux formes: `detail` et `error`.
 3. `rent` represente le montant associe a `rental_periodicity` (mensuel, hebdo, journ, autre). Ne pas supposer que c'est toujours mensuel.
 4. `Booking.confirm` ne rend pas le `Lease` directement separement, mais la reservation mise a jour avec son champ `lease` rempli.
 5. Le webhook `POST /api/payments/payments/callback/{token}/` n'est pas destine a l'application frontend.
-6. L'integration EasyPay n'est pas encore cablee: le contrat d'API est prepare, mais `gateway_url` restera vide tant que le provider n'est pas branche.
+6. Le suivi EasyPay est maintenant centre sur `PaymentLink`: operations historisees dans `payment_link.metadata` et mise a jour de `Payment` uniquement en cas de succes (`Success`).
 7. Le modele `Property` a change: utiliser `address_content` + `city` + `country` au lieu des anciens champs (`address_line_1`, `state`, `postal_code`, etc.) dans les formulaires frontend.
 
 ## Sequence recommandee pour le frontend
@@ -804,11 +818,24 @@ Response (en cas de succes):
     "status": "pending",
     "amount": "2000.00",
     "currency": "CDF",
-    "payment_method": "mobile_money",
-    "easypay_reference_id": "abc123def456xyz",
-    "easypay_transaction_id": "TX-4C90-4C93-2705",
-    "easypay_provider": "Orange Money",
+    "payment_method": "bank_transfer",
     ...
+  },
+  "payment_link": {
+    "id": "<payment_link_uuid>",
+    "token": "<token>",
+    "gateway": "easypay",
+    "status": "active",
+    "gateway_reference": "abc123def456xyz",
+    "metadata": {
+      "last_easypay_phone_number": "+243899090907",
+      "easypay_operations": [
+        {
+          "type": "initiate",
+          "success": true
+        }
+      ]
+    }
   }
 }
 ```
@@ -841,13 +868,14 @@ Response:
 **Flow de paiement Easypay:**
 
 1. Frontend: appel `POST /initiate-easypay/` avec le numero de telephone du tenant
-2. Backend: genere une `easypay_reference_id` unique et envoie une collecte via API Easypay
-3. Backend: retourne la reference + details du paiement (`status=pending`)
+2. Backend: genere une reference, l'attache au `PaymentLink`, puis envoie la collecte via API Easypay
+3. Backend: retourne le `payment` + le `payment_link` (avec `gateway_reference` et metadata)
 4. Easypay: initie l'interaction USSD/mobile money avec le client
 5. Client: complete le paiement sur son telephone
 6. Easypay: envoie un callback au backend (`POST /api/payments/easypay/callback/`)
-7. Backend: met a jour le paiement (`status=paid` ou `failed`) en fonction du callback
-8. **Alternative polling:** Frontend peut periodiquement appeler `check-easypay-status/` pour verifier
+7. Backend: enregistre l'operation dans `PaymentLink.metadata`; met a jour `Payment` uniquement si statut `Success`
+8. Si callback/statut EasyPay est `Failed`, le `Payment` reste `pending` (nouvelle tentative possible)
+9. **Alternative polling:** Frontend peut periodiquement appeler `check-easypay-status/` pour verifier
 
 **Configuration Easypay côte backend:**
 
@@ -855,6 +883,7 @@ Les variables d'environnement suivantes doivent etre definies:
 
 ```bash
 EASYPAY_API_KEY=your-easypay-api-key
+EASYPAY_BASE_URL=https://www.easypay-gateway.com/payments/api/v1
 EASYPAY_CALLBACK_URL=https://your-domain.com/api/payments/easypay/callback/
 ```
 
@@ -863,8 +892,13 @@ EASYPAY_CALLBACK_URL=https://your-domain.com/api/payments/easypay/callback/
 | Statut    | Signification                               |
 | --------- | ------------------------------------------- |
 | `pending` | Paiement initie, en attente de confirmation |
-| `paid`    | Paiement reussi via callback ou verifi      |
-| `failed`  | Paiement echoue (communique via callback)   |
+| `paid`    | Paiement confirme avec succes EasyPay       |
+
+Note metier importante:
+
+- Un echec EasyPay est un echec d'operation gateway, pas un echec definitif du `Payment`.
+- Les echecs sont historises dans `payment_link.metadata.easypay_operations`.
+- Le `Payment` passe a `paid` uniquement en cas de succes (`Success`).
 
 **Tache automatique:**
 

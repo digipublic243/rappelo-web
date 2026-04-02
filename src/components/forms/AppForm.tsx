@@ -3,6 +3,7 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import { cn } from "@/lib/cn";
 import { formInlineErrorClassName } from "@/components/forms/form-styles";
+import { Button, type ButtonVariant, type ButtonSize } from "@/components/ui/Button";
 
 interface AppFormProps {
   action?: string | ((formData: FormData) => void | Promise<void>);
@@ -45,7 +46,7 @@ export function useAppFormContext() {
 }
 
 export function FormHelperText({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <p className={cn("text-xs text-[var(--subtle-foreground)]", className)}>{children}</p>;
+  return <p className={cn("text-xs text-[var(--secondary-3)]", className)}>{children}</p>;
 }
 
 export function FormInlineError({ message, className }: { message?: string; className?: string }) {
@@ -64,7 +65,7 @@ export function FormInlineSuccess({ message, className }: { message?: string; cl
   return (
     <p
       className={cn(
-        "rounded-[var(--radius-md)] bg-[var(--primary-soft)]/70 px-[var(--space-4)] py-[var(--space-3)] text-sm text-[var(--primary-soft-foreground)]",
+        "rounded-[var(--radius-md)] bg-[var(--primary-3)]/70 px-[var(--space-4)] py-[var(--space-3)] text-sm text-[var(--primary-2)]",
         className,
       )}
     >
@@ -79,24 +80,27 @@ export function FormSubmitButton({
   disabled,
   onClick,
   type = "submit",
+  variant = "primary",
+  size = "md",
 }: {
   children: React.ReactNode;
   className?: string;
   disabled?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: "button" | "submit" | "reset";
+  variant?: ButtonVariant;
+  size?: ButtonSize;
 }) {
   return (
-    <button
-      className={cn(
-        "inline-flex items-center justify-center rounded-[var(--radius-lg)] bg-[var(--primary)] px-[var(--space-4)] py-[var(--space-3)] font-semibold text-[var(--primary-foreground)] disabled:cursor-not-allowed disabled:opacity-70",
-        className,
-      )}
+    <Button
+      className={cn("rounded-[var(--radius-lg)]", className)}
       disabled={disabled}
       onClick={onClick}
+      size={size}
       type={type}
+      variant={variant}
     >
       {children}
-    </button>
+    </Button>
   );
 }

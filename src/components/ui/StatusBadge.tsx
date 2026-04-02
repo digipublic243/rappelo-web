@@ -2,11 +2,11 @@ import { STATUS_TONE } from "@/constants/statuses";
 import { cn } from "@/lib/cn";
 
 const toneClasses = {
-  neutral: "bg-[var(--secondary)] text-[var(--muted-foreground)]",
-  success: "bg-[var(--success-bright)] text-[var(--success)]",
-  warning: "bg-[var(--info-soft)] text-[var(--info-foreground)]",
-  danger: "bg-[var(--danger-soft)] text-[var(--danger)]",
-  info: "bg-[var(--primary-soft)] text-[var(--secondary-foreground)]",
+  neutral: "bg-secondary text-secondary-2",
+  success: "bg-success/20 text-success",
+  warning: "bg-[var(--primary-3)] text-[var(--primary-2)]",
+  danger: "bg-[color-mix(in_srgb,var(--danger) 14%,var(--background))] text-[var(--danger)]",
+  info: "bg-[var(--primary-3)] text-secondary-2",
 };
 
 interface StatusBadgeProps {

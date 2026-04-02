@@ -40,24 +40,24 @@ export default async function PaymentsPage() {
 
       <section className="grid gap-4 md:grid-cols-4">
         {[
-          ["Total encaissé", formatMoney(collected)],
-          ["À encaisser", formatMoney(outstanding)],
-          ["En retard", formatMoney(overdue)],
+          ["Total encaissé", formatMoney(collected, "CDF")],
+          ["À encaisser", formatMoney(outstanding, "CDF")],
+          ["En retard", formatMoney(overdue, "CDF")],
           ["Paiements en attente", String(pendingCount)],
         ].map(([label, value]) => (
           <SurfaceCard key={label} className="p-5">
-            <p className="text-sm font-medium text-[var(--muted-foreground)]">{label}</p>
-            <p className="mt-2 text-3xl font-black text-[var(--foreground)]">{value}</p>
+            <p className="text-sm font-medium text-secondary-2">{label}</p>
+            <p className="mt-2 text-3xl font-black text-foreground">{value}</p>
           </SurfaceCard>
         ))}
       </section>
 
       <SurfaceCard className="overflow-hidden">
         <table className="w-full min-w-[920px]">
-          <thead className="bg-[var(--surface-low)] text-left">
+          <thead className="bg-[var(--secondary-4)] text-left">
             <tr>
               {["Locataire / unité", "Bail", "Montant", "Échéance", "Mode", "Statut", "Action"].map((label) => (
-                <th key={label} className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">
+                <th key={label} className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-secondary-2">
                   {label}
                 </th>
               ))}
@@ -67,25 +67,27 @@ export default async function PaymentsPage() {
             {payments.map((payment) => (
               <tr key={payment.id} className="border-t border-[var(--secondary)]">
                 <td className="px-6 py-5">
-                  <p className="font-semibold text-[var(--foreground)]">
+                  <p className="font-semibold text-foreground">
                     {payment.tenantName ??
                       tenants.find((tenant) => tenant.id === payment.tenantId)
                         ?.fullName ??
                       payment.tenantId}
                   </p>
-                  <p className="text-xs text-[var(--muted-foreground)]">{payment.unitId || "Unité non liée"}</p>
+                  <p className="text-xs text-secondary-2">{payment.unitId || "Unité non liée"}</p>
                 </td>
-                <td className="px-6 py-5 text-sm text-[var(--muted-foreground)]">
+                <td className="px-6 py-5 text-sm text-secondary-2">
                   {leases.find((lease) => lease.id === payment.leaseId)?.lease_number ?? payment.leaseId ?? "Aucun bail"}
                 </td>
-                <td className="px-6 py-5 text-sm font-semibold text-[var(--foreground)]">{formatMoney(payment.amount)}</td>
-                <td className="px-6 py-5 text-sm text-[var(--muted-foreground)]">
+                <td className="px-6 py-5 text-sm font-semibold text-foreground">
+                  {formatMoney(payment.amount, payment.currency ?? "CDF")}
+                </td>
+                <td className="px-6 py-5 text-sm text-secondary-2">
                   <p>{formatDate(payment.dueDate)}</p>
-                  <p className="mt-1 text-xs text-[var(--subtle-foreground-soft)]">
+                  <p className="mt-1 text-xs text-[var(--secondary-3)]">
                     {payment.paymentLabel ?? `Paiement à partir du ${payment.dueDate}`}
                   </p>
                 </td>
-                <td className="px-6 py-5 text-sm text-[var(--muted-foreground)]">{formatPaymentMethod(payment.method)}</td>
+                <td className="px-6 py-5 text-sm text-secondary-2">{formatPaymentMethod(payment.method)}</td>
                 <td className="px-6 py-5">
                   <StatusBadge status={payment.status} label={paymentStatusLabel(payment.status)} />
                 </td>

@@ -30,11 +30,11 @@ export default async function LandlordPropertiesPage() {
         }
       />
 
-      <section className="flex flex-wrap items-center gap-4 rounded-xl bg-[var(--surface-low)] p-4">
+      <section className="flex flex-wrap items-center gap-4 rounded-xl bg-[var(--secondary-4)] p-4">
         <FilterChip label="Statut :" value="Tous les biens" />
         <FilterChip label="Ville :" value="Toutes les villes" />
         <FilterChip label="Type :" value="Commercial / Résidentiel" />
-        <p className="ml-auto text-sm font-medium text-[var(--subtle-foreground)]">Affichage de {properties.length} bien(s) sur {properties.length}</p>
+        <p className="ml-auto text-sm font-medium text-[var(--secondary-3)]">Affichage de {properties.length} bien(s) sur {properties.length}</p>
       </section>
 
       <div className="grid gap-6">
@@ -49,30 +49,30 @@ export default async function LandlordPropertiesPage() {
                   </div>
                   <div className="grid flex-1 gap-6 p-6 lg:grid-cols-4 lg:items-center">
                     <div>
-                      <h3 className="text-xl font-bold text-[var(--foreground)]">{property.name}</h3>
-                      <p className="mt-2 flex items-center gap-1 text-sm text-[var(--muted-foreground)]">
+                      <h3 className="text-xl font-bold text-foreground">{property.name}</h3>
+                      <p className="mt-2 flex items-center gap-1 text-sm text-secondary-2">
                         <MaterialIcon name="location_on" className="text-[16px]" />
                         {property.address}, {property.city}
                       </p>
                     </div>
                     <div className="space-y-1">
-                      <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">Inventaire</p>
-                      <p className="text-2xl font-bold text-[var(--foreground)]">{property.totalUnits} unités</p>
-                      <p className="text-xs font-semibold text-[var(--success)]">{property.occupiedUnits} occupées</p>
+                      <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--secondary-3)]">Inventaire</p>
+                      <p className="text-2xl font-bold text-foreground">{property.totalUnits} unités</p>
+                      <p className="text-xs font-semibold text-success">{property.occupiedUnits} occupées</p>
                     </div>
                     <div className="space-y-2">
-                      <div className="flex items-center justify-between text-xs text-[var(--subtle-foreground)]">
+                      <div className="flex items-center justify-between text-xs text-[var(--secondary-3)]">
                         <span>Occupation</span>
-                        <span className="text-[var(--foreground)]">{occupancyRate}%</span>
+                        <span className="text-foreground">{occupancyRate}%</span>
                       </div>
-                      <div className="h-2 rounded-full bg-[var(--secondary)]">
-                        <div className="h-full rounded-full bg-[var(--success-strong)]" style={{ width: `${occupancyRate}%` }} />
+                      <div className="h-2 rounded-full bg-secondary">
+                        <div className="h-full rounded-full bg-success/20" style={{ width: `${occupancyRate}%` }} />
                       </div>
                     </div>
                     <div className="space-y-1 text-left lg:text-right">
-                      <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">Revenu mensuel</p>
+                      <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--secondary-3)]">Revenu mensuel</p>
                       <p className="text-3xl font-bold tracking-tight text-[var(--primary)]">{formatMoney(property.monthlyRevenue)}</p>
-                      <span className="inline-flex rounded-full bg-[var(--success-bright)] px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--success)]">
+                      <span className="inline-flex rounded-full bg-success/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-success">
                         Payé
                       </span>
                     </div>
@@ -84,7 +84,7 @@ export default async function LandlordPropertiesPage() {
         })}
       </div>
 
-      <SurfaceCard className="rounded-[28px] bg-[linear-gradient(135deg,var(--panel-strong),var(--panel-strong-alt))] p-8 text-white">
+      <SurfaceCard className="rounded-[28px] bg-[linear-gradient(135deg,var(--primary),var(--primary-2))] p-8 text-white">
         <h2 className="text-2xl font-bold tracking-tight">Vous agrandissez votre patrimoine ?</h2>
         <p className="mt-2 max-w-2xl text-sm text-white/80">
           Conservez la même structure Stitch pour les futurs écrans d’acquisition et d’onboarding tout en gardant la cohérence du portefeuille actuel.

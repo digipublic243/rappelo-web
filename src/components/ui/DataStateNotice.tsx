@@ -10,7 +10,7 @@ export function DataStateNotice({ meta }: DataStateNoticeProps) {
   }
 
   return (
-    <div className="rounded-xl border border-[var(--primary-soft)] bg-[var(--surface-low)] px-4 py-3 text-sm text-[var(--muted-foreground)]">
+    <div className="rounded-xl border border-[var(--primary-3)] bg-[var(--secondary-4)] px-4 py-3 text-sm text-secondary-2">
       {meta.warning ?? "Des données de secours sont utilisées tant que le point d’accès backend requis n’est pas disponible."}
     </div>
   );

@@ -406,6 +406,16 @@ export interface ApiPaymentLink {
   gateway_reference?: string;
   link_url: string;
   created_at: string;
+  metadata?: {
+    last_easypay_phone_number?: string;
+    last_reference_id?: string;
+    easypay_operations?: Array<{
+      type?: string;
+      success?: boolean;
+      [key: string]: unknown;
+    }>;
+    [key: string]: unknown;
+  };
 }
 
 export interface ApiPaymentCreateRequest {
@@ -428,12 +438,19 @@ export interface ApiEasyPayInitiateRequest {
 export interface ApiEasyPayMutationResponse {
   message?: string;
   payment: ApiPayment;
+  payment_link?: ApiPaymentLink;
 }
 
 export interface ApiEasyPayStatusResponse {
   status?: string;
   payment: ApiPayment;
-  easypay_status?: Record<string, unknown>;
+  easypay_status?: {
+    status?: string;
+    transactionId?: string;
+    amount?: number | string;
+    currency?: string;
+    [key: string]: unknown;
+  };
 }
 
 export interface ApiTenantDashboard {

@@ -50,15 +50,15 @@ export default async function LeaseListPage() {
           ],
         ].map(([label, value]) => (
           <SurfaceCard key={label} className="p-5">
-            <p className="text-sm font-medium text-[var(--muted-foreground)]">{label}</p>
-            <p className="mt-2 text-3xl font-black text-[var(--foreground)]">{value}</p>
+            <p className="text-sm font-medium text-secondary-2">{label}</p>
+            <p className="mt-2 text-3xl font-black text-foreground">{value}</p>
           </SurfaceCard>
         ))}
       </section>
 
       <SurfaceCard className="overflow-hidden">
         <table className="w-full min-w-[860px]">
-          <thead className="bg-[var(--surface-low)] text-left">
+          <thead className="bg-[var(--secondary-4)] text-left">
             <tr>
               {[
                 "Numéro de bail",
@@ -70,7 +70,7 @@ export default async function LeaseListPage() {
                 "Statut",
                 "Action",
               ].map((label) => (
-                <th key={label} className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">
+                <th key={label} className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-secondary-2">
                   {label}
                 </th>
               ))}
@@ -79,33 +79,33 @@ export default async function LeaseListPage() {
           <tbody>
             {leases.map((lease) => (
               <tr key={lease.id} className="border-t border-[var(--secondary)]">
-                <td className="px-6 py-5 text-sm font-semibold text-[var(--foreground)]">{lease.lease_number}</td>
-                <td className="px-6 py-5 text-sm text-[var(--muted-foreground)]">
-                  <span className="font-semibold text-[var(--foreground)]">{lease.tenantId}</span>
+                <td className="px-6 py-5 text-sm font-semibold text-foreground">{lease.lease_number}</td>
+                <td className="px-6 py-5 text-sm text-secondary-2">
+                  <span className="font-semibold text-foreground">{lease.tenantId}</span>
                 </td>
-                <td className="px-6 py-5 text-sm text-[var(--muted-foreground)]">
-                  <span className="font-semibold text-[var(--foreground)]">{lease.unitId}</span>
+                <td className="px-6 py-5 text-sm text-secondary-2">
+                  <span className="font-semibold text-foreground">{lease.unitId}</span>
                 </td>
-                <td className="px-6 py-5 text-sm text-[var(--muted-foreground)]">
+                <td className="px-6 py-5 text-sm text-secondary-2">
                   {formatDate(lease.startDate)}
-                  <div className="text-xs text-[var(--subtle-foreground-soft)]">au {formatDate(lease.endDate)}</div>
+                  <div className="text-xs text-[var(--secondary-3)]">au {formatDate(lease.endDate)}</div>
                 </td>
-                <td className="px-6 py-5 text-sm text-[var(--muted-foreground)]">
+                <td className="px-6 py-5 text-sm text-secondary-2">
                   {formatMoney(lease.rentAmount)}
-                  <div className="text-xs text-[var(--subtle-foreground-soft)]">
+                  <div className="text-xs text-[var(--secondary-3)]">
                     {formatCadence(lease.cadence)}
                   </div>
                 </td>
-                <td className="px-6 py-5 text-sm text-[var(--muted-foreground)]">
-                  <span className="font-semibold text-[var(--foreground)]">
+                <td className="px-6 py-5 text-sm text-secondary-2">
+                  <span className="font-semibold text-foreground">
                     {leaseOverdueStatusLabel(lease.overdueStatus)}
                   </span>
                   {lease.daysOverdue && lease.daysOverdue > 0 ? (
-                    <div className="text-xs text-[var(--subtle-foreground-soft)]">
+                    <div className="text-xs text-[var(--secondary-3)]">
                       {lease.daysOverdue} j • {formatMoney(lease.overdueAmount ?? 0, "CDF")}
                     </div>
                   ) : (
-                    <div className="text-xs text-[var(--subtle-foreground-soft)]">Aucun retard enregistré</div>
+                    <div className="text-xs text-[var(--secondary-3)]">Aucun retard enregistré</div>
                   )}
                 </td>
                 <td className="px-6 py-5">

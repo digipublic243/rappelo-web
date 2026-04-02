@@ -702,23 +702,7 @@ export async function generatePaymentLinkAction(
   }
 
   try {
-    const lease = await getLeaseById(leaseId, accessToken);
-    const tenantId = String(lease.tenant ?? "").trim();
-
-    if (!tenantId) {
-      return {
-        error: "Le bail sélectionné n’est lié à aucun locataire.",
-        errorDetails: ["tenant_id : introuvable depuis le bail sélectionné"],
-      };
-    }
-
-    console.log("payment payload ::::", {
-      lease: leaseId,
-      tenant_id: tenantId,
-      due_date: dueDate,
-      payment_method: gateway,
-      notes: notes || undefined,
-    });
+    await getLeaseById(leaseId, accessToken);
 
     const payment =
       existingPaymentId ||
@@ -726,7 +710,6 @@ export async function generatePaymentLinkAction(
         await createPayment(
           {
             lease: leaseId,
-            tenant_id: tenantId,
             due_date: dueDate,
             payment_method: gateway,
             notes: notes || undefined,
@@ -745,6 +728,7 @@ export async function generatePaymentLinkAction(
 
     return {
       message: "Le lien de paiement a été généré avec succès.",
+      paymentId: String(payment),
       linkUrl: link.link_url,
       gatewayUrl: link.gateway_url,
       gatewayReference: link.gateway_reference,

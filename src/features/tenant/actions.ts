@@ -124,6 +124,9 @@ export async function initiateTenantEasyPayAction(
       message:
         response.message ??
         "La demande EasyPay a été envoyée. Confirmez-la depuis votre téléphone.",
+      gatewayReference: response.payment_link?.gateway_reference,
+      lastPhoneNumber:
+        response.payment_link?.metadata?.last_easypay_phone_number ?? phoneNumber,
     };
   } catch (error) {
     const formatted = formatFormApiError(
@@ -165,9 +168,10 @@ export async function checkTenantEasyPayStatusAction(
     revalidatePath("/tenant/dashboard");
 
     return {
-      message: response.status
-        ? `Statut EasyPay synchronisé : ${response.status}.`
+      message: response.easypay_status?.status
+        ? `Statut EasyPay synchronisé : ${response.easypay_status.status}.`
         : "Le statut EasyPay a été synchronisé avec le serveur.",
+      easypayStatus: response.easypay_status?.status ?? response.status,
     };
   } catch (error) {
     const formatted = formatFormApiError(

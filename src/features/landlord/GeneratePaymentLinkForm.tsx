@@ -43,7 +43,7 @@ export function GeneratePaymentLinkForm({ leases, tenants, payments }: GenerateP
         options={[
           { label: "Créer un nouveau paiement", value: "" },
           ...pendingPayments.map((payment) => ({
-            label: `${payment.tenantName ?? tenants.find((tenant) => tenant.id === payment.tenantId)?.fullName ?? payment.tenantId} — ${payment.unitId} — ${formatMoney(payment.amount)}`,
+            label: `${payment.tenantName ?? tenants.find((tenant) => tenant.id === payment.tenantId)?.fullName ?? payment.tenantId} — ${payment.paymentLabel ?? payment.unitId} — ${formatMoney(payment.amount, payment.currency ?? "CDF")}`,
             value: payment.id,
           })),
         ]}
@@ -83,9 +83,9 @@ export function GeneratePaymentLinkForm({ leases, tenants, payments }: GenerateP
 
       <FormInlineError message={state.error} />
       {state.errorDetails?.length ? (
-        <div className="rounded-xl border border-[var(--danger-border)] bg-white px-4 py-4">
+        <div className="rounded-xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-white px-4 py-4">
           <p className="text-sm font-bold text-[var(--danger)]">Détails de l’erreur :</p>
-          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--danger-muted)]">
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[color-mix(in_srgb,var(--danger) 72%,var(--background))]">
             {state.errorDetails.map((detail) => (
               <li key={detail}>{detail}</li>
             ))}
@@ -94,25 +94,30 @@ export function GeneratePaymentLinkForm({ leases, tenants, payments }: GenerateP
       ) : null}
       <FormInlineSuccess message={state.message} />
       {state.linkUrl ? (
-        <div className="rounded-xl bg-[var(--surface-low)] px-4 py-3">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">Lien généré</p>
-          <p className="mt-2 break-all text-sm font-semibold text-[var(--foreground)]">{state.linkUrl}</p>
+        <div className="rounded-xl bg-[var(--secondary-4)] px-4 py-3">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary-3)]">Lien généré</p>
+          <p className="mt-2 break-all text-sm font-semibold text-foreground">{state.linkUrl}</p>
+          {state.paymentId ? (
+            <p className="mt-2 text-xs text-secondary-2">
+              Paiement concerné : {state.paymentId}
+            </p>
+          ) : null}
           {state.expiresAt ? (
-            <p className="mt-2 text-xs text-[var(--muted-foreground)]">
+            <p className="mt-2 text-xs text-secondary-2">
               Expire le {formatDate(state.expiresAt)}
             </p>
           ) : null}
           {state.gatewayReference ? (
-            <p className="mt-2 text-xs text-[var(--muted-foreground)]">
+            <p className="mt-2 text-xs text-secondary-2">
               Référence passerelle : {state.gatewayReference}
             </p>
           ) : null}
           {state.gatewayUrl ? (
-            <p className="mt-2 break-all text-xs text-[var(--muted-foreground)]">
+            <p className="mt-2 break-all text-xs text-secondary-2">
               URL passerelle : {state.gatewayUrl}
             </p>
           ) : (
-            <p className="mt-2 text-xs text-[var(--muted-foreground)]">
+            <p className="mt-2 text-xs text-secondary-2">
               L’URL de passerelle restera vide tant que l’intégration EasyPay n’est pas câblée côté backend.
             </p>
           )}

@@ -25,28 +25,28 @@ export default async function LandlordDashboardPage() {
       value: formatMoney(totalRevenue),
       hint: `${dashboard.payments.filter((payment) => payment.status === "paid").length} paid invoices`,
       icon: "payments",
-      tone: "bg-[var(--primary-soft)] text-[var(--primary)]",
+      tone: "bg-[var(--primary-3)] text-[var(--primary)]",
     },
     {
       label: "Occupancy Rate",
       value: `${occupancyRate}%`,
       hint: `${occupiedUnits}/${totalUnits || 0} Units Occupied`,
       icon: "hotel_class",
-      tone: "bg-[var(--info-soft)] text-[var(--info-foreground-strong)]",
+      tone: "bg-[var(--primary-3)] text-[var(--primary-2)]",
     },
     {
       label: "Active Leases",
       value: String(dashboard.kpis.activeLeases),
       hint: `${renewalCount} pending renewal`,
       icon: "description",
-      tone: "bg-[var(--success-bright)] text-[var(--success-strong)]",
+      tone: "bg-success/20 text-success",
     },
     {
       label: "Pending Bookings",
       value: String(dashboard.kpis.pendingBookings),
       hint: dashboard.kpis.pendingBookings > 0 ? "Requires review" : "Inbox clear",
       icon: "event_repeat",
-      tone: "bg-[var(--secondary)] text-[var(--muted-foreground)]",
+      tone: "bg-secondary text-secondary-2",
     },
   ];
 
@@ -66,13 +66,13 @@ export default async function LandlordDashboardPage() {
               <div className={`rounded-lg p-2 ${card.tone}`}>
                 <MaterialIcon name={card.icon} className="text-[22px]" />
               </div>
-              <span className="rounded-full bg-[var(--success-bright)] px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--success)]">
+              <span className="rounded-full bg-success/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-success">
                 {card.hint.includes("%") ? card.hint.split(" ")[0] : "Live"}
               </span>
             </div>
-            <p className="text-sm font-medium text-[var(--muted-foreground)]">{card.label}</p>
-            <h2 className="mt-1 text-2xl font-bold tracking-tight text-[var(--foreground)]">{card.value}</h2>
-            <p className="mt-2 text-xs text-[var(--muted-foreground)]">{card.hint}</p>
+            <p className="text-sm font-medium text-secondary-2">{card.label}</p>
+            <h2 className="mt-1 text-2xl font-bold tracking-tight text-foreground">{card.value}</h2>
+            <p className="mt-2 text-xs text-secondary-2">{card.hint}</p>
           </SurfaceCard>
         ))}
       </section>
@@ -82,8 +82,8 @@ export default async function LandlordDashboardPage() {
           <SurfaceCard className="overflow-hidden">
             <div className="flex items-end justify-between p-6">
               <div>
-                <h3 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Needs Attention</h3>
-                <p className="mt-1 text-sm text-[var(--muted-foreground)]">Operational tasks that require the next landlord action.</p>
+                <h3 className="text-xl font-bold tracking-tight text-foreground">Needs Attention</h3>
+                <p className="mt-1 text-sm text-secondary-2">Operational tasks that require the next landlord action.</p>
               </div>
               <button className="text-sm font-semibold text-[var(--primary)]" type="button">
                 Manage All Tasks
@@ -92,7 +92,7 @@ export default async function LandlordDashboardPage() {
             <div className="divide-y divide-[var(--secondary)]">
               {dashboard.bookings.map((booking, index) => (
                 <div key={booking.id} className="flex flex-col gap-4 p-5 md:flex-row md:items-center">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--primary-soft)] text-[var(--primary)]">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--primary-3)] text-[var(--primary)]">
                     <MaterialIcon
                       name={index === 0 ? "pending_actions" : index === 1 ? "history_edu" : "add_home"}
                       className="text-[22px]"
@@ -100,12 +100,12 @@ export default async function LandlordDashboardPage() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-3">
-                      <p className="text-sm font-bold text-[var(--foreground)]">
+                      <p className="text-sm font-bold text-foreground">
                         {index === 0 ? "Overdue Payment Review" : index === 1 ? "Lease Expiry Window" : "New Booking Request"}
                       </p>
                       <StatusBadge status={booking.status} label={booking.status.replace("_", " ")} />
                     </div>
-                    <p className="mt-1 text-xs text-[var(--muted-foreground)]">
+                    <p className="mt-1 text-xs text-secondary-2">
                       {index === 0 && overduePayment
                         ? `Amount ${formatMoney(overduePayment.amount)} due ${formatDate(overduePayment.dueDate)} for ${booking.unitId}.`
                         : index === 1
@@ -123,23 +123,23 @@ export default async function LandlordDashboardPage() {
 
           <SurfaceCard className="p-6">
             <div className="mb-5 flex items-center justify-between">
-              <h3 className="text-xl font-bold tracking-tight text-[var(--foreground)]">Portfolio Snapshot</h3>
-              <span className="rounded-full bg-[var(--secondary)] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--muted-foreground)]">
+              <h3 className="text-xl font-bold tracking-tight text-foreground">Portfolio Snapshot</h3>
+              <span className="rounded-full bg-secondary px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-secondary-2">
                 Live Overview
               </span>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
-              <div className="rounded-xl bg-[var(--surface-low)] p-5">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">Properties</p>
-                <p className="mt-2 text-3xl font-black text-[var(--foreground)]">{dashboard.kpis.properties}</p>
+              <div className="rounded-xl bg-[var(--secondary-4)] p-5">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary-3)]">Properties</p>
+                <p className="mt-2 text-3xl font-black text-foreground">{dashboard.kpis.properties}</p>
               </div>
-              <div className="rounded-xl bg-[var(--surface-low)] p-5">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">Tenants</p>
-                <p className="mt-2 text-3xl font-black text-[var(--foreground)]">{dashboard.kpis.tenants}</p>
+              <div className="rounded-xl bg-[var(--secondary-4)] p-5">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary-3)]">Tenants</p>
+                <p className="mt-2 text-3xl font-black text-foreground">{dashboard.kpis.tenants}</p>
               </div>
-              <div className="rounded-xl bg-[var(--surface-low)] p-5">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">Pending Payments</p>
-                <p className="mt-2 text-3xl font-black text-[var(--foreground)]">{dashboard.kpis.pendingPayments}</p>
+              <div className="rounded-xl bg-[var(--secondary-4)] p-5">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary-3)]">Pending Payments</p>
+                <p className="mt-2 text-3xl font-black text-foreground">{dashboard.kpis.pendingPayments}</p>
               </div>
             </div>
           </SurfaceCard>
@@ -147,7 +147,7 @@ export default async function LandlordDashboardPage() {
 
         <div className="space-y-8 lg:col-span-4">
           <SurfaceCard className="overflow-hidden">
-            <div className="relative h-60 bg-[linear-gradient(160deg,var(--panel-strong),var(--panel-mid-alt))] p-6 text-white">
+            <div className="relative h-60 bg-[linear-gradient(160deg,var(--primary),var(--primary-2))] p-6 text-white">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.16),transparent_44%)]" />
               <div className="relative">
                 <span className="rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest">Featured Property</span>
@@ -176,18 +176,18 @@ export default async function LandlordDashboardPage() {
           </SurfaceCard>
 
           <SurfaceCard className="p-6">
-            <h3 className="text-lg font-bold text-[var(--foreground)]">Shortcuts</h3>
+            <h3 className="text-lg font-bold text-foreground">Shortcuts</h3>
             <div className="mt-4 space-y-3">
               {[
                 ["description", "Lease Templates"],
                 ["payments", "Generate Payment Link"],
                 ["group", "Review Tenant Profiles"],
               ].map(([icon, label]) => (
-                <div key={label} className="flex items-center gap-3 rounded-xl bg-[var(--surface-low)] px-4 py-3">
+                <div key={label} className="flex items-center gap-3 rounded-xl bg-[var(--secondary-4)] px-4 py-3">
                   <div className="rounded-lg bg-white p-2 text-[var(--primary)]">
                     <MaterialIcon name={icon} className="text-[20px]" />
                   </div>
-                  <span className="text-sm font-semibold text-[var(--foreground)]">{label}</span>
+                  <span className="text-sm font-semibold text-foreground">{label}</span>
                 </div>
               ))}
             </div>

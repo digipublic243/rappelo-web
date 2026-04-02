@@ -33,34 +33,34 @@ export default async function LandlordProfilePage() {
 
       <section className="grid gap-8 lg:grid-cols-12">
         <SurfaceCard className="p-6 lg:col-span-5">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--subtle-foreground)]">Identity</p>
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--secondary-3)]">Identity</p>
           <div className="mt-5 space-y-4">
             <div>
-              <p className="text-sm text-[var(--muted-foreground)]">Role</p>
-              <p className="text-lg font-bold text-[var(--foreground)]">{profile.user.role}</p>
+              <p className="text-sm text-secondary-2">Role</p>
+              <p className="text-lg font-bold text-foreground">{profile.user.role}</p>
             </div>
             <div>
-              <p className="text-sm text-[var(--muted-foreground)]">Phone</p>
-              <p className="text-lg font-bold text-[var(--foreground)]">{formatPhone(profile.user.phone_number)}</p>
+              <p className="text-sm text-secondary-2">Phone</p>
+              <p className="text-lg font-bold text-foreground">{formatPhone(profile.user.phone_number)}</p>
             </div>
             <div>
-              <p className="text-sm text-[var(--muted-foreground)]">Email</p>
-              <p className="text-lg font-bold text-[var(--foreground)]">{profile.user.email || "No email on file"}</p>
+              <p className="text-sm text-secondary-2">Email</p>
+              <p className="text-lg font-bold text-foreground">{profile.user.email || "No email on file"}</p>
             </div>
             <div>
-              <p className="text-sm text-[var(--muted-foreground)]">Joined</p>
-              <p className="text-lg font-bold text-[var(--foreground)]">{formatDate(profile.user.date_joined)}</p>
+              <p className="text-sm text-secondary-2">Joined</p>
+              <p className="text-lg font-bold text-foreground">{formatDate(profile.user.date_joined)}</p>
             </div>
           </div>
         </SurfaceCard>
 
         <SurfaceCard className="p-6 lg:col-span-7">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--subtle-foreground)]">Workspace Scope</p>
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--secondary-3)]">Workspace Scope</p>
           <div className="mt-5 grid gap-4 md:grid-cols-3">
             {stats.map(([label, value]) => (
-              <div key={label} className="rounded-xl bg-[var(--surface-low)] p-5">
-                <p className="text-xs uppercase tracking-[0.2em] text-[var(--subtle-foreground)]">{label}</p>
-                <p className="mt-2 text-3xl font-black text-[var(--foreground)]">{value}</p>
+              <div key={label} className="rounded-xl bg-[var(--secondary-4)] p-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-[var(--secondary-3)]">{label}</p>
+                <p className="mt-2 text-3xl font-black text-foreground">{value}</p>
               </div>
             ))}
           </div>
