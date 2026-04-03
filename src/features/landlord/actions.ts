@@ -249,9 +249,6 @@ function buildLeasePayload(formData: FormData): ApiLeaseCreateRequest {
     security_deposit_months_taken:
       Number(String(formData.get("security_deposit_months_taken") ?? "").trim()) ||
       undefined,
-    payment_frequency:
-      (String(formData.get("payment_frequency") ?? "monthly").trim() ||
-        "monthly") as ApiLeaseCreateRequest["payment_frequency"],
     notes: String(formData.get("notes") ?? "").trim() || null,
     status: "draft",
   };

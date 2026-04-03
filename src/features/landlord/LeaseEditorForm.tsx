@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useMemo, useState } from "react";
 import {
   AppForm,
   FormInlineError,
@@ -11,6 +11,8 @@ import { FormField, FormFieldMuted } from "@/components/forms/FormField";
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
 import { useSyncGlobalApiError } from "@/components/providers/ApiErrorProvider";
 import { type LeaseEditorActionState } from "@/features/landlord/lease-editor-state";
+import { formatCadence } from "@/lib/format";
+import type { PricingCadence } from "@/types/domain";
 
 interface LeaseEditorDefaults {
   tenantId: string;
@@ -21,7 +23,6 @@ interface LeaseEditorDefaults {
   monthlyRent: string;
   securityDeposit: string;
   securityDepositMonthsTaken: string;
-  paymentFrequency: string;
   notes: string;
 }
 
@@ -33,7 +34,7 @@ interface LeaseEditorFormProps {
   defaults: LeaseEditorDefaults;
   initialState: LeaseEditorActionState;
   tenants: Array<{ label: string; value: string }>;
-  units: Array<{ label: string; value: string }>;
+  units: Array<{ label: string; value: string; cadence: PricingCadence }>;
 }
 
 export function LeaseEditorForm({
@@ -44,6 +45,11 @@ export function LeaseEditorForm({
   units,
 }: LeaseEditorFormProps) {
   const [state, formAction, pending] = useActionState(action, initialState);
+  const [selectedUnitId, setSelectedUnitId] = useState(defaults.unitId);
+  const selectedUnitCadence = useMemo(
+    () => units.find((unit) => unit.value === selectedUnitId)?.cadence ?? "month",
+    [selectedUnitId, units],
+  );
 
   useSyncGlobalApiError(state.error, {
     title: "Échec de création du bail",
@@ -82,6 +88,7 @@ export function LeaseEditorForm({
               defaultValue={defaults.unitId}
               label="Unité"
               name="unit"
+              onChange={setSelectedUnitId}
               options={units}
               required
               type="select"
@@ -106,19 +113,17 @@ export function LeaseEditorForm({
               name="move_in_date"
               type="date"
             />
-            <FormFieldMuted
-              defaultValue={defaults.paymentFrequency}
-              label="Périodicité de facturation"
-              name="payment_frequency"
-              options={[
-                { label: "Mensuelle", value: "monthly" },
-                { label: "Trimestrielle", value: "quarterly" },
-                { label: "Semestrielle", value: "semi_annual" },
-                { label: "Annuelle", value: "annual" },
-              ]}
-              required
-              type="select"
-            />
+            <div className="rounded-[var(--radius-lg)] border border-secondary-1 bg-secondary-4 px-4 py-4">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-secondary-2">
+                Périodicité de facturation
+              </p>
+              <p className="mt-2 text-sm font-semibold text-foreground">
+                {formatCadence(selectedUnitCadence)}
+              </p>
+              <p className="mt-2 text-xs text-secondary-2">
+                Gérée automatiquement par le backend à partir de la périodicité de l’unité sélectionnée.
+              </p>
+            </div>
             <FormFieldMuted
               defaultValue={defaults.monthlyRent}
               label="Loyer mensuel contractuel"
@@ -176,8 +181,8 @@ export function LeaseEditorForm({
               occupée.
             </p>
             <p>
-              4. La périodicité de facturation pilote ensuite le calcul des
-              paiements backend.
+              4. La périodicité de facturation est héritée automatiquement de
+              l’unité et pilote ensuite le calcul des paiements backend.
             </p>
           </div>
         </section>
@@ -190,8 +195,8 @@ export function LeaseEditorForm({
             <p>Choisissez de préférence une unité vacante ou réservée.</p>
             <p>La date de fin doit être postérieure à la date de début.</p>
             <p>
-              Le loyer mensuel et la périodicité servent de base au calcul des
-              paiements à venir.
+              Le loyer mensuel et la périodicité héritée de l’unité servent de
+              base au calcul des paiements à venir.
             </p>
           </div>
         </section>

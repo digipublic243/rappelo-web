@@ -37,20 +37,25 @@ export function mapApiPropertyToDomain(
 }
 
 export function mapApiUnitToDomain(unit: ApiUnit, tenantName?: string): Unit {
+  const rawCadence = String(
+    unit.rental_periodicity ?? unit.rent_period ?? "mensuel",
+  ).trim();
   const cadence =
-    unit.rental_periodicity === "journ"
+    rawCadence === "journ" || rawCadence === "daily"
       ? "day"
-      : unit.rental_periodicity === "hebdo"
+      : rawCadence === "hebdo" || rawCadence === "weekly"
         ? "week"
-        : unit.rental_periodicity === "autre"
-          ? "custom"
-          : unit.rent_period === "daily"
-            ? "day"
-            : unit.rent_period === "weekly"
-              ? "week"
-              : unit.rent_period === "other"
-                ? "custom"
-                : "month";
+        : rawCadence === "mensuel" || rawCadence === "monthly"
+          ? "month"
+          : rawCadence === "quarterly"
+            ? "quarter"
+            : rawCadence === "semi_annual"
+              ? "semiAnnual"
+              : rawCadence === "annual" || rawCadence === "yearly"
+                ? "year"
+                : rawCadence === "autre" || rawCadence === "other"
+                  ? "custom"
+                  : "month";
   const allowedPaymentMethods = (unit.allowed_payment_methods ?? [])
     .map((method) =>
       method === "mobile_money" || method === "easypay"
@@ -85,7 +90,11 @@ export function mapApiUnitToDomain(unit: ApiUnit, tenantName?: string): Unit {
 export function mapApiLeaseToDomain(lease: ApiLease): Lease {
   const rentAmount = Number(lease.monthly_rent ?? 0);
   const cadence =
-    lease.payment_frequency === "quarterly"
+    lease.payment_frequency === "daily"
+      ? "day"
+      : lease.payment_frequency === "weekly"
+        ? "week"
+      : lease.payment_frequency === "quarterly"
       ? "quarter"
       : lease.payment_frequency === "semi_annual"
         ? "semiAnnual"

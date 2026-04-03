@@ -310,6 +310,8 @@ export interface ApiLease {
   security_deposit?: number | null;
   security_deposit_months_taken?: number | null;
   payment_frequency?:
+    | "daily"
+    | "weekly"
     | "monthly"
     | "quarterly"
     | "semi_annual"
@@ -333,7 +335,6 @@ export interface ApiLeaseCreateRequest {
   currency?: ApiCurrency;
   security_deposit?: number | null;
   security_deposit_months_taken?: number | null;
-  payment_frequency?: "monthly" | "quarterly" | "semi_annual" | "annual";
   move_in_date?: string | null;
   notes?: string | null;
   status?: ApiLeaseStatus;
