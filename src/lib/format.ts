@@ -14,12 +14,54 @@ import type {
   UnitStatus,
 } from "@/types/domain";
 
-export function formatMoney(amount: number, currency = "USD"): string {
+function formatNumber(amount: number) {
   return new Intl.NumberFormat("fr-CD", {
-    style: "currency",
-    currency,
     maximumFractionDigits: 0,
   }).format(amount);
+}
+
+export function formatMoney(amount: number, _currency?: string | null): string {
+  void _currency;
+  const normalizedCurrency = "USD";
+
+  try {
+    return new Intl.NumberFormat("fr-CD", {
+      style: "currency",
+      currency: normalizedCurrency,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  } catch {
+    return `${formatNumber(amount)} ${normalizedCurrency}`;
+  }
+}
+
+export function formatMoneyBreakdown(
+  entries: Array<{ amount: number; currency?: string | null }>,
+  emptyValue = formatMoney(0),
+): string {
+  if (entries.length === 0) {
+    return emptyValue;
+  }
+
+  const total = entries.reduce((sum, entry) => sum + entry.amount, 0);
+  return formatMoney(total, "USD");
+}
+
+export function formatMoneyBreakdownFromMap(
+  totalsByCurrency?: Record<string, number | string> | null,
+  emptyValue = formatMoney(0),
+): string {
+  if (!totalsByCurrency || Object.keys(totalsByCurrency).length === 0) {
+    return emptyValue;
+  }
+
+  return formatMoneyBreakdown(
+    Object.entries(totalsByCurrency).map(([currency, amount]) => ({
+      currency,
+      amount: Number(amount ?? 0),
+    })),
+    emptyValue,
+  );
 }
 
 export function formatDate(isoDate: string): string {

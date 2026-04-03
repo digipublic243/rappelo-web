@@ -65,7 +65,7 @@ export default async function BookingReviewPage({ params }: PageProps) {
             <div className="rounded-xl bg-[var(--secondary-4)] p-4">
               <p className="text-sm font-medium text-secondary-2">Requested Property</p>
               <p className="mt-2 text-sm font-bold text-foreground">
-                {property?.name || booking.propertyId || "Property pending"} • {unit?.label || booking.unitId || "Unit pending"}
+                {property?.name || booking.propertyName || booking.propertyId || "Property pending"} • {unit?.label || booking.unitLabel || booking.unitId || "Unit pending"}
               </p>
             </div>
             <div className="rounded-xl bg-[var(--secondary-4)] p-4">

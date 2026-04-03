@@ -65,7 +65,7 @@ export default async function TenantLeaseDetailPage({ params }: PageProps) {
                   Montant contractuel
                 </p>
                 <p className="mt-2 text-lg font-bold text-foreground">
-                  {formatMoney(lease.rentAmount, lease.currency ?? "CDF")}
+                  {formatMoney(lease.rentAmount, lease.currency)}
                 </p>
                 <p className="mt-1 text-xs text-[var(--secondary-3)]">
                   {formatCadence(lease.cadence)}
@@ -74,7 +74,7 @@ export default async function TenantLeaseDetailPage({ params }: PageProps) {
             </div>
             {lease.securityDeposit ? (
               <p className="mt-4 text-sm text-secondary-2">
-                Garantie : {formatMoney(lease.securityDeposit, lease.currency ?? "CDF")}
+                Garantie : {formatMoney(lease.securityDeposit, lease.currency)}
                 {lease.securityDepositMonthsTaken != null
                   ? ` • ${lease.securityDepositMonthsTaken} mois prélevé(s)`
                   : ""}
@@ -139,7 +139,7 @@ export default async function TenantLeaseDetailPage({ params }: PageProps) {
                       <p className="text-xs text-secondary-2">{formatDate(item.dueDate)}</p>
                     </div>
                     <p className="text-sm font-semibold text-foreground">
-                      {formatMoney(item.amount, item.currency ?? lease.currency ?? "CDF")}
+                      {formatMoney(item.amount, item.currency ?? lease.currency)}
                     </p>
                   </div>
                 ))
@@ -188,7 +188,7 @@ export default async function TenantLeaseDetailPage({ params }: PageProps) {
               </p>
               <p>
                 <span className="font-semibold text-foreground">Montant en retard :</span>{" "}
-                {formatMoney(overdue?.overdueAmount ?? 0, overdue?.currency ?? lease.currency ?? "CDF")}
+                {formatMoney(overdue?.overdueAmount ?? 0, overdue?.currency ?? lease.currency)}
               </p>
               <p>
                 <span className="font-semibold text-foreground">Paiements manqués :</span>{" "}

@@ -5,6 +5,7 @@ import { useActionState, useState } from "react";
 import { AppForm, FormInlineError, FormSubmitButton } from "@/components/forms/AppForm";
 import { FormField, FormFieldMuted } from "@/components/forms/FormField";
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
+import { formatMoney } from "@/lib/format";
 import type { ApiPropertyStatus } from "@/types/api";
 import type { PropertyEditorActionState } from "@/features/landlord/property-editor-state";
 import { useSyncGlobalApiError } from "@/components/providers/ApiErrorProvider";
@@ -127,9 +128,7 @@ export function PropertyEditorForm({
               label="Devise de référence"
               name="currency"
               options={[
-                { label: "CDF", value: "CDF" },
                 { label: "USD", value: "USD" },
-                { label: "EUR", value: "EUR" },
               ]}
               type="select"
             />
@@ -174,12 +173,15 @@ export function PropertyEditorForm({
 
         <section className="rounded-[28px] bg-background p-8 shadow-sm">
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--secondary-3)]">Aperçu média</p>
-          <div className="mt-6 overflow-hidden rounded-2xl bg-[var(--secondary-1)]">
-            <img
-              alt="Aperçu du bien"
-              className="h-56 w-full object-cover"
-              src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80"
-            />
+          <div className="mt-6 flex h-56 items-end overflow-hidden rounded-2xl bg-[linear-gradient(145deg,var(--secondary-4),var(--primary-4))] p-5">
+            <div className="rounded-xl bg-background/80 px-4 py-3 backdrop-blur">
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-secondary-2">
+                Média
+              </p>
+              <p className="mt-2 text-sm font-semibold text-foreground">
+                Aucun visuel statique affiché
+              </p>
+            </div>
           </div>
           <p className="mt-4 text-sm text-secondary-2">
             La spécification backend actuelle n’expose pas encore l’envoi des médias du bien. Ce bloc reste donc un aperçu visuel.
@@ -203,7 +205,7 @@ export function PropertyEditorForm({
               <span className="text-secondary-2">Revenu mensuel</span>
               <span className="font-bold text-foreground">
                 {propertyStats?.monthlyRevenue != null
-                  ? new Intl.NumberFormat("fr-CD", { style: "currency", currency: defaults.currency || "CDF", maximumFractionDigits: 0 }).format(propertyStats.monthlyRevenue)
+                  ? formatMoney(propertyStats.monthlyRevenue, defaults.currency)
                   : "N/D"}
               </span>
             </div>

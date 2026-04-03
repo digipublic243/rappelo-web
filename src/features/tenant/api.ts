@@ -61,6 +61,8 @@ async function buildTenantDomainData() {
       profileId: null,
       tenantActorId: null,
       accountPhone: undefined,
+      unitLabelsById: new Map<string, string>(),
+      propertyNamesById: new Map<string, string>(),
     };
   }
 
@@ -113,6 +115,8 @@ async function buildTenantDomainData() {
       profileId: null,
       tenantActorId: user ? String(user.id) : null,
       accountPhone: user?.phone_number,
+      unitLabelsById: new Map<string, string>(),
+      propertyNamesById: new Map<string, string>(),
     };
   }
 
@@ -156,6 +160,8 @@ async function buildTenantDomainData() {
       profileId: null,
       tenantActorId: String(user.id),
       accountPhone: user.phone_number,
+      unitLabelsById: new Map<string, string>(),
+      propertyNamesById: new Map<string, string>(),
     };
   }
 
@@ -193,6 +199,12 @@ async function buildTenantDomainData() {
         (property) => String(property.id) === String(currentUnit.property),
       )
     : undefined;
+  const unitLabelsById = new Map(
+    units.map((unit) => [String(unit.id), unit.unit_number]),
+  );
+  const propertyNamesById = new Map(
+    properties.map((property) => [String(property.id), property.name]),
+  );
 
   return {
     profileName: shellProfile?.full_name || user.full_name || "Tenant",
@@ -227,6 +239,8 @@ async function buildTenantDomainData() {
     profileId: String(currentProfile.id),
     tenantActorId,
     accountPhone: user.phone_number,
+    unitLabelsById,
+    propertyNamesById,
   };
 }
 
@@ -333,7 +347,14 @@ export async function getTenantBookingsData() {
   return {
     bookings:
       (filteredBookings.length > 0 ? filteredBookings : bookings)?.map?.(
-        mapApiBookingToDomain,
+        (booking) => {
+          const mapped = mapApiBookingToDomain(booking);
+          return {
+            ...mapped,
+            propertyName: domainData.propertyNamesById.get(mapped.propertyId),
+            unitLabel: domainData.unitLabelsById.get(mapped.unitId),
+          };
+        },
       ) || [],
     meta: { source: "api" as const },
   };

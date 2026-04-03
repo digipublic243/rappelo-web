@@ -119,15 +119,13 @@ export function UnitEditorForm({ action, defaults, initialState, propertyOptions
               defaultValue={defaults.currency}
               helperText={
                 inheritedCurrency
-                  ? `Devise du bien sélectionné : ${inheritedCurrency}. Le backend rejettera une devise différente.`
-                  : "Laissez la devise alignée sur le bien sélectionné."
+                  ? `Devise du bien sélectionné : USD. Le frontend reste volontairement verrouillé sur USD pour le moment.`
+                  : "Le frontend reste verrouillé sur USD pour le moment."
               }
               label="Devise"
               name="currency"
               options={[
-                { label: "CDF", value: "CDF" },
                 { label: "USD", value: "USD" },
-                { label: "EUR", value: "EUR" },
               ]}
               type="select"
             />
@@ -187,7 +185,7 @@ export function UnitEditorForm({ action, defaults, initialState, propertyOptions
             <div className="flex items-center justify-between text-sm">
               <span className="text-secondary-2">Devise appliquée</span>
               <span className="font-bold text-foreground">
-                {inheritedCurrency || defaults.currency || "Devise du bien"}
+                USD
               </span>
             </div>
             <div className="flex items-center justify-between text-sm">

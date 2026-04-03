@@ -1,7 +1,7 @@
 import { LandlordPageFrame } from "@/features/landlord/LandlordPageFrame";
 import { PageIntro } from "@/components/ui/PageIntro";
 import { SurfaceCard, ActionButton } from "@/components/shared/StitchPrimitives";
-import { formatDate, formatMoney } from "@/lib/format";
+import { formatDate, formatMoney, formatMoneyBreakdown } from "@/lib/format";
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { getLandlordDashboardVm } from "@/features/landlord/api";
@@ -10,9 +10,11 @@ import { DataStateNotice } from "@/components/ui/DataStateNotice";
 export default async function LandlordDashboardPage() {
   const dashboard = await getLandlordDashboardVm();
   const overduePayment = dashboard.payments.find((payment) => payment.status === "pending");
-  const totalRevenue = dashboard.payments
-    .filter((payment) => payment.status === "paid")
-    .reduce((sum, payment) => sum + payment.amount, 0);
+  const totalRevenue = formatMoneyBreakdown(
+    dashboard.payments
+      .filter((payment) => payment.status === "paid")
+      .map((payment) => ({ amount: payment.amount, currency: payment.currency })),
+  );
   const totalUnits = dashboard.properties.reduce((sum, property) => sum + property.totalUnits, 0);
   const occupiedUnits = dashboard.properties.reduce((sum, property) => sum + property.occupiedUnits, 0);
   const occupancyRate = totalUnits > 0 ? Math.round((occupiedUnits / totalUnits) * 100) : 0;
@@ -22,7 +24,7 @@ export default async function LandlordDashboardPage() {
   const dashboardCards = [
     {
       label: "Total Revenue",
-      value: formatMoney(totalRevenue),
+      value: totalRevenue,
       hint: `${dashboard.payments.filter((payment) => payment.status === "paid").length} paid invoices`,
       icon: "payments",
       tone: "bg-primary-3 text-primary",
@@ -107,7 +109,7 @@ export default async function LandlordDashboardPage() {
                     </div>
                     <p className="mt-1 text-xs text-secondary-2">
                       {index === 0 && overduePayment
-                        ? `Amount ${formatMoney(overduePayment.amount)} due ${formatDate(overduePayment.dueDate)} for ${booking.unitId}.`
+                        ? `Amount ${formatMoney(overduePayment.amount, overduePayment.currency)} due ${formatDate(overduePayment.dueDate)} for ${booking.unitId}.`
                         : index === 1
                           ? "Lease expires in 15 days. Renewal options prepared."
                           : `Booking requested from ${formatDate(booking.requestedFrom)} to ${formatDate(booking.requestedTo)}.`}
@@ -168,7 +170,7 @@ export default async function LandlordDashboardPage() {
                   </div>
                   <div>
                     <p className="text-white/60">Revenue</p>
-                    <p className="mt-1 font-bold">{featuredProperty ? formatMoney(featuredProperty.monthlyRevenue) : "$0.00"}</p>
+                    <p className="mt-1 font-bold">{featuredProperty ? formatMoney(featuredProperty.monthlyRevenue, featuredProperty.currency) : formatMoney(0)}</p>
                   </div>
                 </div>
               </div>

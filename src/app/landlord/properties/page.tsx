@@ -7,12 +7,6 @@ import { formatMoney } from "@/lib/format";
 import { getLandlordPropertiesData } from "@/features/landlord/api";
 import { DataStateNotice } from "@/components/ui/DataStateNotice";
 
-const propertyImages = [
-  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80",
-];
-
 export default async function LandlordPropertiesPage() {
   const { properties, meta } = await getLandlordPropertiesData();
 
@@ -38,14 +32,21 @@ export default async function LandlordPropertiesPage() {
       </section>
 
       <div className="grid gap-6">
-        {properties.map((property, index) => {
+        {properties.map((property) => {
           const occupancyRate = Math.round((property.occupiedUnits / property.totalUnits) * 100);
           return (
             <Link key={property.id} href={`/landlord/properties/${property.id}`}>
               <SurfaceCard className="group overflow-hidden">
                 <div className="flex flex-col md:flex-row">
-                  <div className="h-56 overflow-hidden md:h-auto md:w-72">
-                    <img alt={property.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src={propertyImages[index % propertyImages.length]} />
+                  <div className="flex h-56 items-end overflow-hidden bg-[linear-gradient(135deg,var(--primary-4),var(--secondary-4))] p-6 md:h-auto md:w-72">
+                    <div className="rounded-2xl bg-background/80 px-4 py-3 backdrop-blur">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-secondary-2">
+                        Bien
+                      </p>
+                      <p className="mt-2 text-lg font-bold text-foreground">
+                        {property.name}
+                      </p>
+                    </div>
                   </div>
                   <div className="grid flex-1 gap-6 p-6 lg:grid-cols-4 lg:items-center">
                     <div>
@@ -71,7 +72,7 @@ export default async function LandlordPropertiesPage() {
                     </div>
                     <div className="space-y-1 text-left lg:text-right">
                       <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--secondary-3)]">Revenu mensuel</p>
-                      <p className="text-3xl font-bold tracking-tight text-primary">{formatMoney(property.monthlyRevenue, property.currency ?? "CDF")}</p>
+                      <p className="text-3xl font-bold tracking-tight text-primary">{formatMoney(property.monthlyRevenue, property.currency)}</p>
                       <span className="inline-flex rounded-full bg-success/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-success">
                         Payé
                       </span>

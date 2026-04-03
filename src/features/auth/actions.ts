@@ -191,5 +191,6 @@ export async function landlordSignUpAction(
 export async function logoutAction(formData: FormData) {
   const role = String(formData.get("role") ?? "").trim();
   await clearSessionTokens();
-  redirect(role === "tenant" ? "/tenant/login" : "/landlord/sign-in");
+  redirect("/");
+  // redirect(role === "tenant" ? "/tenant/login" : "/landlord/sign-in");
 }

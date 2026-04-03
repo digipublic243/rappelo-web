@@ -27,9 +27,6 @@ export default async function PropertyDetailPage({ params }: PageProps) {
     notFound();
   }
   const { property, units, details, meta } = detail;
-  const heroImage =
-    details.mediaGallery?.[0] ??
-    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80";
   const featureTags = [
     ...(details.amenities ?? []),
     ...(details.facilities ?? []),
@@ -58,10 +55,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
     [
       "Total des loyers mensuels",
       details.monthlyRentTotal != null
-        ? formatMoney(
-            details.monthlyRentTotal,
-            details.currency ?? property.currency ?? "CDF",
-          )
+        ? formatMoney(details.monthlyRentTotal, details.currency ?? property.currency)
         : "Non renseigné",
     ],
     // [
@@ -73,10 +67,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
     [
       "Prix d’achat",
       details.purchasePrice != null
-        ? formatMoney(
-            details.purchasePrice,
-            details.currency ?? property.currency ?? "CDF",
-          )
+        ? formatMoney(details.purchasePrice, details.currency ?? property.currency)
         : "Non renseigné",
     ],
     [
@@ -124,15 +115,21 @@ export default async function PropertyDetailPage({ params }: PageProps) {
       <section className="grid gap-8 lg:grid-cols-12">
         <div className="space-y-8 lg:col-span-5">
           <SurfaceCard className="overflow-hidden">
-            <div className="relative h-72">
-              <img
-                alt={property.name}
-                className="h-full w-full object-cover"
-                src={heroImage}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+            <div className="relative flex h-72 items-end bg-[linear-gradient(145deg,var(--primary),var(--primary-2))] p-6">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.16),transparent_42%)]" />
               <div className="absolute bottom-4 left-4">
                 <StatusBadge status={details.status} label={details.status} />
+              </div>
+              <div className="relative z-10 max-w-xs text-white">
+                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/70">
+                  Fiche bien
+                </p>
+                <h3 className="mt-3 text-2xl font-bold tracking-tight">
+                  {property.name}
+                </h3>
+                <p className="mt-2 text-sm text-white/80">
+                  {property.address}, {property.city}
+                </p>
               </div>
             </div>
             <div className="p-6">
@@ -306,7 +303,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 <p className="mt-2 text-xl font-black text-foreground">
                   {formatMoney(
                     property.monthlyRevenue,
-                    property.currency ?? details.currency ?? "CDF",
+                    property.currency ?? details.currency,
                   )}
                 </p>
               </div>
@@ -325,7 +322,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 <p className="mt-2 text-xl font-black text-foreground">
                   {formatMoney(
                     Math.round(property.monthlyRevenue / property.totalUnits),
-                    property.currency ?? details.currency ?? "CDF",
+                    property.currency ?? details.currency,
                   )}
                 </p>
               </div>

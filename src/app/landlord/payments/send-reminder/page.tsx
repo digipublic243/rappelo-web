@@ -50,7 +50,7 @@ export default async function SendReminderPage() {
           <h2 className="mt-3 text-2xl font-bold">Contexte de relance</h2>
           <p className="mt-4 text-sm leading-6 text-white/80">
             {relatedTenant
-              ? `${relatedTenant.fullName} présente actuellement un solde en attente de ${overduePayment ? formatMoney(overduePayment.amount) : "$0.00"} pour ${overduePayment?.unitId || "l’unité sélectionnée"}.`
+              ? `${relatedTenant.fullName} présente actuellement un solde en attente de ${overduePayment ? formatMoney(overduePayment.amount, overduePayment.currency) : formatMoney(0)} pour ${overduePayment?.unitId || "l’unité sélectionnée"}.`
               : "Aucun contexte locataire en retard n’est actuellement disponible depuis le registre live."}
           </p>
         </SurfaceCard>

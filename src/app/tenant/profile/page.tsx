@@ -16,7 +16,15 @@ export default async function TenantProfilePage() {
   const summary = [
     ["Leases", String(profile.details.leasesCount)],
     ["Payments", String(profile.details.paymentsCount)],
-    ["Current Rent", profile.details.currentLease ? formatMoney(profile.details.currentLease.rentAmount) : "N/A"],
+    [
+      "Current Rent",
+      profile.details.currentLease
+        ? formatMoney(
+            profile.details.currentLease.rentAmount,
+            profile.details.currentLease.currency,
+          )
+        : "N/A",
+    ],
   ];
 
   return (

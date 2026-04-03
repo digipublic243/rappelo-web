@@ -40,7 +40,7 @@ export default async function TenantLeasesPage() {
                     </div>
                     <div>
                       <p className="text-xs text-secondary-2">Montant contractuel</p>
-                      <p className="mt-1 text-sm font-semibold text-foreground">{formatMoney(lease.rentAmount, lease.currency ?? "CDF")}</p>
+                      <p className="mt-1 text-sm font-semibold text-foreground">{formatMoney(lease.rentAmount, lease.currency)}</p>
                       <p className="mt-1 text-xs text-[var(--secondary-3)]">{formatCadence(lease.cadence)}</p>
                     </div>
                     <div>
@@ -63,31 +63,33 @@ export default async function TenantLeasesPage() {
       <section>
         <h2 className="text-sm font-bold uppercase tracking-[0.24em] text-secondary-2">Baux archivés</h2>
         <SurfaceCard className="mt-4 overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-[var(--secondary-4)]">
-              <tr>
-                {["Bail", "Période", "Statut", "Action"].map((label) => (
-                  <th key={label} className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-secondary-2">
-                    {label}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {historicLeases.map((lease) => (
-                <tr key={lease.id} className="border-t border-[var(--secondary)]">
-                  <td className="px-6 py-4 text-sm font-semibold text-foreground">{lease.lease_number}</td>
-                  <td className="px-6 py-4 text-sm text-secondary-2">{formatDate(lease.startDate)} - {formatDate(lease.endDate)}</td>
-                  <td className="px-6 py-4"><StatusBadge status={lease.status} label={leaseStatusLabel(lease.status)} /></td>
-                  <td className="px-6 py-4 text-sm text-primary">
-                    <Link className="font-semibold" href={`/tenant/leases/${lease.id}`}>
-                      Voir le détail
-                    </Link>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px]">
+              <thead className="bg-[var(--secondary-4)]">
+                <tr>
+                  {["Bail", "Période", "Statut", "Action"].map((label) => (
+                    <th key={label} className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-secondary-2">
+                      {label}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {historicLeases.map((lease) => (
+                  <tr key={lease.id} className="border-t border-[var(--secondary)]">
+                    <td className="px-6 py-4 text-sm font-semibold text-foreground">{lease.lease_number}</td>
+                    <td className="px-6 py-4 text-sm text-secondary-2">{formatDate(lease.startDate)} - {formatDate(lease.endDate)}</td>
+                    <td className="px-6 py-4"><StatusBadge status={lease.status} label={leaseStatusLabel(lease.status)} /></td>
+                    <td className="px-6 py-4 text-sm text-primary">
+                      <Link className="font-semibold" href={`/tenant/leases/${lease.id}`}>
+                        Voir le détail
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </SurfaceCard>
       </section>
     </TenantPageFrame>

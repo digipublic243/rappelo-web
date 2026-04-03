@@ -30,7 +30,7 @@ export function TenantBookingRequestForm({ units }: TenantBookingRequestFormProp
                 <p className="mt-1 text-sm text-secondary-2">{unit.type}</p>
               </div>
               <div className="text-right">
-                <p className="text-3xl font-black text-foreground">{formatMoney(unit.price, unit.currency ?? "CDF")}</p>
+                <p className="text-3xl font-black text-foreground">{formatMoney(unit.price, unit.currency)}</p>
                 <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--secondary-3)]">
                   {formatCadence(unit.pricingCadence)}
                 </p>
@@ -99,7 +99,7 @@ export function TenantBookingRequestForm({ units }: TenantBookingRequestFormProp
         </p>
         <div className="mt-6 space-y-4">
           {[
-            ["Base Rate", selectedUnit ? formatMoney(selectedUnit.price, selectedUnit.currency ?? "CDF") : formatMoney(0, "CDF")],
+            ["Base Rate", selectedUnit ? formatMoney(selectedUnit.price, selectedUnit.currency) : formatMoney(0)],
             ["Deposit", selectedUnit?.depositEnabled ? "Required" : "Optional"],
             ["Cadence", selectedUnit ? formatCadence(selectedUnit.pricingCadence) : "Not available"],
             ["Method", selectedUnit?.allowedPaymentMethods?.join(" + ").toUpperCase() || "Cash / EasyPay"],

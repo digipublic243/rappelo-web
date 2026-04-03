@@ -39,39 +39,43 @@ export default async function TenantListPage() {
       </section>
 
       <SurfaceCard className="overflow-hidden">
-        <table className="w-full min-w-[820px]">
-          <thead className="bg-[var(--secondary-4)] text-left">
-            <tr>
-              {["Locataire", "Bail actif", "Santé paiement", "Unité", "Action"].map((label) => (
-                <th key={label} className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-secondary-2">
-                  {label}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {tenants.map((tenant) => (
-              <tr key={tenant.id} className="border-t border-[var(--secondary)]">
-                <td className="px-6 py-5">
-                  <p className="font-semibold text-foreground">{tenant.fullName}</p>
-                  <p className="text-xs text-secondary-2">{tenant.email}</p>
-                </td>
-                <td className="px-6 py-5">
-                  <StatusBadge status={tenant.leaseStatus} label={leaseStatusLabel(tenant.leaseStatus)} />
-                </td>
-                <td className="px-6 py-5">
-                  <StatusBadge status={tenant.paymentStatus} label={paymentStatusLabel(tenant.paymentStatus)} />
-                </td>
-                <td className="px-6 py-5 text-sm text-foreground">{tenant.unitId}</td>
-                <td className="px-6 py-5">
-                  <Link className="text-sm font-semibold text-primary underline" href={`/landlord/tenants/${tenant.id}`}>
-                    Voir le détail
-                  </Link>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[820px]">
+            <thead className="bg-[var(--secondary-4)] text-left">
+              <tr>
+                {["Locataire", "Bail actif", "Santé paiement", "Unité", "Action"].map((label) => (
+                  <th key={label} className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-secondary-2">
+                    {label}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {tenants.map((tenant) => (
+                <tr key={tenant.id} className="border-t border-[var(--secondary)]">
+                  <td className="px-6 py-5">
+                    <p className="font-semibold text-foreground">{tenant.fullName}</p>
+                    <p className="text-xs text-secondary-2">{tenant.email}</p>
+                  </td>
+                  <td className="px-6 py-5">
+                    <StatusBadge status={tenant.leaseStatus} label={leaseStatusLabel(tenant.leaseStatus)} />
+                  </td>
+                  <td className="px-6 py-5">
+                    <StatusBadge status={tenant.paymentStatus} label={paymentStatusLabel(tenant.paymentStatus)} />
+                  </td>
+                  <td className="px-6 py-5 text-sm text-foreground">
+                    {tenant.unitLabel ?? tenant.unitId}
+                  </td>
+                  <td className="px-6 py-5">
+                    <Link className="text-sm font-semibold text-primary underline" href={`/landlord/tenants/${tenant.id}`}>
+                      Voir le détail
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </SurfaceCard>
     </LandlordPageFrame>
   );

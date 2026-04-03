@@ -53,16 +53,8 @@ export default async function TenantDashboardPage() {
       <section className="grid gap-6 md:grid-cols-12">
         <SurfaceCard className="overflow-hidden md:col-span-8">
           <div className="relative h-72">
-            <img
-              alt="Séjour en cours"
-              className="h-full w-full object-cover"
-              src={
-                // dashboard.residenceImage ??
-                // dashboard.heroBanner ??
-                "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1600&q=80"
-              }
-              />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            <div className="absolute inset-0 bg-[linear-gradient(145deg,var(--primary),var(--primary-2))]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.16),transparent_42%)]" />
             <div className="absolute bottom-6 left-8 text-white">
               <span className="mb-3 inline-block rounded-full bg-success/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest">Séjour en cours</span>
               <h2 className="text-2xl font-bold">
@@ -77,7 +69,7 @@ export default async function TenantDashboardPage() {
             {[
               ["Période du bail", currentLeaseLabel],
               ["Date d’expiration", dashboard.currentLease ? formatDate(dashboard.currentLease.endDate) : "Indisponible"],
-              ["Loyer", dashboard.currentLease ? formatMoney(dashboard.currentLease.rentAmount) : formatMoney(0)],
+              ["Loyer", dashboard.currentLease ? formatMoney(dashboard.currentLease.rentAmount, dashboard.currentLease.currency) : formatMoney(0)],
             ].map(([label, value]) => (
               <div key={label}>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--secondary-3)]">{label}</p>
@@ -102,7 +94,7 @@ export default async function TenantDashboardPage() {
             </span>
           </div>
           <h3 className="mt-10 text-lg font-bold text-foreground">Paiement du loyer</h3>
-          <p className="mt-1 text-4xl font-black tracking-tight text-foreground">{nextPayment ? formatMoney(nextPayment.amount) : formatMoney(0)}</p>
+          <p className="mt-1 text-4xl font-black tracking-tight text-foreground">{nextPayment ? formatMoney(nextPayment.amount, nextPayment.currency) : formatMoney(0)}</p>
           <p className="mt-4 text-sm font-medium text-secondary-2">
             {nextPayment ? `À régler avant le ${formatDate(nextPayment.dueDate)}` : "Aucun paiement à venir"}
           </p>

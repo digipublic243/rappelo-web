@@ -19,6 +19,7 @@ import {
   updateUnitStatus,
 } from "@/lib/api/properties";
 import {
+  checkEasyPayStatus,
   confirmPayment,
   createPayment,
   generatePaymentLink,
@@ -39,6 +40,7 @@ import type {
   ApiUnitStatus,
 } from "@/types/api";
 import type { LeaseEditorActionState } from "@/features/landlord/lease-editor-state";
+import type { LandlordEasyPayActionState } from "@/features/landlord/payment-easypay-state";
 import type { LeaseOverdueActionState } from "@/features/landlord/lease-overdue-state";
 import type { PropertyEditorActionState } from "@/features/landlord/property-editor-state";
 import type { PaymentWorkflowActionState } from "@/features/landlord/payment-workflow-state";
@@ -71,7 +73,7 @@ function buildPropertyPayload(formData: FormData): ApiPropertyUpsertRequest {
     description: String(formData.get("description") ?? "").trim() || null,
     total_units: Number.isFinite(totalUnits) ? totalUnits : 0,
     currency:
-      (String(formData.get("currency") ?? "CDF").trim() || "CDF") as ApiCurrency,
+      (String(formData.get("currency") ?? "USD").trim() || "USD") as ApiCurrency,
     is_active: status === "active" || status === "maintenance",
   };
 }
@@ -879,6 +881,61 @@ export async function generatePaymentLinkAction(
   }
 }
 
+export async function generatePaymentLinkForPaymentAction(
+  _: PaymentWorkflowActionState,
+  formData: FormData,
+): Promise<PaymentWorkflowActionState> {
+  const accessToken = await requireAccessToken();
+  if (!accessToken) {
+    return { error: "Aucune session bailleur authentifiée n’a été trouvée." };
+  }
+
+  const paymentId = String(formData.get("paymentId") ?? "").trim();
+  const gateway = String(formData.get("gateway") ?? "cash").trim() as
+    | "cash"
+    | "bank_transfer"
+    | "easypay";
+  const expiresInHours = Number(
+    String(formData.get("expires_in_hours") ?? "48").trim() || "48",
+  );
+
+  if (!paymentId) {
+    return {
+      error: "Aucun paiement n’a été sélectionné.",
+      errorDetails: ["paiement : requis"],
+    };
+  }
+
+  try {
+    const link = await generatePaymentLink(
+      paymentId,
+      { gateway, expires_in_hours: expiresInHours },
+      accessToken,
+    );
+
+    revalidatePath("/landlord/payments");
+    revalidatePath(`/landlord/payments/${paymentId}`);
+
+    return {
+      message: "Le lien de paiement est prêt à être partagé.",
+      paymentId,
+      linkUrl: link.link_url,
+      gatewayUrl: link.gateway_url,
+      gatewayReference: link.gateway_reference,
+      expiresAt: link.expires_at,
+    };
+  } catch (error) {
+    const formattedError = formatFormApiError(
+      error,
+      "Impossible de générer le lien de paiement pour ce paiement.",
+    );
+    return {
+      error: formattedError.message,
+      errorDetails: formattedError.details,
+    };
+  }
+}
+
 export async function sendPaymentReminderAction(
   _: PaymentWorkflowActionState,
   formData: FormData,
@@ -925,6 +982,51 @@ export async function sendPaymentReminderAction(
     return {
       error: formattedError.message,
       errorDetails: formattedError.details,
+    };
+  }
+}
+
+export async function checkLandlordEasyPayStatusAction(
+  _: LandlordEasyPayActionState,
+  formData: FormData,
+): Promise<LandlordEasyPayActionState> {
+  const accessToken = await requireAccessToken();
+  if (!accessToken) {
+    return {
+      error: "Votre session a expiré. Reconnectez-vous pour vérifier le paiement.",
+    };
+  }
+
+  const paymentId = String(formData.get("paymentId") ?? "").trim();
+  if (!paymentId) {
+    return {
+      error: "Aucun paiement n’a été sélectionné.",
+      errorDetails: ["paiement : requis"],
+    };
+  }
+
+  try {
+    const response = await checkEasyPayStatus(paymentId, accessToken);
+
+    revalidatePath("/landlord/payments");
+    revalidatePath(`/landlord/payments/${paymentId}`);
+    revalidatePath("/landlord/dashboard");
+
+    return {
+      message: response.easypay_status?.status
+        ? `Statut EasyPay synchronisé : ${response.easypay_status.status}.`
+        : "Le statut EasyPay a été synchronisé avec le serveur.",
+      easypayStatus: response.easypay_status?.status ?? response.status,
+    };
+  } catch (error) {
+    const formatted = formatFormApiError(
+      error,
+      "Impossible de vérifier le statut EasyPay pour ce paiement.",
+    );
+
+    return {
+      error: formatted.message,
+      errorDetails: formatted.details,
     };
   }
 }

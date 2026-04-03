@@ -51,8 +51,12 @@ export default async function TenantBookingsPage() {
               <div className="p-6">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h2 className="text-xl font-bold text-foreground">{booking.unitId || "Unit pending"}</h2>
-                    <p className="text-sm text-secondary-2">{booking.propertyId || "Property pending"}</p>
+                    <h2 className="text-xl font-bold text-foreground">
+                      {booking.unitLabel ?? booking.unitId ?? "Unit pending"}
+                    </h2>
+                    <p className="text-sm text-secondary-2">
+                      {booking.propertyName ?? booking.propertyId ?? "Property pending"}
+                    </p>
                   </div>
                   <StatusBadge status={booking.status} label={bookingStatusLabel(booking.status)} />
                 </div>

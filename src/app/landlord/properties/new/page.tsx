@@ -26,7 +26,7 @@ export default function NewPropertyPage() {
           country: "RD CONGO",
           description: "",
           totalUnits: "1",
-          currency: "CDF",
+          currency: "USD",
           isActive: true,
         }}
         initialState={initialPropertyEditorActionState}

@@ -30,7 +30,7 @@ export default async function NewUnitPage() {
           unitNumber: "",
           unitType: "studio",
           rent: "",
-          currency: propertyOptions[0]?.currency ?? "",
+          currency: "USD",
           rentalPeriodicity: "mensuel",
           description: "",
           isFurnished: false,

@@ -43,9 +43,7 @@ const periodicityOptions = [
 ];
 
 const currencyOptions = [
-  { value: "CDF", label: "CDF" },
   { value: "USD", label: "USD" },
-  { value: "EUR", label: "EUR" },
 ];
 
 export function UnitConfigurationForm({
@@ -62,7 +60,7 @@ export function UnitConfigurationForm({
     ).map((method) => String(method)),
   );
   const pendingPayments = payments.filter((payment) => payment.status === "pending");
-  const currentCurrency = details.currency ?? unit.currency ?? "CDF";
+  const currentCurrency = "USD";
 
   useSyncGlobalApiError(state.error, {
     title: "Échec de mise à jour de l’unité",
@@ -174,8 +172,8 @@ export function UnitConfigurationForm({
                       type="number"
                     />
                     <FormFieldMuted
-                      defaultValue={details.currency ?? unit.currency ?? "CDF"}
-                      helperText="Doit rester alignée sur le bien."
+                      defaultValue="USD"
+                      helperText="Le frontend reste verrouillé sur USD pour le moment."
                       label="Devise"
                       name="currency"
                       options={currencyOptions}

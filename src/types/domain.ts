@@ -56,6 +56,7 @@ export interface Tenant {
   phone: string;
   propertyId: string;
   unitId: string;
+  unitLabel?: string;
   leaseStatus: LeaseStatus;
   paymentStatus: PaymentStatus;
 }
@@ -64,7 +65,9 @@ export interface Booking {
   id: string;
   tenantId: string;
   propertyId: string;
+  propertyName?: string;
   unitId: string;
+  unitLabel?: string;
   requestedFrom: string;
   requestedTo: string;
   status: BookingStatus;
@@ -75,8 +78,10 @@ export interface Lease {
   id: string;
   lease_number: string;
   tenantId: string;
+  tenantName?: string;
   propertyId: string;
   unitId: string;
+  unitLabel?: string;
   startDate: string;
   endDate: string;
   status: LeaseStatus;
@@ -100,6 +105,7 @@ export interface Payment {
   leaseId?: string;
   paymentLabel?: string;
   unitId: string;
+  unitLabel?: string;
   amount: number;
   currency?: string;
   dueDate: string;

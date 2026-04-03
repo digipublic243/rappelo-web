@@ -28,7 +28,7 @@ export function SendPaymentReminderForm({ payments, tenants }: SendPaymentRemind
         options={remindablePayments.map((payment) => {
           const tenant = tenants.find((item) => item.id === payment.tenantId);
           return {
-            label: `${tenant?.fullName ?? payment.tenantId} — ${payment.unitId} — ${formatMoney(payment.amount)}`,
+            label: `${tenant?.fullName ?? payment.tenantId} — ${payment.unitId} — ${formatMoney(payment.amount, payment.currency)}`,
             value: payment.id,
           };
         })}

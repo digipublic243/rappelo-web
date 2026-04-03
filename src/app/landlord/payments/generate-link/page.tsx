@@ -7,7 +7,7 @@ import {
 import { getLandlordPaymentWorkflowData } from "@/features/landlord/api";
 import { DataStateNotice } from "@/components/ui/DataStateNotice";
 import { GeneratePaymentLinkForm } from "@/features/landlord/GeneratePaymentLinkForm";
-import { formatMoney } from "@/lib/format";
+import { formatMoney, formatMoneyBreakdown } from "@/lib/format";
 import Link from "next/link";
 
 export default async function GeneratePaymentLinkPage() {
@@ -42,14 +42,20 @@ export default async function GeneratePaymentLinkPage() {
               <SurfaceCard key={payment.id} className="p-5">
                 <p className="font-semibold text-foreground">{tenant?.fullName ?? payment.tenantId}</p>
                 <p className="mt-1 text-xs text-secondary-2">
-                  {lease?.lease_number ?? "Bail non lié"} • {payment.unitId || "Unité indisponible"} • {formatMoney(payment.amount, payment.currency ?? "CDF")}
+                  {lease?.lease_number ?? "Bail non lié"} • {payment.unitId || "Unité indisponible"} • {formatMoney(payment.amount, payment.currency)}
                 </p>
               </SurfaceCard>
             );
           })}
           <SurfaceCard className="p-6">
             <p className="text-sm text-secondary-2">En attente sur ce cycle</p>
-            <p className="mt-2 text-4xl font-black text-foreground">{formatMoney(summary?.totalPending ?? 0, "CDF")}</p>
+            <p className="mt-2 text-4xl font-black text-foreground">
+              {formatMoneyBreakdown(
+                payments
+                  .filter((payment) => payment.status === "pending")
+                  .map((payment) => ({ amount: payment.amount, currency: payment.currency })),
+              )}
+            </p>
             <p className="mt-2 text-xs text-secondary-2">
               {summary?.countPending ?? 0} paiement(s) encore à régulariser.
             </p>

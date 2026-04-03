@@ -44,7 +44,7 @@ export default async function EditPropertyPage({ params }: PageProps) {
           country: details.country,
           description: details.description ?? "",
           totalUnits: String(property.totalUnits),
-          currency: details.currency ?? property.currency ?? "CDF",
+          currency: details.currency ?? property.currency ?? "",
           isActive: details.status === "active",
         }}
         initialState={initialPropertyEditorActionState}

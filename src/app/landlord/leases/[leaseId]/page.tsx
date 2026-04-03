@@ -87,7 +87,7 @@ export default async function LeaseDetailPage({ params }: PageProps) {
               </span>
             </div>
             <p className="mt-5 text-4xl font-black tracking-tight text-foreground">
-              {formatMoney(lease.rentAmount, lease.currency ?? "CDF")}
+              {formatMoney(lease.rentAmount, lease.currency)}
             </p>
             <p className="mt-2 text-sm text-secondary-2">
               Période du bail : {formatDate(lease.startDate)} -{" "}
@@ -96,7 +96,7 @@ export default async function LeaseDetailPage({ params }: PageProps) {
             {lease.securityDeposit ? (
               <p className="mt-2 text-sm text-secondary-2">
                 Garantie :{" "}
-                {formatMoney(lease.securityDeposit, lease.currency ?? "CDF")}
+                {formatMoney(lease.securityDeposit, lease.currency)}
                 {lease.securityDepositMonthsTaken != null
                   ? ` • ${lease.securityDepositMonthsTaken} mois prélevé(s)`
                   : ""}
@@ -110,29 +110,31 @@ export default async function LeaseDetailPage({ params }: PageProps) {
                 Calendrier de paiement
               </h2>
             </div>
-            <table className="w-full">
-              <tbody>
-                {renderedSchedule.map((payment) => (
-                  <tr
-                    key={payment.id}
-                    className="border-t border-[var(--secondary)] first:border-t-0"
-                  >
-                    <td className="px-8 py-5 text-sm text-secondary-2">
-                      {payment.label}
-                    </td>
-                    <td className="px-8 py-5 text-sm font-semibold text-foreground">
-                      {formatMoney(
-                        payment.amount,
-                        payment.currency ?? lease.currency ?? "CDF",
-                      )}
-                    </td>
-                    <td className="px-8 py-5 text-sm text-secondary-2">
-                      {formatDate(payment.dueDate)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[720px]">
+                <tbody>
+                  {renderedSchedule.map((payment) => (
+                    <tr
+                      key={payment.id}
+                      className="border-t border-[var(--secondary)] first:border-t-0"
+                    >
+                      <td className="px-8 py-5 text-sm text-secondary-2">
+                        {payment.label}
+                      </td>
+                      <td className="px-8 py-5 text-sm font-semibold text-foreground">
+                        {formatMoney(
+                          payment.amount,
+                          payment.currency ?? lease.currency,
+                        )}
+                      </td>
+                      <td className="px-8 py-5 text-sm text-secondary-2">
+                        {formatDate(payment.dueDate)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </SurfaceCard>
         </div>
 
@@ -168,7 +170,7 @@ export default async function LeaseDetailPage({ params }: PageProps) {
                 </span>{" "}
                 {formatMoney(
                   overdue?.overdueAmount ?? 0,
-                  overdue?.currency ?? lease.currency ?? "CDF",
+                  overdue?.currency ?? lease.currency,
                 )}
               </p>
               <p>

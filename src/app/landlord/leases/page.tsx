@@ -10,6 +10,8 @@ import {
   formatCadence,
   formatDate,
   formatMoney,
+  formatMoneyBreakdown,
+  formatMoneyBreakdownFromMap,
   leaseOverdueStatusLabel,
   leaseStatusLabel,
 } from "@/lib/format";
@@ -46,13 +48,18 @@ export default async function LeaseListPage() {
           ],
           [
             "Montant en retard",
-            overdueSummary?.totalOverdueAmount != null
-              ? formatMoney(overdueSummary.totalOverdueAmount, "CDF")
-              : overdueSummary?.totalOverdueByCurrency
-                ? Object.entries(overdueSummary.totalOverdueByCurrency)
-                    .map(([currency, amount]) => formatMoney(amount, currency))
-                    .join(" • ")
-                : formatMoney(0, "CDF"),
+            overdueSummary?.totalOverdueByCurrency
+              ? formatMoneyBreakdownFromMap(overdueSummary.totalOverdueByCurrency)
+              : overdueSummary?.totalOverdueAmount != null
+                ? formatMoney(overdueSummary.totalOverdueAmount)
+                : formatMoneyBreakdown(
+                    leases
+                      .filter((lease) => (lease.overdueAmount ?? 0) > 0)
+                      .map((lease) => ({
+                        amount: lease.overdueAmount ?? 0,
+                        currency: lease.overdueCurrency ?? lease.currency,
+                      })),
+                  ),
           ],
         ].map(([label, value]) => (
           <SurfaceCard key={label} className="p-5">
@@ -63,69 +70,75 @@ export default async function LeaseListPage() {
       </section>
 
       <SurfaceCard className="overflow-hidden">
-        <table className="w-full min-w-[860px]">
-          <thead className="bg-[var(--secondary-4)] text-left">
-            <tr>
-              {[
-                "Numéro de bail",
-                "Locataire",
-                "Unité",
-                "Période",
-                "Montant contractuel",
-                "Retard",
-                "Statut",
-                "Action",
-              ].map((label) => (
-                <th key={label} className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-secondary-2">
-                  {label}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {leases.map((lease) => (
-              <tr key={lease.id} className="border-t border-[var(--secondary)]">
-                <td className="px-6 py-5 text-sm font-semibold text-foreground">{lease.lease_number}</td>
-                <td className="px-6 py-5 text-sm text-secondary-2">
-                  <span className="font-semibold text-foreground">{lease.tenantId}</span>
-                </td>
-                <td className="px-6 py-5 text-sm text-secondary-2">
-                  <span className="font-semibold text-foreground">{lease.unitId}</span>
-                </td>
-                <td className="px-6 py-5 text-sm text-secondary-2">
-                  {formatDate(lease.startDate)}
-                  <div className="text-xs text-[var(--secondary-3)]">au {formatDate(lease.endDate)}</div>
-                </td>
-                <td className="px-6 py-5 text-sm text-secondary-2">
-                  {formatMoney(lease.rentAmount, lease.currency ?? "CDF")}
-                  <div className="text-xs text-[var(--secondary-3)]">
-                    {formatCadence(lease.cadence)}
-                  </div>
-                </td>
-                <td className="px-6 py-5 text-sm text-secondary-2">
-                  <span className="font-semibold text-foreground">
-                    {leaseOverdueStatusLabel(lease.overdueStatus)}
-                  </span>
-                  {lease.daysOverdue && lease.daysOverdue > 0 ? (
-                    <div className="text-xs text-[var(--secondary-3)]">
-                      {lease.daysOverdue} j • {formatMoney(lease.overdueAmount ?? 0, lease.overdueCurrency ?? lease.currency ?? "CDF")}
-                    </div>
-                  ) : (
-                    <div className="text-xs text-[var(--secondary-3)]">Aucun retard enregistré</div>
-                  )}
-                </td>
-                <td className="px-6 py-5">
-                  <StatusBadge status={lease.status} label={leaseStatusLabel(lease.status)} />
-                </td>
-                <td className="px-6 py-5">
-                  <Link className="text-sm font-semibold text-primary underline-2 underline" href={`/landlord/leases/${lease.id}`}>
-                    Voir le détail
-                  </Link>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[860px]">
+            <thead className="bg-[var(--secondary-4)] text-left">
+              <tr>
+                {[
+                  "Numéro de bail",
+                  "Locataire",
+                  "Unité",
+                  "Période",
+                  "Montant contractuel",
+                  "Retard",
+                  "Statut",
+                  "Action",
+                ].map((label) => (
+                  <th key={label} className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-secondary-2">
+                    {label}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {leases.map((lease) => (
+                <tr key={lease.id} className="border-t border-[var(--secondary)]">
+                  <td className="px-6 py-5 text-sm font-semibold text-foreground">{lease.lease_number}</td>
+                  <td className="px-6 py-5 text-sm text-secondary-2">
+                    <span className="font-semibold text-foreground">
+                      {lease.tenantName ?? lease.tenantId}
+                    </span>
+                  </td>
+                  <td className="px-6 py-5 text-sm text-secondary-2">
+                    <span className="font-semibold text-foreground">
+                      {lease.unitLabel ?? lease.unitId}
+                    </span>
+                  </td>
+                  <td className="px-6 py-5 text-sm text-secondary-2">
+                    {formatDate(lease.startDate)}
+                    <div className="text-xs text-[var(--secondary-3)]">au {formatDate(lease.endDate)}</div>
+                  </td>
+                  <td className="px-6 py-5 text-sm text-secondary-2">
+                    {formatMoney(lease.rentAmount, lease.currency)}
+                    <div className="text-xs text-[var(--secondary-3)]">
+                      {formatCadence(lease.cadence)}
+                    </div>
+                  </td>
+                  <td className="px-6 py-5 text-sm text-secondary-2">
+                    <span className="font-semibold text-foreground">
+                      {leaseOverdueStatusLabel(lease.overdueStatus)}
+                    </span>
+                    {lease.daysOverdue && lease.daysOverdue > 0 ? (
+                      <div className="text-xs text-[var(--secondary-3)]">
+                        {lease.daysOverdue} j • {formatMoney(lease.overdueAmount ?? 0, lease.overdueCurrency ?? lease.currency)}
+                      </div>
+                    ) : (
+                      <div className="text-xs text-[var(--secondary-3)]">Aucun retard enregistré</div>
+                    )}
+                  </td>
+                  <td className="px-6 py-5">
+                    <StatusBadge status={lease.status} label={leaseStatusLabel(lease.status)} />
+                  </td>
+                  <td className="px-6 py-5">
+                    <Link className="text-sm font-semibold text-primary underline-2 underline" href={`/landlord/leases/${lease.id}`}>
+                      Voir le détail
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </SurfaceCard>
     </LandlordPageFrame>
   );

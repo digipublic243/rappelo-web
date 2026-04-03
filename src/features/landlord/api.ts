@@ -216,26 +216,47 @@ async function buildLandlordDomainData(): Promise<LandlordDomainData> {
   const unitDomains = units.map((unit) =>
     mapApiUnitToDomain(unit, unitTenantNames.get(String(unit.id))),
   );
+  const unitLabelsById = new Map(
+    unitDomains.map((unit) => [unit.id, unit.label]),
+  );
+  const propertyNamesById = new Map(
+    propertyDomains.map((property) => [property.id, property.name]),
+  );
   const enrichedPayments = paymentDomains.map((payment) => {
     const lease = leaseDomains.find((item) => item.id === payment.leaseId);
     return {
       ...payment,
       tenantName: tenantNamesByActorId.get(payment.tenantId),
       unitId: lease?.unitId ?? "",
+      unitLabel: lease?.unitId ? unitLabelsById.get(lease.unitId) : undefined,
     };
   });
   const enrichedLeases = leaseDomains.map((lease) => {
     const unit = unitDomains.find((item) => item.id === lease.unitId);
-    return { ...lease, propertyId: unit?.propertyId ?? "" };
+    return {
+      ...lease,
+      tenantName: tenantNamesByActorId.get(lease.tenantId),
+      propertyId: unit?.propertyId ?? "",
+      unitLabel: unit?.label,
+    };
   });
+  const enrichedBookings = bookingDomains.map((booking) => ({
+    ...booking,
+    propertyName: propertyNamesById.get(booking.propertyId),
+    unitLabel: unitLabelsById.get(booking.unitId),
+  }));
+  const enrichedTenants = tenantDomains.map((tenant) => ({
+    ...tenant,
+    unitLabel: unitLabelsById.get(tenant.unitId),
+  }));
 
   return {
     properties: propertyDomains,
     units: unitDomains,
     leases: enrichedLeases,
     payments: enrichedPayments,
-    tenants: tenantDomains,
-    bookings: bookingDomains,
+    tenants: enrichedTenants,
+    bookings: enrichedBookings,
     meta: { source: "api" as const },
   };
 }
@@ -679,7 +700,11 @@ export async function getLandlordBookingDetail(
   );
 
   return {
-    booking: mappedBooking,
+    booking: {
+      ...mappedBooking,
+      propertyName: property?.name,
+      unitLabel: unit?.label,
+    },
     tenant,
     property,
     unit,

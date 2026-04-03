@@ -43,7 +43,7 @@ export function GeneratePaymentLinkForm({ leases, tenants, payments }: GenerateP
         options={[
           { label: "Créer un nouveau paiement", value: "" },
           ...pendingPayments.map((payment) => ({
-            label: `${payment.tenantName ?? tenants.find((tenant) => tenant.id === payment.tenantId)?.fullName ?? payment.tenantId} — ${payment.paymentLabel ?? payment.unitId} — ${formatMoney(payment.amount, payment.currency ?? "CDF")}`,
+            label: `${payment.tenantName ?? tenants.find((tenant) => tenant.id === payment.tenantId)?.fullName ?? payment.tenantId} — ${payment.paymentLabel ?? payment.unitId} — ${formatMoney(payment.amount, payment.currency)}`,
             value: payment.id,
           })),
         ]}

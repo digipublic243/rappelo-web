@@ -52,7 +52,7 @@ export default async function TenantPaymentDetailPage({ params }: PageProps) {
             </span>
           </div>
           <p className="mt-5 text-4xl font-black tracking-tight text-foreground">
-            {formatMoney(payment.amount, payment.currency ?? "CDF")}
+            {formatMoney(payment.amount, payment.currency)}
           </p>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
             <div>

@@ -57,7 +57,7 @@ export default async function NewLeasePage() {
         }))}
         units={units.map((unit) => ({
           value: unit.id,
-          label: `${unit.label} • ${formatMoney(unit.price)} • ${unit.status}`,
+          label: `${unit.label} • ${formatMoney(unit.price, unit.currency)} • ${unit.status}`,
         }))}
       />
     </LandlordPageFrame>
