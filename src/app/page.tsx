@@ -15,11 +15,11 @@ export default function Home() {
                 RAPPELO
               </div>
               <h1 className="mt-6 max-w-2xl text-4xl font-extrabold tracking-tight text-foreground md:text-5xl">
-                Property operations with one visual language for landlord and tenant flows.
+                Les opérations immobilières dans un langage visuel unique pour les parcours bailleur et locataire.
               </h1>
               <p className="mt-4 max-w-2xl text-sm leading-6 text-secondary-2 md:text-base">
-                The workspace now follows the same polished shell as the main product: role-based entry points, API-backed views,
-                and Stitch-aligned layouts ready for the next implementation steps.
+                L’espace suit désormais la même structure soignée que le produit principal : points d’entrée selon le rôle, vues alimentées par l’API
+                et layouts alignés sur Stitch, prêts pour les prochaines étapes d’implémentation.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
@@ -28,22 +28,22 @@ export default function Home() {
                   href="/landlord/sign-in"
                 >
                   <MaterialIcon name="dashboard" className="text-[18px]" />
-                  Enter landlord flow
+                  Entrer dans le parcours bailleur
                 </Link>
                 <Link
                   className="inline-flex items-center justify-center gap-2 rounded-lg border border-[color:color-mix(in_srgb,var(--secondary)_40%,transparent)] bg-[var(--secondary-4)] px-5 py-3 text-sm font-semibold text-primary transition-all hover:bg-secondary-4"
                   href="/tenant/login"
                 >
                   <MaterialIcon name="home" className="text-[18px]" />
-                  Enter tenant flow
+                  Entrer dans le parcours locataire
                 </Link>
               </div>
 
               <div className="mt-10 grid gap-4 md:grid-cols-3">
                 {[
-                  ["Live APIs", "Auth, properties, units, tenants, leases, payments"],
-                  ["Shared Shell", "Sidebar, topbar, cards and dashboards stay visually aligned"],
-                  ["Clean Base", "Typed services, mappers, loading states and measured fallback"],
+                  ["APIs live", "Auth, biens, unités, locataires, baux et paiements"],
+                  ["Shell partagé", "Sidebar, topbar, cartes et dashboards restent visuellement alignés"],
+                  ["Base propre", "Services typés, mappers, états de chargement et fallback mesuré"],
                 ].map(([label, text]) => (
                   <div key={label} className="rounded-2xl bg-[var(--secondary-4)] p-5">
                     <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--secondary-3)]">{label}</p>
@@ -61,12 +61,12 @@ export default function Home() {
                   <MaterialIcon name="query_stats" className="text-[24px]" />
                 </div>
                 <span className="rounded-full bg-background/14 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white/90">
-                  Portfolio View
+                  Vue portefeuille
                 </span>
               </div>
-              <h2 className="mt-10 text-2xl font-bold tracking-tight">Operational visibility from the first screen.</h2>
+              <h2 className="mt-10 text-2xl font-bold tracking-tight">Une visibilité opérationnelle dès le premier écran.</h2>
               <p className="mt-3 text-sm leading-6 text-white/78">
-                The landing experience now uses the same editorial cards, spacing, colors and hierarchy as the landlord and tenant surfaces.
+                L’expérience d’accueil reprend maintenant les mêmes cartes éditoriales, espacements, couleurs et hiérarchie que les surfaces bailleur et locataire.
               </p>
             </SurfaceCard>
 
@@ -80,22 +80,22 @@ export default function Home() {
                     Landlord
                   </span>
                 </div>
-                <h2 className="mt-6 text-2xl font-bold tracking-tight text-foreground">Run the portfolio</h2>
+                <h2 className="mt-6 text-2xl font-bold tracking-tight text-foreground">Piloter le portefeuille</h2>
                 <p className="mt-2 text-sm leading-6 text-secondary-2">
-                  Dashboard, properties, units, tenants, bookings, leases, payments and reports from one management lane.
+                  Dashboard, biens, unités, locataires, réservations, baux, paiements et rapports dans un seul espace de gestion.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link
                     className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-[var(--primary-4)]"
                     href="/landlord/dashboard"
                   >
-                    Open dashboard
+                    Ouvrir le dashboard
                   </Link>
                   <Link
                     className="inline-flex items-center justify-center rounded-lg border border-[color:color-mix(in_srgb,var(--secondary)_40%,transparent)] bg-[var(--secondary-4)] px-5 py-3 text-sm font-semibold text-primary"
                     href="/landlord/sign-in"
                   >
-                    Sign in
+                    Se connecter
                   </Link>
                 </div>
               </SurfaceCard>
@@ -109,22 +109,22 @@ export default function Home() {
                     Tenant
                   </span>
                 </div>
-                <h2 className="mt-6 text-2xl font-bold tracking-tight text-foreground">Track the residency</h2>
+                <h2 className="mt-6 text-2xl font-bold tracking-tight text-foreground">Suivre le séjour</h2>
                 <p className="mt-2 text-sm leading-6 text-secondary-2">
-                  Resident dashboard, stays, leases, payments and booking discovery on the same product system.
+                  Dashboard résident, séjours, baux, paiements et découverte de réservation dans le même système produit.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link
                     className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-[var(--primary-4)]"
                     href="/tenant/dashboard"
                   >
-                    Open dashboard
+                    Ouvrir le dashboard
                   </Link>
                   <Link
                     className="inline-flex items-center justify-center rounded-lg border border-[color:color-mix(in_srgb,var(--secondary)_40%,transparent)] bg-[var(--secondary-4)] px-5 py-3 text-sm font-semibold text-primary"
                     href="/tenant/login"
                   >
-                    Tenant login
+                    Connexion locataire
                   </Link>
                 </div>
               </SurfaceCard>

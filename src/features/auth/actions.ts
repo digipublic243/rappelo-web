@@ -35,6 +35,7 @@ export async function loginAction(
 
   try {
     const tokenPair = await login({ phone_number: phoneNumber, password });
+    console.log("login::::", tokenPair);
     await setSessionTokens({
       accessToken: tokenPair.access,
       refreshToken: tokenPair.refresh,

@@ -12,5 +12,5 @@ services:
       NODE_ENV: production
       HOSTNAME: 0.0.0.0
       PORT: 3000
-      API_BASE_URL: ${API_BASE_URL:-http://host.docker.internal:8000}
+      API_BASE_URL: ${API_BASE_URL:-http://178.128.166.255:8000}
     restart: unless-stopped
