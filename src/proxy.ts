@@ -1,17 +1,12 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-
-const API_BASE_URL =
-  process.env.API_BASE_URL ??
-  process.env.NEXT_PUBLIC_API_BASE_URL ??
-  "http://localhost:8000";
-
-const API_PREFIX = "/api";
-
-const SESSION_COOKIE_NAMES = {
-  accessToken: "rappelo_access_token",
-  refreshToken: "rappelo_refresh_token",
-} as const;
+import {
+  API_BASE_URL,
+  API_PREFIX,
+  SESSION_COOKIE_MAX_AGE,
+  SESSION_COOKIE_NAMES,
+  SESSION_COOKIE_OPTIONS,
+} from "@/config/api";
 
 type UserRole = "landlord" | "tenant" | "property_manager" | "admin";
 
@@ -68,8 +63,14 @@ function isLandlordRole(role: UserRole | undefined) {
 }
 
 function clearSessionCookies(response: NextResponse) {
-  response.cookies.delete(SESSION_COOKIE_NAMES.accessToken);
-  response.cookies.delete(SESSION_COOKIE_NAMES.refreshToken);
+  response.cookies.set(SESSION_COOKIE_NAMES.accessToken, "", {
+    ...SESSION_COOKIE_OPTIONS,
+    maxAge: 0,
+  });
+  response.cookies.set(SESSION_COOKIE_NAMES.refreshToken, "", {
+    ...SESSION_COOKIE_OPTIONS,
+    maxAge: 0,
+  });
 }
 
 function redirectTo(request: NextRequest, pathname: string) {
@@ -135,12 +136,7 @@ export async function proxy(request: NextRequest) {
     response.cookies.set(
       SESSION_COOKIE_NAMES.accessToken,
       resolvedAccessToken,
-      {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
-        path: "/",
-      },
+      { ...SESSION_COOKIE_OPTIONS, maxAge: SESSION_COOKIE_MAX_AGE },
     );
   }
 

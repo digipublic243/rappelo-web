@@ -21,6 +21,23 @@ cp .env.docker.example .env.docker
 docker compose --env-file .env.docker up --build -d
 ```
 
+## Session cookies
+
+Tu peux ajuster la persistance des sessions avec :
+
+```env
+SESSION_COOKIE_SECURE=true
+SESSION_COOKIE_SAME_SITE=lax
+SESSION_COOKIE_MAX_AGE=604800
+SESSION_COOKIE_DOMAIN=example.com
+```
+
+Notes :
+
+- `SESSION_COOKIE_SECURE=true` si ton site est servi en `https`
+- `SESSION_COOKIE_SECURE=false` si tu testes en `http`
+- `SESSION_COOKIE_DOMAIN` est utile si tu veux partager la session entre sous-domaines
+
 ## Notes
 
 - L'application écoute sur `0.0.0.0:3000`.
