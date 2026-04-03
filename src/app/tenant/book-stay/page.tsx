@@ -13,6 +13,8 @@ export default async function BookStayPage() {
       <DataStateNotice meta={meta} />
       <PageIntro
         eyebrow="Property"
+        backHref="/tenant/bookings"
+        backLabel="Retour aux réservations"
         title="Select your luxury unit"
         description="Booking flow fed by live available units, with lease terms and summary kept separate from the post-booking lease stage."
       />

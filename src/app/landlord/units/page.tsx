@@ -36,12 +36,12 @@ export default async function UnitOverviewPage() {
               </div>
               <StatusBadge status={unit.status} label={unitStatusLabel(unit.status)} />
             </div>
-            <p className="mt-6 text-3xl font-black tracking-tight text-foreground">{formatMoney(unit.price)}</p>
+            <p className="mt-6 text-3xl font-black tracking-tight text-foreground">{formatMoney(unit.price, unit.currency ?? "CDF")}</p>
             <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--secondary-3)]">{formatCadence(unit.pricingCadence)}</p>
             <div className="mt-4 rounded-lg bg-[var(--secondary-4)] px-4 py-3 text-sm text-secondary-2">
               Dépôt {unit.depositEnabled ? "activé" : "désactivé"} • {unit.tenantName ?? "Contexte vacant"}
             </div>
-            <Link className="mt-5 inline-flex text-sm font-semibold text-[var(--primary)]" href={`/landlord/units/${unit.id}`}>
+            <Link className="mt-5 inline-flex text-sm font-semibold text-primary underline" href={`/landlord/units/${unit.id}`}>
               Configurer l’unité
             </Link>
           </SurfaceCard>

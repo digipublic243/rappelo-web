@@ -47,7 +47,7 @@ export function TenantOtpForm() {
               code OTP s’affiche dans la console du serveur.
             </p>
           </div>
-          <span className="rounded-full bg-[var(--primary-3)] px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-[var(--primary-2)]">
+          <span className="rounded-full bg-primary-3 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-[var(--primary-2)]">
             Recommandé
           </span>
         </div>
@@ -65,7 +65,7 @@ export function TenantOtpForm() {
             />
             <FormInlineError message={otpError} />
             {otpErrorDetails?.length ? (
-              <div className="rounded-xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-white px-4 py-4">
+              <div className="rounded-xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-background px-4 py-4">
                 <p className="text-sm font-bold text-[var(--danger)]">Détails :</p>
                 <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[color-mix(in_srgb,var(--danger) 72%,var(--background))]">
                   {otpErrorDetails.map((detail) => (
@@ -81,7 +81,7 @@ export function TenantOtpForm() {
         ) : (
           <AppForm action={verifyAction} className="mt-5 space-y-4">
             <FormField name="phone_number" type="hidden" value={resolvedPhoneNumber} />
-            <div className="rounded-2xl bg-white px-4 py-3 text-sm text-secondary-2">
+            <div className="rounded-2xl bg-background px-4 py-3 text-sm text-secondary-2">
               {formatPhonePreview(resolvedPhoneNumber)}
             </div>
             <FormField
@@ -92,10 +92,10 @@ export function TenantOtpForm() {
               required
               type="text"
             />
-            <FormInlineSuccess className="bg-[var(--primary-3)]/50" message={otpMessage} />
+            <FormInlineSuccess className="bg-primary-3/50" message={otpMessage} />
             <FormInlineError message={otpError} />
             {otpErrorDetails?.length ? (
-              <div className="rounded-xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-white px-4 py-4">
+              <div className="rounded-xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-background px-4 py-4">
                 <p className="text-sm font-bold text-[var(--danger)]">Détails :</p>
                 <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[color-mix(in_srgb,var(--danger) 72%,var(--background))]">
                   {otpErrorDetails.map((detail) => (
@@ -106,7 +106,7 @@ export function TenantOtpForm() {
             ) : null}
             <div className="flex gap-3">
               <FormSubmitButton
-                className="flex-1 border border-[var(--secondary-1)] bg-white text-secondary-2"
+                className="flex-1 border border-[var(--secondary-1)] bg-background text-secondary-2"
                 onClick={() => {
                   setPhoneNumber(resolvedPhoneNumber);
                 }}

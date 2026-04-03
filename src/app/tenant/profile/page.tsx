@@ -23,6 +23,8 @@ export default async function TenantProfilePage() {
     <TenantPageFrame currentPath="/tenant/profile">
       <DataStateNotice meta={profile.meta} />
       <PageIntro
+        backHref="/tenant/dashboard"
+        backLabel="Retour au tableau de bord"
         eyebrow="Account"
         title={profile.user.full_name || "Tenant Profile"}
         description="Verify the active tenant account, linked residency details, and current billing context."

@@ -372,6 +372,7 @@ export async function getTenantLeaseDetailVm(leaseId: string) {
       id: String(item.id ?? `${leaseId}-${index}`),
       dueDate: String(item.due_date ?? lease.startDate),
       amount: Number(item.amount ?? lease.rentAmount) || lease.rentAmount,
+      currency: String((item as { currency?: string }).currency ?? lease.currency ?? ""),
       status: item.status,
       label: item.label ?? item.name ?? `Échéance ${index + 1}`,
     })),
@@ -382,6 +383,7 @@ export async function getTenantLeaseDetailVm(leaseId: string) {
           status: overdue.overdue_status,
           daysOverdue: overdue.days_overdue,
           overdueAmount: normalizeOverdueMetric(overdue.overdue_amount),
+          currency: overdue.currency ?? lease.currency,
           missedPaymentCount: overdue.missed_payment_count,
           lastAlertSentAt: overdue.last_overdue_alert_sent_at ?? undefined,
         }

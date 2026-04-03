@@ -71,7 +71,7 @@ export default async function LandlordPropertiesPage() {
                     </div>
                     <div className="space-y-1 text-left lg:text-right">
                       <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--secondary-3)]">Revenu mensuel</p>
-                      <p className="text-3xl font-bold tracking-tight text-[var(--primary)]">{formatMoney(property.monthlyRevenue)}</p>
+                      <p className="text-3xl font-bold tracking-tight text-primary">{formatMoney(property.monthlyRevenue, property.currency ?? "CDF")}</p>
                       <span className="inline-flex rounded-full bg-success/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-success">
                         Payé
                       </span>

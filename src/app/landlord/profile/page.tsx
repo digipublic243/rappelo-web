@@ -26,6 +26,8 @@ export default async function LandlordProfilePage() {
     <LandlordPageFrame currentPath="/landlord/profile">
       <DataStateNotice meta={profile.meta} />
       <PageIntro
+        backHref="/landlord/dashboard"
+        backLabel="Retour au dashboard"
         eyebrow="Account"
         title={profile.user.full_name || "Landlord Profile"}
         description="Verify the active landlord account, contact information, and current workspace scope."

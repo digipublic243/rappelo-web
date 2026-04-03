@@ -15,6 +15,7 @@ import {
   createProperty,
   createUnit,
   updateProperty,
+  updateUnit,
   updateUnitStatus,
 } from "@/lib/api/properties";
 import {
@@ -27,12 +28,14 @@ import { createTenantProfile } from "@/lib/api/tenants";
 import { buildGlobalApiError, formatFormApiError } from "@/lib/api/errors";
 import { getSessionTokens } from "@/lib/api/session";
 import type {
+  ApiCurrency,
   ApiEmploymentStatus,
   ApiLeaseCreateRequest,
   ApiPropertyStatus,
   ApiPropertyUpsertRequest,
   ApiRentalPeriodicity,
   ApiUnitCreateRequest,
+  ApiUnitUpdateRequest,
   ApiUnitStatus,
 } from "@/types/api";
 import type { LeaseEditorActionState } from "@/features/landlord/lease-editor-state";
@@ -67,6 +70,8 @@ function buildPropertyPayload(formData: FormData): ApiPropertyUpsertRequest {
     country,
     description: String(formData.get("description") ?? "").trim() || null,
     total_units: Number.isFinite(totalUnits) ? totalUnits : 0,
+    currency:
+      (String(formData.get("currency") ?? "CDF").trim() || "CDF") as ApiCurrency,
     is_active: status === "active" || status === "maintenance",
   };
 }
@@ -107,7 +112,9 @@ function buildUnitPayload(formData: FormData): ApiUnitCreateRequest {
     unit_type:
       String(formData.get("unit_type") ?? "studio").trim() || undefined,
     rent: Number.isFinite(rent) ? rent : 0,
-    currency: String(formData.get("currency") ?? "USD").trim() || "USD",
+    currency: (String(formData.get("currency") ?? "").trim() || undefined) as
+      | ApiCurrency
+      | undefined,
     rental_periodicity: (String(
       formData.get("rental_periodicity") ?? "mensuel",
     ).trim() || "mensuel") as ApiRentalPeriodicity,
@@ -136,6 +143,94 @@ function toOptionalDecimal(value: FormDataEntryValue | null) {
 
   const parsed = Number(raw);
   return Number.isFinite(parsed) ? parsed : null;
+}
+
+function toOptionalInteger(value: FormDataEntryValue | null) {
+  const raw = String(value ?? "").trim();
+  if (!raw) {
+    return null;
+  }
+
+  const parsed = Number(raw);
+  return Number.isInteger(parsed) ? parsed : null;
+}
+
+function buildUnitUpdatePayload(formData: FormData): ApiUnitUpdateRequest {
+  const rent = Number(String(formData.get("rent") ?? "").trim() || "0");
+
+  return {
+    unit_number: String(formData.get("unit_number") ?? "").trim() || undefined,
+    unit_type: String(formData.get("unit_type") ?? "").trim() || undefined,
+    status: (String(formData.get("status") ?? "").trim() ||
+      undefined) as ApiUnitStatus | undefined,
+    rent: Number.isFinite(rent) ? rent : undefined,
+    currency: (String(formData.get("currency") ?? "").trim() ||
+      undefined) as ApiCurrency | undefined,
+    rental_periodicity: (String(
+      formData.get("rental_periodicity") ?? "",
+    ).trim() || undefined) as ApiRentalPeriodicity | undefined,
+    description: String(formData.get("description") ?? "").trim() || null,
+    is_furnished: String(formData.get("is_furnished") ?? "").trim() === "true",
+    is_active: String(formData.get("is_active") ?? "").trim() === "true",
+    bedrooms: toOptionalInteger(formData.get("bedrooms")),
+    bathrooms: toOptionalInteger(formData.get("bathrooms")),
+    square_footage: toOptionalInteger(formData.get("square_footage")),
+    floor_number: toOptionalInteger(formData.get("floor_number")),
+    security_deposit: toOptionalDecimal(formData.get("security_deposit")),
+    security_deposit_months_required: toOptionalInteger(
+      formData.get("security_deposit_months_required"),
+    ),
+    booking_deposit: toOptionalDecimal(formData.get("booking_deposit")),
+    allowed_payment_methods: [
+      String(formData.get("payment_method_cash") ?? "").trim() === "true"
+        ? "cash"
+        : null,
+      String(formData.get("payment_method_easypay") ?? "").trim() === "true"
+        ? "easypay"
+        : null,
+      String(formData.get("payment_method_bank_transfer") ?? "").trim() ===
+      "true"
+        ? "bank_transfer"
+        : null,
+    ].filter((value): value is string => Boolean(value)),
+    advance_payment_policy_text:
+      String(formData.get("advance_payment_policy_text") ?? "").trim() || null,
+  };
+}
+
+function validateUnitUpdatePayload(payload: ApiUnitUpdateRequest) {
+  const errors: string[] = [];
+
+  if (!payload.unit_number) {
+    errors.push("Le numéro d’unité est requis.");
+  }
+
+  if (!payload.unit_type) {
+    errors.push("Le type d’unité est requis.");
+  }
+
+  if ((payload.rent ?? 0) <= 0) {
+    errors.push("Le loyer doit être supérieur à zéro.");
+  }
+
+  if (payload.security_deposit != null && payload.security_deposit < 0) {
+    errors.push("Le dépôt de garantie ne peut pas être négatif.");
+  }
+
+  if (payload.booking_deposit != null && payload.booking_deposit < 0) {
+    errors.push("L’acompte de réservation ne peut pas être négatif.");
+  }
+
+  if (
+    payload.security_deposit_months_required != null &&
+    payload.security_deposit_months_required < 0
+  ) {
+    errors.push(
+      "Le nombre de mois de garantie requis ne peut pas être négatif.",
+    );
+  }
+
+  return errors;
 }
 
 function buildLeasePayload(formData: FormData): ApiLeaseCreateRequest {
@@ -405,6 +500,44 @@ export async function createUnitAction(
   }
 
   redirect(redirectPath);
+}
+
+export async function updateUnitAction(
+  unitId: string,
+  _: UnitEditorActionState,
+  formData: FormData,
+): Promise<UnitEditorActionState> {
+  const accessToken = await requireAccessToken();
+  if (!accessToken) {
+    return { error: "Aucune session bailleur authentifiée n’a été trouvée." };
+  }
+
+  const payload = buildUnitUpdatePayload(formData);
+  const validationErrors = validateUnitUpdatePayload(payload);
+  if (validationErrors.length > 0) {
+    return {
+      error: "La configuration de l’unité est incomplète ou invalide.",
+      errorDetails: validationErrors,
+    };
+  }
+
+  try {
+    await updateUnit(unitId, payload, accessToken);
+    revalidatePath(`/landlord/units/${unitId}`);
+    revalidatePath("/landlord/units");
+    revalidatePath("/landlord/dashboard");
+    revalidatePath("/landlord/properties");
+    return { success: "Configuration enregistrée avec succès." };
+  } catch (error) {
+    const formattedError = formatFormApiError(
+      error,
+      "Impossible de mettre à jour l’unité pour le moment.",
+    );
+    return {
+      error: formattedError.message,
+      errorDetails: formattedError.details,
+    };
+  }
 }
 
 export async function createTenantAction(

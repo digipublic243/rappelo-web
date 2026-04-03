@@ -31,6 +31,8 @@ export default async function TenantLeaseDetailPage({ params }: PageProps) {
     <TenantPageFrame currentPath="/tenant/leases">
       <DataStateNotice meta={meta} />
       <PageIntro
+        backHref="/tenant/leases"
+        backLabel="Retour aux baux"
         eyebrow="Bail"
         title={lease.lease_number}
         description={`${leaseStatusLabel(lease.status)} • unité ${unit?.label ?? lease.unitId}`}
@@ -63,7 +65,7 @@ export default async function TenantLeaseDetailPage({ params }: PageProps) {
                   Montant contractuel
                 </p>
                 <p className="mt-2 text-lg font-bold text-foreground">
-                  {formatMoney(lease.rentAmount)}
+                  {formatMoney(lease.rentAmount, lease.currency ?? "CDF")}
                 </p>
                 <p className="mt-1 text-xs text-[var(--secondary-3)]">
                   {formatCadence(lease.cadence)}
@@ -72,7 +74,7 @@ export default async function TenantLeaseDetailPage({ params }: PageProps) {
             </div>
             {lease.securityDeposit ? (
               <p className="mt-4 text-sm text-secondary-2">
-                Garantie : {formatMoney(lease.securityDeposit)}
+                Garantie : {formatMoney(lease.securityDeposit, lease.currency ?? "CDF")}
                 {lease.securityDepositMonthsTaken != null
                   ? ` • ${lease.securityDepositMonthsTaken} mois prélevé(s)`
                   : ""}
@@ -137,7 +139,7 @@ export default async function TenantLeaseDetailPage({ params }: PageProps) {
                       <p className="text-xs text-secondary-2">{formatDate(item.dueDate)}</p>
                     </div>
                     <p className="text-sm font-semibold text-foreground">
-                      {formatMoney(item.amount)}
+                      {formatMoney(item.amount, item.currency ?? lease.currency ?? "CDF")}
                     </p>
                   </div>
                 ))
@@ -186,7 +188,7 @@ export default async function TenantLeaseDetailPage({ params }: PageProps) {
               </p>
               <p>
                 <span className="font-semibold text-foreground">Montant en retard :</span>{" "}
-                {formatMoney(overdue?.overdueAmount ?? 0, "CDF")}
+                {formatMoney(overdue?.overdueAmount ?? 0, overdue?.currency ?? lease.currency ?? "CDF")}
               </p>
               <p>
                 <span className="font-semibold text-foreground">Paiements manqués :</span>{" "}

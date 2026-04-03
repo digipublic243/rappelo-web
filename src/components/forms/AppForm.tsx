@@ -65,7 +65,7 @@ export function FormInlineSuccess({ message, className }: { message?: string; cl
   return (
     <p
       className={cn(
-        "rounded-[var(--radius-md)] bg-[var(--primary-3)]/70 px-[var(--space-4)] py-[var(--space-3)] text-sm text-[var(--primary-2)]",
+        "rounded-[var(--radius-md)] bg-primary-3/70 px-[var(--space-4)] py-[var(--space-3)] text-sm text-[var(--primary-2)]",
         className,
       )}
     >

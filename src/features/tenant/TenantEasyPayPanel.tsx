@@ -195,7 +195,7 @@ export function TenantEasyPayPanel({
             {(state) => (
               <div className="space-y-4 text-left">
                 <FormField
-                  activeOptionClassName="border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-4)]"
+                  activeOptionClassName="border-[var(--primary)] bg-primary text-[var(--primary-4)]"
                   inactiveOptionClassName="border-[var(--secondary-1)] bg-[var(--secondary-4)] text-foreground"
                   label="Numéro à utiliser"
                   name="phone_source"

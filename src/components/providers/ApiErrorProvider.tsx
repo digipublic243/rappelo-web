@@ -54,7 +54,7 @@ function GlobalApiErrorBanner({
 
   return (
     <div className="pointer-events-none fixed inset-x-4 top-4 z-[100] flex justify-center">
-      <div className="pointer-events-auto w-full max-w-xl rounded-3xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-white/95 p-4 shadow-[0_24px_60px_rgba(117,33,33,0.18)] backdrop-blur-md">
+      <div className="pointer-events-auto w-full max-w-xl rounded-3xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-background/95 p-4 shadow-[0_24px_60px_rgba(117,33,33,0.18)] backdrop-blur-md">
         <div className="flex items-start gap-3">
           <div className="mt-0.5 rounded-2xl bg-[color-mix(in_srgb,var(--danger) 14%,var(--background))] p-2 text-[var(--danger)]">
             <MaterialIcon name="notifications" size={18} />

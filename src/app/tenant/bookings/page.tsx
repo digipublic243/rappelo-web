@@ -30,7 +30,7 @@ export default async function TenantBookingsPage() {
         {["All Bookings", "Upcoming", "In Review", "Archived"].map((label, index) => (
           <button
             key={label}
-            className={`rounded-full px-6 py-2 text-sm font-semibold whitespace-nowrap ${index === 0 ? "bg-[var(--primary)] text-[var(--primary-4)]" : "bg-white text-secondary-2"}`}
+            className={`rounded-full px-6 py-2 text-sm font-semibold whitespace-nowrap ${index === 0 ? "bg-primary text-[var(--primary-4)]" : "bg-background text-secondary-2"}`}
             type="button"
           >
             {label}

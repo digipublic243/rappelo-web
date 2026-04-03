@@ -9,7 +9,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
   const occupancyRate = Math.round((property.occupiedUnits / property.totalUnits) * 100);
 
   return (
-    <article className="rounded-xl bg-white shadow-sm ring-1 ring-[var(--secondary-1)]">
+    <article className="rounded-xl bg-background shadow-sm ring-1 ring-secondary-1">
       <div className="grid gap-5 p-5 lg:grid-cols-4 lg:items-center">
         <div className="lg:col-span-2">
           <h3 className="text-lg font-bold text-foreground">{property.name}</h3>
@@ -27,7 +27,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
 
         <div className="space-y-1 lg:text-right">
           <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--secondary-3)]">Monthly revenue</p>
-          <p className="text-xl font-extrabold text-[var(--primary)]">{formatMoney(property.monthlyRevenue)}</p>
+          <p className="text-xl font-extrabold text-primary">{formatMoney(property.monthlyRevenue)}</p>
           <p className="text-xs text-secondary-2">Occupancy {occupancyRate}%</p>
         </div>
       </div>

@@ -9,6 +9,8 @@ export default function NewTenantPage() {
     <LandlordPageFrame currentPath="/landlord/tenants">
       <PageIntro
         eyebrow="Locataires"
+        backHref="/landlord/tenants"
+        backLabel="Retour aux locataires"
         title="Ajouter un locataire"
         description="Créez un profil locataire. Le backend génère automatiquement le compte tenant associé."
       />

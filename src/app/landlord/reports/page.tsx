@@ -47,7 +47,7 @@ export default async function ReportsPage() {
             {properties.map((property) => (
               <div key={property.id} className="flex items-center justify-between rounded-xl bg-[var(--secondary-4)] px-4 py-4">
                 <span className="font-semibold text-foreground">{property.name}</span>
-                <span className="text-sm font-bold text-[var(--primary)]">{formatMoney(property.monthlyRevenue)}</span>
+                <span className="text-sm font-bold text-primary">{formatMoney(property.monthlyRevenue)}</span>
               </div>
             ))}
           </div>

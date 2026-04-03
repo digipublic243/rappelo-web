@@ -29,6 +29,7 @@ export function mapApiPropertyToDomain(
     name: property.name,
     address: property.address_content ?? property.address_line_1,
     city: property.city,
+    currency: property.currency ?? financials?.currency ?? undefined,
     totalUnits: property.total_units,
     occupiedUnits,
     monthlyRevenue: property.monthly_rent_total ?? financials?.monthly_rent_total ?? 0,
@@ -69,6 +70,7 @@ export function mapApiUnitToDomain(unit: ApiUnit, tenantName?: string): Unit {
     label: unit.unit_number,
     type: unit.unit_type,
     price: Number.isFinite(price) ? price : 0,
+    currency: unit.currency ?? undefined,
     pricingCadence: cadence,
     status: unit.status,
     depositEnabled: Boolean(
@@ -101,6 +103,7 @@ export function mapApiLeaseToDomain(lease: ApiLease): Lease {
     endDate: lease.end_date,
     status: lease.status,
     rentAmount: Number.isFinite(rentAmount) ? rentAmount : 0,
+    currency: lease.currency ?? undefined,
     cadence,
     securityDeposit:
       lease.security_deposit != null ? Number(lease.security_deposit) : undefined,

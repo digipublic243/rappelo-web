@@ -40,16 +40,16 @@ export default async function TenantLeasesPage() {
                     </div>
                     <div>
                       <p className="text-xs text-secondary-2">Montant contractuel</p>
-                      <p className="mt-1 text-sm font-semibold text-foreground">{formatMoney(lease.rentAmount)}</p>
+                      <p className="mt-1 text-sm font-semibold text-foreground">{formatMoney(lease.rentAmount, lease.currency ?? "CDF")}</p>
                       <p className="mt-1 text-xs text-[var(--secondary-3)]">{formatCadence(lease.cadence)}</p>
                     </div>
                     <div>
                       <p className="text-xs text-secondary-2">Statut</p>
-                      <p className="mt-1 text-sm font-semibold text-[var(--primary)]">{leaseStatusLabel(lease.status)}</p>
+                      <p className="mt-1 text-sm font-semibold text-primary underline">{leaseStatusLabel(lease.status)}</p>
                     </div>
                   </div>
                   <div className="mt-6">
-                    <Link className="text-sm font-semibold text-[var(--primary)]" href={`/tenant/leases/${lease.id}`}>
+                    <Link className="text-sm font-semibold text-primary underline" href={`/tenant/leases/${lease.id}`}>
                       Voir le bail
                     </Link>
                   </div>
@@ -79,7 +79,7 @@ export default async function TenantLeasesPage() {
                   <td className="px-6 py-4 text-sm font-semibold text-foreground">{lease.lease_number}</td>
                   <td className="px-6 py-4 text-sm text-secondary-2">{formatDate(lease.startDate)} - {formatDate(lease.endDate)}</td>
                   <td className="px-6 py-4"><StatusBadge status={lease.status} label={leaseStatusLabel(lease.status)} /></td>
-                  <td className="px-6 py-4 text-sm text-[var(--primary)]">
+                  <td className="px-6 py-4 text-sm text-primary">
                     <Link className="font-semibold" href={`/tenant/leases/${lease.id}`}>
                       Voir le détail
                     </Link>

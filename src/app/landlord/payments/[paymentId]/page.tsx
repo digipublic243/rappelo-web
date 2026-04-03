@@ -39,6 +39,8 @@ export default async function LandlordPaymentDetailPage({ params }: PageProps) {
     <LandlordPageFrame currentPath="/landlord/payments">
       <DataStateNotice meta={meta} />
       <PageIntro
+        backHref="/landlord/payments"
+        backLabel="Retour aux paiements"
         eyebrow="Paiement"
         title={payment.paymentLabel ?? `Paiement ${payment.id}`}
         description={`${paymentStatusLabel(payment.status)} • échéance ${formatDate(
@@ -46,12 +48,6 @@ export default async function LandlordPaymentDetailPage({ params }: PageProps) {
         )}`}
         action={
           <div className="flex flex-wrap gap-3">
-            <Link
-              className={actionButtonClassName({ variant: "ghost" })}
-              href="/landlord/payments"
-            >
-              Retour aux paiements
-            </Link>
             <Link
               className={actionButtonClassName({ variant: "secondary" })}
               href="/landlord/payments/send-reminder"

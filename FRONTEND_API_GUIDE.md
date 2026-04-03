@@ -2,6 +2,24 @@
 
 Ce document est une vue d'integration pour le frontend. Il ne remplace pas la spec OpenAPI, mais il indique quels endpoints utiliser, dans quel ordre, et quels points d'attention respecter.
 
+## Langue des messages API
+
+- Les messages de reponse exposes au frontend (`detail`, `error`, `message`) sont maintenant rediges en francais.
+- Le frontend ne doit pas faire de logique metier sur le texte exact de ces messages.
+- Utiliser en priorite le code HTTP, la presence des cles (`detail`, `error`, `message`) et les champs de statut metier (`status`, `overdue_status`, etc.).
+- Pour l'affichage UI, considerer ces messages comme des textes prets a afficher ou a mapper vers une traduction frontend si necessaire.
+
+## Politique devise (currency)
+
+- Tous les montants monetaires exposent desormais un champ `currency` ou heritent d'une devise metier.
+- `Property.currency` est la devise de reference d'un bien.
+- `Unit.currency` doit correspondre a `Property.currency`.
+- `Lease.currency` est alignee automatiquement sur `Unit.currency`.
+- `Payment.currency` est alignee automatiquement sur `Lease.currency`.
+- `PaymentScheduleItem.currency` est alignee automatiquement sur `Lease.currency`.
+- `Discount.currency` est alignee automatiquement sur le `unit` ou `lease` cible.
+- `EmploymentInfo.currency` indique la devise de `gross_income`.
+
 ## Base URL
 
 - Local: `http://localhost:8000`
@@ -197,6 +215,10 @@ Usage frontend:
 - `GET /api/properties/properties/{id}/financials/`
 - `GET /api/properties/properties/{id}/statistics/`
 
+Note `financials`:
+
+- La reponse inclut `currency` pour interpreter `monthly_rent_total`, `purchase_price` et `current_value`.
+
 **Reponse liste (`GET /api/properties/properties/`):**
 
 ```json
@@ -214,6 +236,7 @@ Usage frontend:
       "total_units": 3,
       "manager_count": 0,
       "monthly_rent_total": null,
+      "currency": "CDF",
       "is_active": true,
       "created_at": "2026-04-02T12:13:06.961783Z",
       "updated_at": "2026-04-02T12:13:06.961795Z"
@@ -241,7 +264,8 @@ Filtres disponibles sur la liste:
   "city": "kinshasa",
   "country": "RD CONGO",
   "description": "...",
-  "total_units": 4
+  "total_units": 4,
+  "currency": "CDF"
 }
 ```
 
@@ -257,6 +281,7 @@ Champs modele `Property` (create/update):
 | `country`         | string  | non    | defaut `RD CONGO`                                                 |
 | `description`     | string  | non    |                                                                   |
 | `total_units`     | integer | non    | defaut 1                                                          |
+| `currency`        | string  | non    | `CDF \| USD \| EUR` (defaut `CDF`)                              |
 
 `enriched` renvoie en plus:
 
@@ -312,7 +337,7 @@ Champs pour `POST /api/properties/units/` (creation simple):
 | `unit_number`                      | string  | oui    | unique par propriete                                        |
 | `unit_type`                        | enum    | non    | `studio \| 1br \| 2br \| 3br \| 4br \| commercial \| other` |
 | `rent`                             | decimal | oui    | montant du loyer                                            |
-| `currency`                         | string  | non    | defaut `USD`                                                |
+| `currency`                         | string  | non    | `CDF \| USD \| EUR` (defaut: devise du bien)              |
 | `rental_periodicity`               | enum    | non    | `journ \| hebdo \| mensuel \| autre` — defaut `mensuel`     |
 | `security_deposit`                 | decimal | non    | montant de garantie demande                                 |
 | `security_deposit_months_required` | integer | non    | nombre de mois de garantie requis (defaut `0`)              |
@@ -332,6 +357,11 @@ Filtres disponibles sur la liste:
 - `allowed_payment_methods`
 - `advance_payment_policy_text`
 - `current_tenant`, `current_lease`
+
+Notes devise (units):
+
+- Si `currency` n'est pas fourni a la creation d'unite, le backend utilise `Property.currency`.
+- Si `currency` est fourni avec une devise differente de `Property.currency`, la requete est rejetee.
 
 #### Metadonnees propriete (amenities/facilities/media/branding)
 
@@ -414,6 +444,10 @@ Filtre utile:
 - `POST /api/tenants/references/{id}/verify/`
 - `POST /api/tenants/references/{id}/unverify/`
 
+Note devise (employment-info):
+
+- Le champ `currency` accompagne `gross_income` dans les endpoints emploi.
+
 ### C. Booking flow
 
 #### Creer une reservation (tenant)
@@ -434,6 +468,7 @@ Payload type:
   "has_pets": false,
   "pet_details": "",
   "monthly_income_estimate": "1200.00",
+  "monthly_income_currency": "CDF",
   "employment_status_snapshot": "employed",
   "emergency_contact_name": "John Doe",
   "emergency_contact_phone": "+2507XXXXXXXX",
@@ -443,11 +478,17 @@ Payload type:
   "special_requests": "Near entrance",
   "source_channel": "mobile_app",
   "booking_deposit": "50.00",
+  "booking_deposit_currency": "CDF",
   "notes": "Je souhaite reserver cette unite"
 }
 ```
 
 Le backend affecte automatiquement `tenant = request.user`.
+
+Notes devise (booking):
+
+- `booking_deposit_currency` est forcee sur la devise de l'unite lorsque `booking_deposit` est fourni.
+- `monthly_income_currency` represente la devise du revenu estime fourni par le locataire.
 
 #### Lister les reservations
 
@@ -484,11 +525,20 @@ Notes frontend:
 - `GET /api/leases/leases/{id}/payment_schedule/`
 - `POST /api/leases/leases/{id}/regenerate_schedule/`
 
+Note `payment_schedule`:
+
+- Chaque item de l'echeancier contient `amount` et `currency`.
+- Lors de `regenerate_schedule`, la devise est automatiquement celle du bail (`lease.currency`).
+
 Champs garantie a retenir:
 
 - `security_deposit`: montant de garantie pour le bail
 - `security_deposit_months_taken`: nombre de mois effectivement pris au locataire pour ce bail
 - si `security_deposit_months_taken` n'est pas fourni a la creation, le backend reprend automatiquement `unit.security_deposit_months_required`
+
+Champs devise:
+
+- `currency`: devise du bail (`CDF \| USD \| EUR`), alignee automatiquement sur la devise de l'unite.
 
 Champs de periodicite de paiement (contrat):
 
@@ -534,6 +584,7 @@ Payload type:
   "name": "Promo Avril",
   "discount_type": "percent",
   "value": "10.00",
+  "currency": "CDF",
   "scope": "global",
   "unit": "<unit_uuid>",
   "valid_from": "2026-04-01",
@@ -541,6 +592,11 @@ Payload type:
   "is_active": true
 }
 ```
+
+Notes devise (discount):
+
+- Pour `discount_type="amount"`, `currency` est renseignee selon la devise de l'unite ou du bail cible.
+- Si `currency` est envoyee mais differente de la cible (`unit`/`lease`), le backend realigne la valeur sur la devise metier cible.
 
 ### F. Payments
 
@@ -568,6 +624,11 @@ Regle metier montant/contrat:
   - `semi_annual` -> `6`
   - `annual` -> `12`
 - si un `amount` est envoye par le frontend, le backend applique quand meme le montant calcule
+
+Regle metier devise/contrat:
+
+- `currency` est derivee du bail (`lease.currency`) a la creation/mise a jour d'un paiement.
+- En pratique, le frontend doit traiter `currency` comme un champ pilote par le backend pour `Payment`.
 
 Libelle de periode du paiement:
 
@@ -672,7 +733,7 @@ Reponse exemple apres initiate_easypay:
 
 ```json
 {
-  "message": "Payment initiated successfully",
+  "message": "Paiement initie avec succes.",
   "payment": {
     "id": "<uuid>",
     "lease": "<lease_uuid>",
@@ -744,16 +805,17 @@ Reponse exemple apres initiate_easypay:
 Patterns de reponse d'erreur observes:
 
 ```json
-{ "detail": "Invalid OTP code." }
+{ "detail": "Code OTP invalide." }
 ```
 
 ou
 
 ```json
-{ "error": "Property not found" }
+{ "error": "Paiement introuvable." }
 ```
 
 Le frontend doit donc tolerer les deux formes: `detail` et `error`.
+Le frontend doit aussi partir du principe que ces messages sont en francais cote backend.
 
 ## Points d'attention frontend
 
@@ -812,7 +874,7 @@ Response (en cas de succes):
 
 ```json
 {
-  "message": "Payment initiated successfully",
+  "message": "Paiement initie avec succes.",
   "payment": {
     "id": "<payment_uuid>",
     "status": "pending",
@@ -894,6 +956,10 @@ EASYPAY_CALLBACK_URL=https://your-domain.com/api/payments/easypay/callback/
 | `pending` | Paiement initie, en attente de confirmation |
 | `paid`    | Paiement confirme avec succes EasyPay       |
 
+Note devise (EasyPay):
+
+- Les appels EasyPay utilisent `payment.currency` pour initier la collecte et verifier les statuts.
+
 Note metier importante:
 
 - Un echec EasyPay est un echec d'operation gateway, pas un echec definitif du `Payment`.
@@ -935,6 +1001,7 @@ Response:
   "overdue_status": "overdue",
   "days_overdue": 15,
   "overdue_amount": "50000.00",
+  "currency": "CDF",
   "missed_payment_count": 1,
   "last_overdue_alert_sent_at": null
 }
@@ -948,7 +1015,8 @@ Response:
 | `lease_number`             | string    | Numero du bail (ex: LEASE-001)                           |
 | `overdue_status`           | enum      | `on_track` \| `overdue` \| `severely_overdue` \| `resolved` |
 | `days_overdue`             | int       | Nombre de jours de retard (0 si a jour)                 |
-| `overdue_amount`           | decimal   | Montant total en retard (CDF)                           |
+| `overdue_amount`           | decimal   | Montant total en retard                                 |
+| `currency`                 | string    | Devise associee au bail (`CDF \| USD \| EUR`)          |
 | `missed_payment_count`     | int       | Nombre de paiements manques                              |
 | `last_overdue_alert_sent_at` | datetime | Moment du dernier alerte envoye (null si aucun)        |
 
@@ -971,7 +1039,11 @@ Response:
 ```json
 {
   "count_overdue": 2,
-  "total_overdue_amount": "150000.00",
+  "total_overdue_amount": null,
+  "total_overdue_by_currency": {
+    "CDF": "50000.00",
+    "USD": "100.00"
+  },
   "leases": [
     {
       "id": "<lease_uuid_1>",
@@ -979,6 +1051,7 @@ Response:
       "overdue_status": "overdue",
       "days_overdue": 15,
       "overdue_amount": "50000.00",
+      "currency": "CDF",
       ...
     },
     {
@@ -987,11 +1060,17 @@ Response:
       "overdue_status": "severely_overdue",
       "days_overdue": 45,
       "overdue_amount": "100000.00",
+      "currency": "USD",
       ...
     }
   ]
 }
 ```
+
+Interpretation de `overdue_summary`:
+
+- `total_overdue_by_currency` est la source fiable pour les agrégats multi-devise.
+- `total_overdue_amount` est renseigne seulement s'il n'y a qu'une seule devise dans le scope, sinon `null`.
 
 ### Endpoints pour envoyer des alertes
 
@@ -1013,7 +1092,7 @@ Response:
 
 ```json
 {
-  "message": "Overdue alert recorded",
+  "message": "Alerte de retard enregistree.",
   "lease": {
     "id": "<lease_uuid>",
     "lease_number": "LEASE-001",

@@ -90,11 +90,11 @@ export default async function TenantPaymentsPage() {
                 <td className="px-8 py-5 text-sm text-secondary-2">
                   {payment.leaseId ?? "Aucun bail"}
                 </td>
-                <td className="px-8 py-5 text-sm text-[var(--primary)]">
+                <td className="px-8 py-5 text-sm text-primary">
                   <div className="flex flex-col gap-2">
                     {payment.status === "pending" ? (
                       <Link
-                        className="font-semibold text-[var(--primary)]"
+                        className="font-semibold text-primary"
                         href={`/tenant/payments/${payment.id}`}
                       >
                         Payer via EasyPay

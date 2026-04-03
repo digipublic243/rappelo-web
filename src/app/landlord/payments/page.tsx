@@ -93,7 +93,7 @@ export default async function PaymentsPage() {
                 </td>
                 <td className="px-6 py-5">
                   <div className="flex flex-wrap items-center gap-3">
-                    <Link className="text-sm font-semibold text-[var(--primary)]" href={`/landlord/payments/${payment.id}`}>
+                    <Link className="text-sm font-semibold text-primary underline" href={`/landlord/payments/${payment.id}`}>
                       Voir le détail
                     </Link>
                     {paymentActions(payment.status).canConfirm ? (

@@ -17,16 +17,12 @@ export default async function GeneratePaymentLinkPage() {
     <LandlordPageFrame currentPath="/landlord/payments">
       <DataStateNotice meta={meta} />
       <PageIntro
+        backHref="/landlord/payments"
+        backLabel="Retour aux paiements"
         title="Générer un lien de paiement"
         description="Créez ou rattachez un paiement existant, puis générez un lien partageable. Le backend recalculera le montant à partir du bail et de sa périodicité."
         action={
           <div className="flex flex-wrap gap-3">
-            <Link
-              className={actionButtonClassName({ variant: "ghost" })}
-              href="/landlord/payments"
-            >
-              Retour aux paiements
-            </Link>
             <Link
               className={actionButtonClassName({ variant: "secondary" })}
               href="/landlord/payments/send-reminder"

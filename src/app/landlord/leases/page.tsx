@@ -46,7 +46,13 @@ export default async function LeaseListPage() {
           ],
           [
             "Montant en retard",
-            formatMoney(overdueSummary?.totalOverdueAmount ?? 0, "CDF"),
+            overdueSummary?.totalOverdueAmount != null
+              ? formatMoney(overdueSummary.totalOverdueAmount, "CDF")
+              : overdueSummary?.totalOverdueByCurrency
+                ? Object.entries(overdueSummary.totalOverdueByCurrency)
+                    .map(([currency, amount]) => formatMoney(amount, currency))
+                    .join(" • ")
+                : formatMoney(0, "CDF"),
           ],
         ].map(([label, value]) => (
           <SurfaceCard key={label} className="p-5">
@@ -91,7 +97,7 @@ export default async function LeaseListPage() {
                   <div className="text-xs text-[var(--secondary-3)]">au {formatDate(lease.endDate)}</div>
                 </td>
                 <td className="px-6 py-5 text-sm text-secondary-2">
-                  {formatMoney(lease.rentAmount)}
+                  {formatMoney(lease.rentAmount, lease.currency ?? "CDF")}
                   <div className="text-xs text-[var(--secondary-3)]">
                     {formatCadence(lease.cadence)}
                   </div>
@@ -102,7 +108,7 @@ export default async function LeaseListPage() {
                   </span>
                   {lease.daysOverdue && lease.daysOverdue > 0 ? (
                     <div className="text-xs text-[var(--secondary-3)]">
-                      {lease.daysOverdue} j • {formatMoney(lease.overdueAmount ?? 0, "CDF")}
+                      {lease.daysOverdue} j • {formatMoney(lease.overdueAmount ?? 0, lease.overdueCurrency ?? lease.currency ?? "CDF")}
                     </div>
                   ) : (
                     <div className="text-xs text-[var(--secondary-3)]">Aucun retard enregistré</div>
@@ -112,7 +118,7 @@ export default async function LeaseListPage() {
                   <StatusBadge status={lease.status} label={leaseStatusLabel(lease.status)} />
                 </td>
                 <td className="px-6 py-5">
-                  <Link className="text-sm font-semibold text-[var(--primary)]" href={`/landlord/leases/${lease.id}`}>
+                  <Link className="text-sm font-semibold text-primary underline-2 underline" href={`/landlord/leases/${lease.id}`}>
                     Voir le détail
                   </Link>
                 </td>

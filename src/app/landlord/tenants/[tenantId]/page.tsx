@@ -24,6 +24,8 @@ export default async function TenantDetailPage({ params }: PageProps) {
     <LandlordPageFrame currentPath="/landlord/tenants">
       <DataStateNotice meta={meta} />
       <PageIntro
+        backHref="/landlord/tenants"
+        backLabel="Retour aux locataires"
         title={tenant.fullName}
         description={`Primary Tenant • ${tenant.unitId}`}
         action={

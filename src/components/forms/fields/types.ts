@@ -36,6 +36,7 @@ export type TextareaFieldProps = CommonFieldProps & {
 export type SelectFieldProps = CommonFieldProps & {
   options: FormFieldOption[];
   defaultValue?: string | number;
+  onChange?: (value: string) => void;
 };
 
 export type HiddenFieldProps = {
@@ -64,6 +65,7 @@ export type CheckboxFieldProps = CommonFieldProps & {
 export type RadioGroupFieldProps = CommonFieldProps & {
   type: "radio-group";
   value?: string;
+  defaultValue?: string;
   options: Array<{
     label: string;
     value: string;

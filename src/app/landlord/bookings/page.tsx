@@ -41,7 +41,7 @@ export default async function BookingRequestsPage() {
                 <p>Deposit: {formatMoney(booking.depositAmount)}</p>
                 <p>Property: {booking.propertyId || "Property pending"}</p>
               </div>
-              <Link className="mt-6 inline-flex text-sm font-semibold text-[var(--primary)]" href={`/landlord/bookings/${booking.id}`}>
+              <Link className="mt-6 inline-flex text-sm font-semibold text-primary underline" href={`/landlord/bookings/${booking.id}`}>
                 Open review drawer
               </Link>
             </SurfaceCard>

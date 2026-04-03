@@ -9,6 +9,8 @@ export default function NewPropertyPage() {
     <LandlordPageFrame currentPath="/landlord/properties">
       <PageIntro
         eyebrow="Patrimoine"
+        backHref="/landlord/properties"
+        backLabel="Retour aux biens"
         title="Créer un bien"
         description="Ajoutez un nouvel actif au patrimoine avec la même expérience structurée que l’écran de configuration."
       />
@@ -24,6 +26,7 @@ export default function NewPropertyPage() {
           country: "RD CONGO",
           description: "",
           totalUnits: "1",
+          currency: "CDF",
           isActive: true,
         }}
         initialState={initialPropertyEditorActionState}

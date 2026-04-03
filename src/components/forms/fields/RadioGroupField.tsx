@@ -8,7 +8,9 @@ import type { RadioGroupFieldProps } from "@/components/forms/fields/types";
 export function RadioGroupField(props: RadioGroupFieldProps) {
   const form = useAppFormContext();
   const storedValue = form?.getValue(props.name);
-  const resolvedValue = props.value ?? (storedValue !== undefined ? String(storedValue) : "");
+  const resolvedValue =
+    props.value ??
+    (storedValue !== undefined ? String(storedValue) : props.defaultValue ?? "");
 
   return (
     <div className={props.className}>
@@ -20,13 +22,15 @@ export function RadioGroupField(props: RadioGroupFieldProps) {
             <label
               key={`${props.name}-${option.value}`}
               className={cn(
-                "flex items-center justify-between rounded-2xl border px-4 py-4",
+                "flex items-center justify-between rounded-2xl border px-4 py-4 transition-colors",
                 active ? props.activeOptionClassName : props.inactiveOptionClassName,
               )}
             >
               <div>
-                <p className="text-lg font-semibold capitalize">{option.label}</p>
-                {option.description ? <p className="text-sm text-white/70">{option.description}</p> : null}
+                <p className="text-lg font-semibold capitalize text-inherit">{option.label}</p>
+                {option.description ? (
+                  <p className="text-sm text-secondary-2">{option.description}</p>
+                ) : null}
               </div>
               <input
                 checked={active}

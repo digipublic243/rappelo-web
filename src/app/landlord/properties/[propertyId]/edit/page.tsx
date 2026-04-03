@@ -26,6 +26,8 @@ export default async function EditPropertyPage({ params }: PageProps) {
       <DataStateNotice meta={meta} />
       <PageIntro
         eyebrow="Patrimoine"
+        backHref={`/landlord/properties/${property.id}`}
+        backLabel="Retour au bien"
         title={`Configuration de ${property.name}`}
         description="Revoyez les métadonnées, la valorisation et la visibilité du bien dans la même mise en page éditoriale."
       />
@@ -42,6 +44,7 @@ export default async function EditPropertyPage({ params }: PageProps) {
           country: details.country,
           description: details.description ?? "",
           totalUnits: String(property.totalUnits),
+          currency: details.currency ?? property.currency ?? "CDF",
           isActive: details.status === "active",
         }}
         initialState={initialPropertyEditorActionState}

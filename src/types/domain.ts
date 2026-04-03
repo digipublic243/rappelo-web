@@ -29,6 +29,7 @@ export interface Property {
   name: string;
   address: string;
   city: string;
+  currency?: string;
   totalUnits: number;
   occupiedUnits: number;
   monthlyRevenue: number;
@@ -40,6 +41,7 @@ export interface Unit {
   label: string;
   type: string;
   price: number;
+  currency?: string;
   pricingCadence: PricingCadence;
   status: UnitStatus;
   depositEnabled: boolean;
@@ -79,12 +81,14 @@ export interface Lease {
   endDate: string;
   status: LeaseStatus;
   rentAmount: number;
+  currency?: string;
   cadence: PricingCadence;
   securityDeposit?: number;
   securityDepositMonthsTaken?: number;
   overdueStatus?: LeaseOverdueStatus;
   daysOverdue?: number;
   overdueAmount?: number;
+  overdueCurrency?: string;
   missedPaymentCount?: number;
   lastOverdueAlertSentAt?: string;
 }

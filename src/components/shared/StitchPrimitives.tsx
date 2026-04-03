@@ -71,7 +71,7 @@ export function FilterChip({ label, value, className }: FilterChipProps) {
       )}
     >
       <span className="text-[var(--secondary-3)]">{label}</span>
-      <span className="font-semibold text-[var(--primary)]">{value}</span>
+      <span className="font-semibold text-primary">{value}</span>
     </div>
   );
 }

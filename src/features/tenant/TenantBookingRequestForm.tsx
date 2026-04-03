@@ -30,7 +30,7 @@ export function TenantBookingRequestForm({ units }: TenantBookingRequestFormProp
                 <p className="mt-1 text-sm text-secondary-2">{unit.type}</p>
               </div>
               <div className="text-right">
-                <p className="text-3xl font-black text-foreground">{formatMoney(unit.price)}</p>
+                <p className="text-3xl font-black text-foreground">{formatMoney(unit.price, unit.currency ?? "CDF")}</p>
                 <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--secondary-3)]">
                   {formatCadence(unit.pricingCadence)}
                 </p>
@@ -99,7 +99,7 @@ export function TenantBookingRequestForm({ units }: TenantBookingRequestFormProp
         </p>
         <div className="mt-6 space-y-4">
           {[
-            ["Base Rate", selectedUnit ? formatMoney(selectedUnit.price) : "$0.00"],
+            ["Base Rate", selectedUnit ? formatMoney(selectedUnit.price, selectedUnit.currency ?? "CDF") : formatMoney(0, "CDF")],
             ["Deposit", selectedUnit?.depositEnabled ? "Required" : "Optional"],
             ["Cadence", selectedUnit ? formatCadence(selectedUnit.pricingCadence) : "Not available"],
             ["Method", selectedUnit?.allowedPaymentMethods?.join(" + ").toUpperCase() || "Cash / EasyPay"],
@@ -112,7 +112,7 @@ export function TenantBookingRequestForm({ units }: TenantBookingRequestFormProp
         </div>
         <FormInlineError className="mt-4" message={state.error} />
         {state.errorDetails?.length ? (
-          <div className="mt-4 rounded-xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-white px-4 py-4">
+          <div className="mt-4 rounded-xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-background px-4 py-4">
             <p className="text-sm font-bold text-[var(--danger)]">Détails de l’erreur :</p>
             <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[color-mix(in_srgb,var(--danger) 72%,var(--background))]">
               {state.errorDetails.map((detail) => (

@@ -27,6 +27,8 @@ export default async function NewLeasePage() {
       <DataStateNotice meta={meta} />
       <PageIntro
         eyebrow="Baux"
+        backHref="/landlord/leases"
+        backLabel="Retour aux baux"
         title="Créer un bail"
         description="Préparez un contrat bailleur-locataire à partir des unités et locataires déjà gérés dans le portefeuille."
       />

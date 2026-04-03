@@ -58,7 +58,10 @@ export default async function PropertyDetailPage({ params }: PageProps) {
     [
       "Total des loyers mensuels",
       details.monthlyRentTotal != null
-        ? formatMoney(details.monthlyRentTotal)
+        ? formatMoney(
+            details.monthlyRentTotal,
+            details.currency ?? property.currency ?? "CDF",
+          )
         : "Non renseigné",
     ],
     // [
@@ -70,7 +73,10 @@ export default async function PropertyDetailPage({ params }: PageProps) {
     [
       "Prix d’achat",
       details.purchasePrice != null
-        ? formatMoney(details.purchasePrice)
+        ? formatMoney(
+            details.purchasePrice,
+            details.currency ?? property.currency ?? "CDF",
+          )
         : "Non renseigné",
     ],
     [
@@ -91,6 +97,8 @@ export default async function PropertyDetailPage({ params }: PageProps) {
     <LandlordPageFrame currentPath="/landlord/properties">
       <DataStateNotice meta={meta} />
       <PageIntro
+        backHref="/landlord/properties"
+        backLabel="Retour aux biens"
         title={property.name}
         description={`${property.address}, ${property.city}`}
         action={
@@ -137,7 +145,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               </p>
               <div className="mt-6 space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="rounded-lg bg-secondary p-3 text-[var(--primary)]">
+                  <div className="rounded-lg bg-secondary p-3 text-primary">
                     <MaterialIcon name="map" className="text-[20px]" />
                   </div>
                   <div>
@@ -148,7 +156,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="rounded-lg bg-secondary p-3 text-[var(--primary)]">
+                  <div className="rounded-lg bg-secondary p-3 text-primary">
                     <MaterialIcon name="apartment" className="text-[20px]" />
                   </div>
                   <div>
@@ -185,7 +193,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             </h3>
             <div className="grid grid-cols-2 gap-4">
               {facts.map(([label, value]) => (
-                <div key={label} className="rounded-lg bg-white p-4">
+                <div key={label} className="rounded-lg bg-background p-4">
                   <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--secondary-3)]">
                     {label}
                   </p>
@@ -211,7 +219,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 </p>
               </div>
               <Link
-                className="text-sm font-semibold text-[var(--primary)]"
+                className="text-sm font-semibold text-primary underline"
                 href="/landlord/units"
               >
                 Ouvrir la vue des unités
@@ -272,7 +280,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                         </td>
                         <td className="px-6 py-4">
                           <Link
-                            className="text-sm font-semibold text-[var(--primary)]"
+                            className="text-sm font-semibold text-primary underline"
                             href={`/landlord/units/${unit.id}`}
                           >
                             Configurer
@@ -296,7 +304,10 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                   Revenu mensuel
                 </p>
                 <p className="mt-2 text-xl font-black text-foreground">
-                  {formatMoney(property.monthlyRevenue)}
+                  {formatMoney(
+                    property.monthlyRevenue,
+                    property.currency ?? details.currency ?? "CDF",
+                  )}
                 </p>
               </div>
               <div className="rounded-xl bg-[var(--secondary-4)] p-5">
@@ -314,6 +325,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 <p className="mt-2 text-xl font-black text-foreground">
                   {formatMoney(
                     Math.round(property.monthlyRevenue / property.totalUnits),
+                    property.currency ?? details.currency ?? "CDF",
                   )}
                 </p>
               </div>

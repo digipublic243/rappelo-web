@@ -25,11 +25,11 @@ export function buttonClassName({
     size === "lg" && "px-6 py-4 text-base",
     size === "icon" && "h-10 w-10 rounded-full p-2",
     variant === "primary" &&
-      "bg-[var(--primary)] text-[var(--primary-4)] shadow-[var(--shadow-xs)] hover:brightness-110",
+      "bg-primary text-[var(--primary-4)] shadow-[var(--shadow-xs)] hover:brightness-110",
     variant === "secondary" &&
-      "bg-[var(--primary-3)] text-[var(--primary-2)] hover:opacity-90",
+      "bg-primary-3 text-[var(--primary-2)] hover:opacity-90",
     variant === "ghost" &&
-      "border border-[color:color-mix(in_srgb,var(--secondary)_40%,transparent)] bg-[var(--secondary-4)] text-[var(--primary)] hover:bg-[var(--secondary-4)]",
+      "border border-[color:color-mix(in_srgb,var(--secondary)_40%,transparent)] bg-[var(--secondary-4)] text-primary hover:bg-[var(--secondary-4)]",
     variant === "subtle" &&
       "bg-[var(--secondary-4)] text-foreground shadow-none hover:bg-[var(--background)]",
     variant === "unstyled" && "rounded-none bg-transparent p-0 shadow-none",

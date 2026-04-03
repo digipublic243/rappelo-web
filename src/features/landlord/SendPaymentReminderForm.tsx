@@ -54,7 +54,7 @@ export function SendPaymentReminderForm({ payments, tenants }: SendPaymentRemind
 
       <FormInlineError message={state.error} />
       {state.errorDetails?.length ? (
-        <div className="rounded-xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-white px-4 py-4">
+        <div className="rounded-xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-background px-4 py-4">
           <p className="text-sm font-bold text-[var(--danger)]">Détails de l’erreur :</p>
           <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[color-mix(in_srgb,var(--danger) 72%,var(--background))]">
             {state.errorDetails.map((detail) => (

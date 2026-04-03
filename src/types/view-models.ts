@@ -33,6 +33,7 @@ export interface PropertyDetailVm {
     status: ApiPropertyStatus;
     addressContent: string;
     country: string;
+    currency?: string | null;
     description?: string | null;
     yearBuilt?: number | null;
     squareFootage?: number | null;
@@ -60,19 +61,24 @@ export interface UnitDetailVm {
   unit: Unit;
   payments: Payment[];
   details: {
+    propertyName?: string | null;
     rent?: number | null;
     currency?: string | null;
     rentalPeriodicity?: string | null;
+    description?: string | null;
     bedrooms?: number | null;
     bathrooms?: number | null;
     squareFootage?: number | null;
     floorNumber?: number | null;
     securityDeposit?: number | null;
+    securityDepositMonthsRequired?: number | null;
     bookingDeposit?: number | null;
     allowedPaymentMethods?: string[];
     advancePaymentPolicyText?: string | null;
     currentTenant?: string | null;
+    currentTenantName?: string | null;
     currentLease?: string | null;
+    currentLeaseNumber?: string | null;
     isFurnished: boolean;
     isActive: boolean;
   };
@@ -87,6 +93,7 @@ export interface LeaseDetailVm {
     id: string;
     dueDate: string;
     amount: number;
+    currency?: string;
     status?: string;
     label: string;
   }>;
@@ -96,6 +103,7 @@ export interface LeaseDetailVm {
     status?: Lease["overdueStatus"];
     daysOverdue: number;
     overdueAmount: number;
+    currency?: string;
     missedPaymentCount: number;
     lastAlertSentAt?: string;
   };
@@ -104,7 +112,8 @@ export interface LeaseDetailVm {
 
 export interface LeaseOverdueSummaryVm {
   countOverdue: number;
-  totalOverdueAmount: number;
+  totalOverdueAmount: number | null;
+  totalOverdueByCurrency?: Record<string, number>;
 }
 
 export interface BookingDetailVm {

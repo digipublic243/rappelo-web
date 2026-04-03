@@ -9,7 +9,7 @@ interface TableHeaderProps {
 
 export function TableHeader({ columns }: TableHeaderProps) {
   return (
-    <thead className="bg-zinc-100">
+    <thead className="bg-foreground">
       <tr>
         {columns.map((column) => (
           <th key={column.key} className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-zinc-600">

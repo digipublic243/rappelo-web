@@ -1,5 +1,6 @@
 import { cn } from "@/lib/cn";
 import type { IconType } from "react-icons";
+import { LuArrowLeft } from "react-icons/lu";
 import {
   MdAdd,
   MdApartment,
@@ -84,7 +85,10 @@ const icons: Record<string, IconEntry> = {
   domain: { outline: MdOutlineDomain, filled: MdDomain },
   home: { outline: MdOutlineHome, filled: MdHome },
   query_stats: { outline: MdOutlineQueryStats, filled: MdQueryStats },
-  account_balance_wallet: { outline: MdOutlineAccountBalanceWallet, filled: MdOutlineAccountBalanceWallet },
+  account_balance_wallet: {
+    outline: MdOutlineAccountBalanceWallet,
+    filled: MdOutlineAccountBalanceWallet,
+  },
   apps: { outline: MdOutlineApps, filled: MdApps },
   help: { outline: MdOutlineHelp, filled: MdHelp },
   logout: { outline: MdOutlineLogout, filled: MdLogout },
@@ -95,9 +99,15 @@ const icons: Record<string, IconEntry> = {
   payments: { outline: MdOutlinePayments, filled: MdPayments },
   group: { outline: MdOutlineGroup, filled: MdGroup },
   credit_card: { outline: MdOutlineCreditCard, filled: MdCreditCard },
-  account_circle: { outline: MdOutlineAccountCircle, filled: MdOutlineAccountCircle },
+  account_circle: {
+    outline: MdOutlineAccountCircle,
+    filled: MdOutlineAccountCircle,
+  },
   hotel_class: { outline: MdOutlineHotelClass, filled: MdHotelClass },
-  pending_actions: { outline: MdOutlinePendingActions, filled: MdPendingActions },
+  pending_actions: {
+    outline: MdOutlinePendingActions,
+    filled: MdPendingActions,
+  },
   history_edu: { outline: MdOutlineHistoryEdu, filled: MdHistoryEdu },
   add_home: { outline: MdOutlineAddHome, filled: MdOutlineAddHome },
   wallet: { outline: MdOutlineWallet, filled: MdWallet },
@@ -105,13 +115,27 @@ const icons: Record<string, IconEntry> = {
   wifi: { outline: MdOutlineWifi, filled: MdWifi },
   nest_eco_leaf: { outline: MdOutlineEco, filled: MdEco },
   settings: { outline: MdOutlineSettings, filled: MdSettings },
+  arrow_back: { outline: LuArrowLeft, filled: LuArrowLeft },
 };
 
 const fallbackIcon = MdOutlineApps;
 
-export function MaterialIcon({ name, className, filled = false, size }: MaterialIconProps) {
+export function MaterialIcon({
+  name,
+  className,
+  filled = false,
+  size,
+}: MaterialIconProps) {
   const entry = icons[name];
-  const Icon = filled ? entry?.filled ?? entry?.outline ?? fallbackIcon : entry?.outline ?? fallbackIcon;
+  const Icon = filled
+    ? (entry?.filled ?? entry?.outline ?? fallbackIcon)
+    : (entry?.outline ?? fallbackIcon);
 
-  return <Icon aria-hidden="true" className={cn("inline-block shrink-0", className)} size={size} />;
+  return (
+    <Icon
+      aria-hidden="true"
+      className={cn("inline-block shrink-0", className)}
+      size={size}
+    />
+  );
 }

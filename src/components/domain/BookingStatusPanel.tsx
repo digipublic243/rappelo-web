@@ -10,7 +10,7 @@ export function BookingStatusPanel({ booking }: BookingStatusPanelProps) {
   const canApprove = booking.status === "new" || booking.status === "in_review";
 
   return (
-    <article className="rounded-2xl border border-zinc-200 bg-white p-4">
+    <article className="rounded-2xl border border-zinc-200 bg-background p-4">
       <div className="flex items-start justify-between gap-4">
         <div>
           <h3 className="text-sm font-bold text-zinc-900">Request {booking.id}</h3>

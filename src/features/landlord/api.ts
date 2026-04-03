@@ -305,12 +305,13 @@ export async function getLandlordPropertyDetailVm(
   return {
     property: propertyDomain,
     units: unitDomains,
-    details: {
-      propertyType: property.property_type,
-      status: property.status,
-      addressContent: property.address_content ?? property.address_line_1,
-      country: property.country,
-      description: property.description ?? null,
+      details: {
+        propertyType: property.property_type,
+        status: property.status,
+        addressContent: property.address_content ?? property.address_line_1,
+        country: property.country,
+        currency: property.currency ?? financials?.currency ?? null,
+        description: property.description ?? null,
       yearBuilt: property.year_built ?? null,
       squareFootage: property.square_footage ?? null,
       purchasePrice:
@@ -356,31 +357,50 @@ export async function getLandlordUnitDetailVm(
     return null;
   }
 
-  const unit = mapApiUnitToDomain(apiUnit);
   const domainData = await buildLandlordDomainData();
+  const unit =
+    domainData.units.find((item) => item.id === String(apiUnit.id)) ??
+    mapApiUnitToDomain(apiUnit);
   const payments = domainData.payments.filter(
     (payment) => payment.unitId === unitId,
   );
+  const property = domainData.properties.find(
+    (item) => item.id === unit.propertyId,
+  );
+  const currentLease =
+    domainData.leases.find((item) => item.id === String(apiUnit.current_lease)) ??
+    domainData.leases.find(
+      (item) => item.unitId === unit.id && item.status === "active",
+    );
+  const currentTenant =
+    domainData.tenants.find((item) => item.id === String(apiUnit.current_tenant)) ??
+    domainData.tenants.find((item) => item.unitId === unit.id);
 
   return {
     unit,
     payments,
     details: {
+      propertyName: property?.name ?? null,
       rent: Number(apiUnit.rent ?? apiUnit.monthly_rent ?? 0) || 0,
-      currency: apiUnit.currency ?? "USD",
+      currency: apiUnit.currency ?? null,
       rentalPeriodicity: apiUnit.rental_periodicity ?? null,
+      description: apiUnit.description ?? null,
       bedrooms: apiUnit.bedrooms ?? null,
       bathrooms: apiUnit.bathrooms ?? null,
       squareFootage: apiUnit.square_footage ?? null,
       floorNumber: apiUnit.floor_number ?? null,
       securityDeposit: apiUnit.security_deposit ?? null,
+      securityDepositMonthsRequired:
+        apiUnit.security_deposit_months_required ?? null,
       bookingDeposit: apiUnit.booking_deposit ?? null,
       allowedPaymentMethods: apiUnit.allowed_payment_methods ?? [],
       advancePaymentPolicyText: apiUnit.advance_payment_policy_text ?? null,
       currentTenant:
         apiUnit.current_tenant != null ? String(apiUnit.current_tenant) : null,
+      currentTenantName: currentTenant?.fullName ?? unit.tenantName ?? null,
       currentLease:
         apiUnit.current_lease != null ? String(apiUnit.current_lease) : null,
+      currentLeaseNumber: currentLease?.lease_number ?? null,
       isFurnished: apiUnit.is_furnished,
       isActive: apiUnit.is_active,
     },
@@ -433,6 +453,7 @@ export async function getLandlordLeasesData() {
             overdueStatus: overdue.overdue_status,
             daysOverdue: overdue.days_overdue,
             overdueAmount: normalizeOverdueMetric(overdue.overdue_amount),
+            overdueCurrency: overdue.currency ?? lease.currency,
             missedPaymentCount: overdue.missed_payment_count,
             lastOverdueAlertSentAt:
               overdue.last_overdue_alert_sent_at ?? undefined,
@@ -442,8 +463,14 @@ export async function getLandlordLeasesData() {
     overdueSummary: overdueSummary
       ? ({
           countOverdue: overdueSummary.count_overdue,
-          totalOverdueAmount: normalizeOverdueMetric(
-            overdueSummary.total_overdue_amount,
+          totalOverdueAmount:
+            overdueSummary.total_overdue_amount != null
+              ? normalizeOverdueMetric(overdueSummary.total_overdue_amount)
+              : null,
+          totalOverdueByCurrency: Object.fromEntries(
+            Object.entries(overdueSummary.total_overdue_by_currency ?? {}).map(
+              ([currency, amount]) => [currency, normalizeOverdueMetric(amount)],
+            ),
           ),
         } satisfies LeaseOverdueSummaryVm)
       : undefined,
@@ -504,6 +531,7 @@ export async function getLandlordLeaseDetailVm(
       id: String(item.id ?? `${leaseId}-${index}`),
       dueDate: String(item.due_date ?? lease.startDate),
       amount: Number(item.amount ?? lease.rentAmount) || lease.rentAmount,
+      currency: String((item as { currency?: string }).currency ?? lease.currency ?? ""),
       status: item.status,
       label: item.label ?? item.name ?? `Échéance ${index + 1}`,
     })),
@@ -514,6 +542,7 @@ export async function getLandlordLeaseDetailVm(
           status: overdue.overdue_status,
           daysOverdue: overdue.days_overdue,
           overdueAmount: normalizeOverdueMetric(overdue.overdue_amount),
+          currency: overdue.currency ?? lease.currency,
           missedPaymentCount: overdue.missed_payment_count,
           lastAlertSentAt: overdue.last_overdue_alert_sent_at ?? undefined,
         }

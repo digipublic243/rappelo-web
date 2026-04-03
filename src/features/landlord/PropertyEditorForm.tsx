@@ -19,6 +19,7 @@ interface PropertyEditorDefaults {
   country: string;
   description: string;
   totalUnits: string;
+  currency: string;
   isActive: boolean;
 }
 
@@ -73,9 +74,9 @@ export function PropertyEditorForm({
       {defaults.propertyId ? <FormField name="propertyId" type="hidden" value={defaults.propertyId} /> : null}
 
       <div className="space-y-8 lg:col-span-8">
-        <section className="rounded-[28px] bg-white p-8 shadow-sm">
+        <section className="rounded-[28px] bg-background p-8 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-secondary p-3 text-[var(--primary)]">
+            <div className="rounded-xl bg-secondary p-3 text-primary">
               <MaterialIcon name="domain" className="text-[22px]" />
             </div>
             <div>
@@ -108,9 +109,9 @@ export function PropertyEditorForm({
           </div>
         </section>
 
-        <section className="rounded-[28px] bg-white p-8 shadow-sm">
+        <section className="rounded-[28px] bg-background p-8 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-secondary p-3 text-[var(--primary)]">
+            <div className="rounded-xl bg-secondary p-3 text-primary">
               <MaterialIcon name="payments" className="text-[22px]" />
             </div>
             <div>
@@ -121,8 +122,19 @@ export function PropertyEditorForm({
 
           <div className="mt-8 grid gap-5 md:grid-cols-2">
             <FormFieldMuted defaultValue={defaults.totalUnits} label="Nombre total d’unités" min={1} name="total_units" type="number" />
+            <FormFieldMuted
+              defaultValue={defaults.currency}
+              label="Devise de référence"
+              name="currency"
+              options={[
+                { label: "CDF", value: "CDF" },
+                { label: "USD", value: "USD" },
+                { label: "EUR", value: "EUR" },
+              ]}
+              type="select"
+            />
             <div className="rounded-2xl bg-[var(--secondary-4)] px-4 py-4 text-sm text-secondary-2 md:col-span-2">
-              Les informations avancées comme l’année de construction, la superficie, la valorisation ou le total des loyers restent visibles en lecture sur la fiche bien, mais ne font plus partie du payload documenté pour la création et la mise à jour.
+              Les informations avancées comme l’année de construction, la superficie ou la valorisation restent visibles en lecture sur la fiche bien, mais ne font plus partie du payload documenté pour la création et la mise à jour.
             </div>
           </div>
         </section>
@@ -132,14 +144,14 @@ export function PropertyEditorForm({
         <section className="rounded-[28px] bg-[var(--primary-2)] p-8 text-white shadow-[var(--shadow-lg)]">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold tracking-tight">Statut du bien</h2>
-            <span className="rounded-full bg-white/14 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
+            <span className="rounded-full bg-background/14 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
               Relié à l’API
             </span>
           </div>
           <div className="mt-6 space-y-3">
             <FormField
-              activeOptionClassName="border-white/50 bg-white/12"
-              inactiveOptionClassName="border-transparent bg-white/8"
+              activeOptionClassName="border-white/50 bg-background/12"
+              inactiveOptionClassName="border-transparent bg-background/8"
               name="status"
               onChange={(value) => setSelectedStatus(value as ApiPropertyStatus)}
               options={statusOptions.map((status) => ({
@@ -160,7 +172,7 @@ export function PropertyEditorForm({
           </div>
         </section>
 
-        <section className="rounded-[28px] bg-white p-8 shadow-sm">
+        <section className="rounded-[28px] bg-background p-8 shadow-sm">
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--secondary-3)]">Aperçu média</p>
           <div className="mt-6 overflow-hidden rounded-2xl bg-[var(--secondary-1)]">
             <img
@@ -191,7 +203,7 @@ export function PropertyEditorForm({
               <span className="text-secondary-2">Revenu mensuel</span>
               <span className="font-bold text-foreground">
                 {propertyStats?.monthlyRevenue != null
-                  ? new Intl.NumberFormat("fr-CD", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(propertyStats.monthlyRevenue)
+                  ? new Intl.NumberFormat("fr-CD", { style: "currency", currency: defaults.currency || "CDF", maximumFractionDigits: 0 }).format(propertyStats.monthlyRevenue)
                   : "N/D"}
               </span>
             </div>
@@ -201,7 +213,7 @@ export function PropertyEditorForm({
         <div className="space-y-3">
           <FormInlineError className="rounded-2xl" message={state.error} />
           {state.errorDetails?.length ? (
-            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-white px-5 py-4">
+            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-background px-5 py-4">
               <p className="text-sm font-bold text-[var(--danger)]">Veuillez vérifier ces champs :</p>
               <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[color-mix(in_srgb,var(--danger) 72%,var(--background))]">
                 {state.errorDetails.map((detail) => (

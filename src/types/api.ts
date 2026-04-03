@@ -16,6 +16,7 @@ export type ApiPaymentMethod =
   | "mobile_money"
   | "card"
   | "other";
+export type ApiCurrency = "CDF" | "USD" | "EUR";
 export type ApiEmploymentStatus = "employed" | "self_employed" | "unemployed" | "student" | "retired" | "military" | "officer";
 export type ApiMaritalStatus = "single" | "married" | "divorced" | "widowed" | "separated";
 
@@ -131,6 +132,7 @@ export interface ApiProperty {
   purchase_price?: number | null;
   current_value?: number | null;
   monthly_rent_total?: number | null;
+  currency?: ApiCurrency | null;
   landlord?: number;
   is_active: boolean;
   [key: string]: unknown;
@@ -145,6 +147,7 @@ export interface ApiPropertyUpsertRequest {
   country: string;
   description?: string | null;
   total_units: number;
+  currency?: ApiCurrency;
   is_active: boolean;
 }
 
@@ -188,6 +191,7 @@ export interface ApiPropertyFinancials {
   monthly_rent_total?: number | null;
   purchase_price?: number | null;
   current_value?: number | null;
+  currency?: ApiCurrency | null;
   occupancy_rate: number;
   occupied_units: number;
   vacant_units: number;
@@ -200,7 +204,7 @@ export interface ApiUnit {
   unit_type: string;
   status: ApiUnitStatus;
   rent?: number | string;
-  currency?: string | null;
+  currency?: ApiCurrency | null;
   rental_periodicity?: ApiRentalPeriodicity | null;
   description?: string | null;
   is_furnished: boolean;
@@ -211,6 +215,7 @@ export interface ApiUnit {
   bathrooms?: number | null;
   square_footage?: number | null;
   security_deposit?: number | null;
+  security_deposit_months_required?: number | null;
   booking_deposit?: number | null;
   floor_number?: number | null;
   allowed_payment_methods?: string[];
@@ -227,7 +232,7 @@ export interface ApiUnitCreateRequest {
   unit_number: string;
   unit_type?: string;
   rent: number;
-  currency?: string;
+  currency?: ApiCurrency;
   rental_periodicity?: ApiRentalPeriodicity;
   description?: string | null;
   is_furnished?: boolean;
@@ -238,7 +243,7 @@ export interface ApiUnitUpdateRequest {
   unit_type?: string;
   status?: ApiUnitStatus;
   rent?: number;
-  currency?: string;
+  currency?: ApiCurrency;
   rental_periodicity?: ApiRentalPeriodicity;
   description?: string | null;
   is_furnished?: boolean;
@@ -247,6 +252,7 @@ export interface ApiUnitUpdateRequest {
   bathrooms?: number | null;
   square_footage?: number | null;
   security_deposit?: number | null;
+  security_deposit_months_required?: number | null;
   booking_deposit?: number | null;
   floor_number?: number | null;
   allowed_payment_methods?: string[];
@@ -300,6 +306,7 @@ export interface ApiLease {
   start_date: string;
   end_date: string;
   monthly_rent: number;
+  currency?: ApiCurrency | null;
   security_deposit?: number | null;
   security_deposit_months_taken?: number | null;
   payment_frequency?:
@@ -323,6 +330,7 @@ export interface ApiLeaseCreateRequest {
   start_date: string;
   end_date: string;
   monthly_rent: number;
+  currency?: ApiCurrency;
   security_deposit?: number | null;
   security_deposit_months_taken?: number | null;
   payment_frequency?: "monthly" | "quarterly" | "semi_annual" | "annual";
@@ -346,13 +354,15 @@ export interface ApiLeaseOverdue {
   overdue_status: ApiLeaseOverdueStatus;
   days_overdue: number;
   overdue_amount: number | string;
+  currency?: ApiCurrency | null;
   missed_payment_count: number;
   last_overdue_alert_sent_at?: string | null;
 }
 
 export interface ApiLeaseOverdueSummary {
   count_overdue: number;
-  total_overdue_amount: number | string;
+  total_overdue_amount: number | string | null;
+  total_overdue_by_currency?: Partial<Record<ApiCurrency, number | string>>;
   leases: ApiLeaseOverdue[];
 }
 
@@ -363,7 +373,7 @@ export interface ApiPayment {
   tenant_id?: number | string;
   payment_label?: string;
   amount: number;
-  currency?: string | null;
+  currency?: ApiCurrency | null;
   due_date: string;
   status: ApiPaymentStatus;
   payment_method?: ApiPaymentMethod;
@@ -448,7 +458,7 @@ export interface ApiEasyPayStatusResponse {
     status?: string;
     transactionId?: string;
     amount?: number | string;
-    currency?: string;
+    currency?: ApiCurrency;
     [key: string]: unknown;
   };
 }

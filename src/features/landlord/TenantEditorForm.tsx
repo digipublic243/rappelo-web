@@ -43,9 +43,9 @@ export function TenantEditorForm({ action, initialState }: TenantEditorFormProps
   return (
     <AppForm action={formAction} className="grid gap-8 lg:grid-cols-12">
       <div className="space-y-8 lg:col-span-8">
-        <section className="rounded-[28px] bg-white p-8 shadow-sm">
+        <section className="rounded-[28px] bg-background p-8 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-secondary p-3 text-[var(--primary)]">
+            <div className="rounded-xl bg-secondary p-3 text-primary">
               <MaterialIcon name="group" className="text-[22px]" />
             </div>
             <div>
@@ -70,9 +70,9 @@ export function TenantEditorForm({ action, initialState }: TenantEditorFormProps
           </div>
         </section>
 
-        <section className="rounded-[28px] bg-white p-8 shadow-sm">
+        <section className="rounded-[28px] bg-background p-8 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-secondary p-3 text-[var(--primary)]">
+            <div className="rounded-xl bg-secondary p-3 text-primary">
               <MaterialIcon name="description" className="text-[22px]" />
             </div>
             <div>
@@ -105,7 +105,7 @@ export function TenantEditorForm({ action, initialState }: TenantEditorFormProps
         <section className="rounded-[28px] bg-[var(--primary-2)] p-8 text-white shadow-[var(--shadow-lg)]">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold tracking-tight">Création guidée</h2>
-            <span className="rounded-full bg-white/14 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
+            <span className="rounded-full bg-background/14 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
               API
             </span>
           </div>
@@ -119,7 +119,7 @@ export function TenantEditorForm({ action, initialState }: TenantEditorFormProps
         <div className="space-y-3">
           <FormInlineError className="rounded-2xl" message={state.error} />
           {state.errorDetails?.length ? (
-            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-white px-5 py-4">
+            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--danger) 30%,var(--background))] bg-background px-5 py-4">
               <p className="text-sm font-bold text-[var(--danger)]">Veuillez vérifier ces champs :</p>
               <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[color-mix(in_srgb,var(--danger) 72%,var(--background))]">
                 {state.errorDetails.map((detail) => (

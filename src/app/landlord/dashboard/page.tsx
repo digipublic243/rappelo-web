@@ -25,14 +25,14 @@ export default async function LandlordDashboardPage() {
       value: formatMoney(totalRevenue),
       hint: `${dashboard.payments.filter((payment) => payment.status === "paid").length} paid invoices`,
       icon: "payments",
-      tone: "bg-[var(--primary-3)] text-[var(--primary)]",
+      tone: "bg-primary-3 text-primary",
     },
     {
       label: "Occupancy Rate",
       value: `${occupancyRate}%`,
       hint: `${occupiedUnits}/${totalUnits || 0} Units Occupied`,
       icon: "hotel_class",
-      tone: "bg-[var(--primary-3)] text-[var(--primary-2)]",
+      tone: "bg-primary-3 text-[var(--primary-2)]",
     },
     {
       label: "Active Leases",
@@ -85,14 +85,14 @@ export default async function LandlordDashboardPage() {
                 <h3 className="text-xl font-bold tracking-tight text-foreground">Needs Attention</h3>
                 <p className="mt-1 text-sm text-secondary-2">Operational tasks that require the next landlord action.</p>
               </div>
-              <button className="text-sm font-semibold text-[var(--primary)]" type="button">
+              <button className="text-sm font-semibold text-primary underline" type="button">
                 Manage All Tasks
               </button>
             </div>
             <div className="divide-y divide-[var(--secondary)]">
               {dashboard.bookings.map((booking, index) => (
                 <div key={booking.id} className="flex flex-col gap-4 p-5 md:flex-row md:items-center">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--primary-3)] text-[var(--primary)]">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-3 text-primary">
                     <MaterialIcon
                       name={index === 0 ? "pending_actions" : index === 1 ? "history_edu" : "add_home"}
                       className="text-[22px]"
@@ -150,7 +150,7 @@ export default async function LandlordDashboardPage() {
             <div className="relative h-60 bg-[linear-gradient(160deg,var(--primary),var(--primary-2))] p-6 text-white">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.16),transparent_44%)]" />
               <div className="relative">
-                <span className="rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest">Featured Property</span>
+                <span className="rounded-full bg-background/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest">Featured Property</span>
                 <h3 className="mt-4 text-2xl font-bold tracking-tight">{featuredProperty?.name ?? "Portfolio overview"}</h3>
                 <p className="mt-2 text-sm text-white/80">
                   {featuredProperty
@@ -184,7 +184,7 @@ export default async function LandlordDashboardPage() {
                 ["group", "Review Tenant Profiles"],
               ].map(([icon, label]) => (
                 <div key={label} className="flex items-center gap-3 rounded-xl bg-[var(--secondary-4)] px-4 py-3">
-                  <div className="rounded-lg bg-white p-2 text-[var(--primary)]">
+                  <div className="rounded-lg bg-background p-2 text-primary">
                     <MaterialIcon name={icon} className="text-[20px]" />
                   </div>
                   <span className="text-sm font-semibold text-foreground">{label}</span>

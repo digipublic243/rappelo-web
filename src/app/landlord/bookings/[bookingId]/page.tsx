@@ -26,13 +26,18 @@ export default async function BookingReviewPage({ params }: PageProps) {
   return (
     <LandlordPageFrame currentPath="/landlord/bookings">
       <DataStateNotice meta={meta} />
-      <PageIntro title="Review Request" description="Drawer-like booking review with tenant context, terms, and decision actions." />
+      <PageIntro
+        backHref="/landlord/bookings"
+        backLabel="Retour aux bookings"
+        title="Review Request"
+        description="Drawer-like booking review with tenant context, terms, and decision actions."
+      />
 
       <section className="grid gap-8 lg:grid-cols-12">
         <SurfaceCard className="p-6 lg:col-span-5">
-          <p className="text-sm font-bold uppercase tracking-[0.24em] text-[var(--primary)]">Tenant Profile</p>
+          <p className="text-sm font-bold uppercase tracking-[0.24em] text-primary">Tenant Profile</p>
           <div className="mt-5">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[var(--primary-3)] text-xl font-bold text-[var(--primary)]">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary-3 text-xl font-bold text-primary">
               {(tenant?.fullName || "Tenant")
                 .split(" ")
                 .filter(Boolean)
@@ -83,13 +88,13 @@ export default async function BookingReviewPage({ params }: PageProps) {
             <AppForm action={rejectBookingAction}>
               <FormField name="bookingId" type="hidden" value={booking.id} />
               <FormField name="reason" type="hidden" value="Rejected from landlord review screen." />
-              <FormSubmitButton className="rounded-lg bg-[var(--primary-3)] px-5 text-sm text-secondary-2">
+              <FormSubmitButton className="rounded-lg bg-primary-3 px-5 text-sm text-secondary-2">
                 Reject Booking
               </FormSubmitButton>
             </AppForm>
             <AppForm action={confirmBookingAction}>
               <FormField name="bookingId" type="hidden" value={booking.id} />
-              <FormSubmitButton className="rounded-lg bg-[var(--primary)] px-5 text-sm text-[var(--primary-4)]">
+              <FormSubmitButton className="rounded-lg bg-primary px-5 text-sm text-[var(--primary-4)]">
                 Approve Booking
               </FormSubmitButton>
             </AppForm>

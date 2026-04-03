@@ -64,7 +64,7 @@ export default async function TenantListPage() {
                 </td>
                 <td className="px-6 py-5 text-sm text-foreground">{tenant.unitId}</td>
                 <td className="px-6 py-5">
-                  <Link className="text-sm font-semibold text-[var(--primary)]" href={`/landlord/tenants/${tenant.id}`}>
+                  <Link className="text-sm font-semibold text-primary underline" href={`/landlord/tenants/${tenant.id}`}>
                     Voir le détail
                   </Link>
                 </td>

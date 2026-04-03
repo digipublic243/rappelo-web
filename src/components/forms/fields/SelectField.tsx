@@ -24,6 +24,7 @@ export function SelectField(props: SelectFieldProps) {
         name={props.name}
         onChange={(event) => {
           form?.setValue(props.name, event.target.value);
+          props.onChange?.(event.target.value);
         }}
         required={props.required}
         value={resolvedValue}

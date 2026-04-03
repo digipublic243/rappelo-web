@@ -19,16 +19,12 @@ export default async function SendReminderPage() {
     <LandlordPageFrame currentPath="/landlord/payments">
       <DataStateNotice meta={meta} />
       <PageIntro
+        backHref="/landlord/payments"
+        backLabel="Retour aux paiements"
         title="Envoyer un rappel"
         description="Déclenchez une relance sur les paiements en attente avec un message adapté au contexte du locataire."
         action={
           <div className="flex flex-wrap gap-3">
-            <Link
-              className={actionButtonClassName({ variant: "ghost" })}
-              href="/landlord/payments"
-            >
-              Retour aux paiements
-            </Link>
             <Link
               className={actionButtonClassName({ variant: "secondary" })}
               href="/landlord/payments/generate-link"

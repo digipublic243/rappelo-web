@@ -85,19 +85,19 @@ export default async function TenantDashboardPage() {
               </div>
             ))}
             <div className="flex items-center justify-end">
-              <Link className="text-sm font-bold text-[var(--primary)]" href="/tenant/leases">
+              <Link className="text-sm font-bold text-primary" href="/tenant/leases">
                 Détails
               </Link>
             </div>
           </div>
         </SurfaceCard>
 
-        <SurfaceCard className="bg-[var(--primary-3)] p-8 md:col-span-4">
+        <SurfaceCard className="bg-primary-3 p-8 md:col-span-4">
           <div className="flex items-start justify-between">
-            <div className="rounded-xl bg-white/50 p-3">
-              <MaterialIcon name="account_balance_wallet" className="text-[22px] text-[var(--primary)]" />
+            <div className="rounded-xl bg-background/50 p-3">
+              <MaterialIcon name="account_balance_wallet" className="text-[22px] text-primary" />
             </div>
-            <span className="rounded-full bg-[var(--primary)]/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[var(--primary-2)]">
+            <span className="rounded-full bg-primary/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[var(--primary-2)]">
               Prochaine échéance
             </span>
           </div>
@@ -120,14 +120,14 @@ export default async function TenantDashboardPage() {
         <SurfaceCard className="bg-[var(--secondary-4)] p-8 md:col-span-6">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold text-foreground">Résumé du séjour</h3>
-            <span className="rounded-full bg-white px-3 py-1 text-[10px] font-bold text-secondary-2">
+            <span className="rounded-full bg-background px-3 py-1 text-[10px] font-bold text-secondary-2">
               {dashboard.leases.length} contexte(s) actif(s)
             </span>
           </div>
           <div className="mt-6 space-y-4">
             {dashboardFacts.map(({ icon, title, text }) => (
-              <div key={title} className="flex gap-4 rounded-lg bg-white/70 p-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--primary-3)] text-[var(--primary-2)]">
+              <div key={title} className="flex gap-4 rounded-lg bg-background/70 p-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-3 text-[var(--primary-2)]">
                   <MaterialIcon name={icon} className="text-[18px]" />
                 </div>
                 <div>
@@ -146,7 +146,7 @@ export default async function TenantDashboardPage() {
             <p className="text-sm font-semibold">{dashboard.profileName}</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               {accountSummary.map(([label, value]) => (
-                <div key={label} className="rounded-xl bg-white/8 px-4 py-3">
+                <div key={label} className="rounded-xl bg-background/8 px-4 py-3">
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">{label}</p>
                   <p className="mt-2 text-xl font-bold text-white">{value}</p>
                 </div>

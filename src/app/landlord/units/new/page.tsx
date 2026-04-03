@@ -10,12 +10,15 @@ export default async function NewUnitPage() {
   const propertyOptions = properties.map((property) => ({
     value: property.id,
     label: `${property.name} — ${property.address}, ${property.city}`,
+    currency: property.currency,
   }));
 
   return (
     <LandlordPageFrame currentPath="/landlord/units">
       <PageIntro
         eyebrow="Inventaire"
+        backHref="/landlord/units"
+        backLabel="Retour aux unités"
         title="Créer une unité"
         description="Ajoutez une nouvelle unité locative au patrimoine avec le même workflow structuré que le reste de l’espace bailleur."
       />
@@ -27,7 +30,7 @@ export default async function NewUnitPage() {
           unitNumber: "",
           unitType: "studio",
           rent: "",
-          currency: "USD",
+          currency: propertyOptions[0]?.currency ?? "",
           rentalPeriodicity: "mensuel",
           description: "",
           isFurnished: false,

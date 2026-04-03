@@ -1,11 +1,7 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TenantPageFrame } from "@/features/tenant/TenantPageFrame";
 import { PageIntro } from "@/components/ui/PageIntro";
-import {
-  SurfaceCard,
-  actionButtonClassName,
-} from "@/components/shared/StitchPrimitives";
+import { SurfaceCard } from "@/components/shared/StitchPrimitives";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import {
   formatDate,
@@ -35,19 +31,13 @@ export default async function TenantPaymentDetailPage({ params }: PageProps) {
     <TenantPageFrame currentPath="/tenant/payments">
       <DataStateNotice meta={meta} />
       <PageIntro
+        backHref="/tenant/payments"
+        backLabel="Retour aux paiements"
         eyebrow="Paiement"
         title={payment.paymentLabel ?? `Paiement ${payment.id}`}
         description={`${paymentStatusLabel(payment.status)} • échéance ${formatDate(
           payment.dueDate,
         )}`}
-        action={
-          <Link
-            className={actionButtonClassName({ variant: "ghost" })}
-            href="/tenant/payments"
-          >
-            Retour aux paiements
-          </Link>
-        }
       />
 
       <section className="space-y-8">
